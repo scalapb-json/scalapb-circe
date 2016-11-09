@@ -31,11 +31,11 @@ libraryDependencies ++= Seq(
 )
 
 pomExtra in Global := {
-  <url>https://github.com/whisklabs/docker-it-scala</url>
+  <url>https://github.com/whisklabs/scalapb-playjson</url>
     <scm>
-        <connection>scm:git:github.com/whisklabs/docker-it-scala.git</connection>
-        <developerConnection>scm:git:git@github.com:whisklabs/docker-it-scala.git</developerConnection>
-        <url>github.com/whisklabs/docker-it-scala.git</url>
+        <connection>scm:git:github.com/whisklabs/scalapb-playjson.git</connection>
+        <developerConnection>scm:git:git@github.com:whisklabs/scalapb-playjson.git</developerConnection>
+        <url>github.com/whisklabs/scalapb-playjson.git</url>
     </scm>
     <developers>
         <developer>
