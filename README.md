@@ -4,12 +4,12 @@ The structure of this project is hugely inspired by [scalapb-json4s](https://git
 
 ## Dependency
 
-Artifacts are available for Scala 2.11 only (because of play-json 2.5 dependency)
+Artifacts are available for Scala 2.11 and 2.12
 
 Include in your `build.sbt` file
 
 ```scala
-libraryDependencies += "com.whisk" % "scalapb-playjson_2.11" % "0.1"
+libraryDependencies += "com.whisk" %% "scalapb-playjson" % "0.2.1"
 ```
 
 ## Usage
@@ -17,11 +17,11 @@ libraryDependencies += "com.whisk" % "scalapb-playjson_2.11" % "0.1"
 There are four functions you can use directly to serialize/deserialize your messages:
 
 ```scala
-ScalaPBJson.toJsonString(msg) // returns String
-ScalaPBJson.toJson(msg): // returns JsObject
+JsonFormat.toJsonString(msg) // returns String
+JsonFormat.toJson(msg): // returns JsObject
 
-ScalaPBJson.fromJsonString(str) // return MessageType
-ScalaPBJson.fromJson(json) // return MessageType
+JsonFormat.fromJsonString(str) // return MessageType
+JsonFormat.fromJson(json) // return MessageType
 ```
 
 Alternatively you can define play-json `Reads[T]`, `Writes[T]` or `Format[T]` and use serialization implicitly
@@ -29,17 +29,17 @@ Alternatively you can define play-json `Reads[T]`, `Writes[T]` or `Format[T]` an
 ```scala
 import play.api.libs.json._
 
-implicit val myMsgWrites: Writes[MyMsg] = ScalaPBJson.writes[MyMsg]
+implicit val myMsgWrites: Writes[MyMsg] = JsonFormat.writes[MyMsg]
 
-implicit val myMsgReads: Reads[MyMsg] = ScalaPBJson.reads[MyMsg]
+implicit val myMsgReads: Reads[MyMsg] = JsonFormat.reads[MyMsg]
 
-implicit val myMsgFmt: Format[MyMsg] = ScalaPBJson.format[MyMsg]
+implicit val myMsgFmt: Format[MyMsg] = JsonFormat.format[MyMsg]
 ```
 
 There are helper methods for enums as well if necessary
 
 ```scala
-ScalaPBJson.enumReads
-ScalaPBJson.enumWrites
-ScalaPBJson.enumFormat
+JsonFormat.enumReads
+JsonFormat.enumWrites
+JsonFormat.enumFormat
 ```
