@@ -1,4 +1,4 @@
-# scalapb-playjson
+# scalapb-playjson [![Build Status](https://travis-ci.org/whisklabs/scalapb-playjson.svg?branch=master)](https://travis-ci.org/whisklabs/scalapb-playjson)
 
 The structure of this project is hugely inspired by [scalapb-json4s](https://github.com/trueaccord/scalapb-json4s)
 
