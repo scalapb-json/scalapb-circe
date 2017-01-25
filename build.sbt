@@ -18,14 +18,19 @@ val scalaPbVersion = "0.5.47"
 
 Project.inConfig(Test)(sbtprotoc.ProtocPlugin.protobufConfigSettings)
 
+PB.targets in Compile := Nil
+
 PB.targets in Test := Seq(
-  scalapb.gen() -> (sourceManaged in Test).value
+  PB.gens.java -> (sourceManaged in Test).value,
+  scalapb.gen(javaConversions=true) -> (sourceManaged in Test).value
 )
 
 libraryDependencies ++= Seq(
   "com.trueaccord.scalapb" %% "scalapb-runtime" % scalaPbVersion,
   "com.typesafe.play" %% "play-json" % "2.5.10",
-  "org.scalatest" %% "scalatest" % "3.0.1" % "test"
+  "org.scalatest" %% "scalatest" % "3.0.1" % "test",
+  "com.google.protobuf" % "protobuf-java-util" % "3.1.0" % "test",
+  "com.google.protobuf" % "protobuf-java" % "3.1.0" % "protobuf"
 )
 
 pomExtra in Global := {

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package jsontest;
+
+import "google/protobuf/duration.proto";
+import "test.proto";
+
+message MyTest3 {
+  string s = 1;
+  int32 i32 = 2;
+  float f = 3;
+  double d = 4;
+  map<string, int32> string_to_int32 = 5;
+  map<int32, MyTest> int_to_mytest = 6;
+  map<fixed64, bytes> fixed64_to_bytes = 7;
+}

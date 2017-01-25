@@ -1,27 +1,42 @@
 syntax = "proto2";
 
-package test;
+package jsontest;
+
+import "google/protobuf/duration.proto";
 
 enum MyEnum {
-    UNKNOWN = 0;
-    V1 = 1;
-    V2 = 2;
+  UNKNOWN = 0;
+  V1 = 1;
+  V2 = 2;
 }
 
 message MyTest {
-    optional string hello = 1;
-    optional int32 foobar = 2;
-    optional int64 bazinga = 3;
-    repeated string primitive_sequence = 4;
-    repeated MyTest rep_message = 5;
-    optional MyTest opt_message = 6;
+  optional string hello = 1;
+  optional int32 foobar = 2;
+  optional int64 bazinga = 3;
+  repeated string primitive_sequence = 4;
+  repeated MyTest rep_message = 5;
+  optional MyTest opt_message = 6;
 
-    map<string, int32> string_to_int32 = 7;
-    map<int32, MyTest> int_to_mytest = 8;
+  map<string, int32> string_to_int32 = 7;
+  map<int32, MyTest> int_to_mytest = 8;
 
-    repeated MyEnum rep_enum = 9;
-    optional MyEnum opt_enum = 10;
-    map<int32, MyEnum> int_to_enum = 11;
-    map<bool, string> bool_to_string = 12;
-    map<string, bool> string_to_bool = 13;
+  repeated MyEnum rep_enum = 9;
+  optional MyEnum opt_enum = 10;
+  map<int32, MyEnum> int_to_enum = 11;
+  map<bool, string> bool_to_string = 12;
+  map<string, bool> string_to_bool = 13;
+  optional bytes opt_bs = 14;
+  optional bool opt_bool = 15;
+
+  oneof trick_or_treat {
+    int32 trick = 16;
+    MyTest treat = 17;
+  }
+
+  map<fixed64, bytes> fixed64_to_bytes = 18;
+}
+
+message WellKnownTest {
+  optional google.protobuf.Duration duration = 1;
 }
