@@ -12,7 +12,7 @@ organization := "com.whisk"
 
 name := "scalapb-playjson"
 
-version := "0.2.0"
+version := "0.2.1"
 
 val scalaPbVersion = "0.5.47"
 
