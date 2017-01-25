@@ -38,32 +38,31 @@ class ScalaPBJsonSpec extends FlatSpec with Matchers {
       |}
       |""".stripMargin
 
-
   "Empty object" should "give empty json" in {
-    ScalaPBJson.toJson(MyTest()) shouldEqual Json.toJson(Map.empty[String, JsValue])
+    JsonFormat.toJson(MyTest()) shouldEqual Json.toJson(Map.empty[String, JsValue])
   }
 
   "Empty json" should "convert to base proto" in {
-    ScalaPBJson.fromJsonString[MyTest]("{}") shouldEqual MyTest()
+    JsonFormat.fromJsonString[MyTest]("{}") shouldEqual MyTest()
   }
 
   "TestProto" should "be TestJson when converted to Proto" in {
-    ScalaPBJson.toJson(TestProto) shouldEqual Json.parse(TestJson)
+    JsonFormat.toJson(TestProto) shouldEqual Json.parse(TestJson)
   }
 
   "TestJson" should "be TestProto when parsed from json" in {
-    ScalaPBJson.fromJsonString[MyTest](TestJson) shouldEqual TestProto
+    JsonFormat.fromJsonString[MyTest](TestJson) shouldEqual TestProto
   }
 
   "MyEnum" should "have formats to convert" in {
-    implicit val enumFmt: Format[MyEnum] = ScalaPBJson.enumFormat[MyEnum]
+    implicit val enumFmt: Format[MyEnum] = JsonFormat.enumFormat[MyEnum]
 
     Json.toJson(MyEnum.V1) shouldEqual JsString("V1")
     Json.toJson(MyEnum.UNKNOWN) shouldEqual JsString("UNKNOWN")
   }
 
   it should "be converted back from json string" in {
-    implicit val enumFmt: Format[MyEnum] = ScalaPBJson.enumFormat[MyEnum]
+    implicit val enumFmt: Format[MyEnum] = JsonFormat.enumFormat[MyEnum]
 
     Json.fromJson[MyEnum](JsString("V1")) shouldEqual JsSuccess(MyEnum.V1)
   }

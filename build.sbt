@@ -14,9 +14,7 @@ name := "scalapb-playjson"
 
 version := "0.1"
 
-scalafmtConfig := Some(file(".scalafmt.conf"))
-
-val scalaPbVersion = "0.5.43"
+val scalaPbVersion = "0.5.47"
 
 Project.inConfig(Test)(sbtprotoc.ProtocPlugin.protobufConfigSettings)
 
@@ -26,8 +24,8 @@ PB.targets in Test := Seq(
 
 libraryDependencies ++= Seq(
   "com.trueaccord.scalapb" %% "scalapb-runtime" % scalaPbVersion,
-  "com.typesafe.play" %% "play-json" % "2.5.8",
-  "org.scalatest" %% "scalatest" % "3.0.0" % "test"
+  "com.typesafe.play" %% "play-json" % "2.5.10",
+  "org.scalatest" %% "scalatest" % "3.0.1" % "test"
 )
 
 pomExtra in Global := {
