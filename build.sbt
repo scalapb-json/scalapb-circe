@@ -1,6 +1,6 @@
 scalaVersion := "2.11.8"
 
-crossScalaVersions := Seq("2.11.8")
+crossScalaVersions := Seq("2.11.8", "2.12.1")
 
 scalacOptions ++= Seq("-feature", "-deprecation")
 
@@ -25,9 +25,14 @@ PB.targets in Test := Seq(
   scalapb.gen(javaConversions = true) -> (sourceManaged in Test).value
 )
 
+val playVer = Def.setting[String] {
+  if (scalaVersion.value startsWith "2.11.") "2.5.10"
+  else "2.6.0-M1"
+}
+
 libraryDependencies ++= Seq(
   "com.trueaccord.scalapb" %% "scalapb-runtime" % scalaPbVersion,
-  "com.typesafe.play" %% "play-json" % "2.5.10",
+  "com.typesafe.play" %% "play-json" % playVer.value,
   "org.scalatest" %% "scalatest" % "3.0.1" % "test",
   "com.google.protobuf" % "protobuf-java-util" % "3.1.0" % "test",
   "com.google.protobuf" % "protobuf-java" % "3.1.0" % "protobuf"

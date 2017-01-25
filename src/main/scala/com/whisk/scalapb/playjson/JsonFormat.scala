@@ -5,7 +5,6 @@ import com.google.protobuf.ByteString
 import com.google.protobuf.Descriptors.FieldDescriptor.JavaType
 import com.google.protobuf.Descriptors.{EnumValueDescriptor, FieldDescriptor}
 import com.trueaccord.scalapb._
-import play.api.data.validation.ValidationError
 import play.api.libs.json.{JsError, _}
 
 import scala.language.existentials
@@ -263,7 +262,7 @@ object JsonFormat {
   def reads[A <: GeneratedMessage with Message[A]: GeneratedMessageCompanion] = new Reads[A] {
     override def reads(json: JsValue): JsResult[A] = Try[A](fromJson[A](json)) match {
       case Success(value) => JsSuccess(value)
-      case Failure(f) => JsError(ValidationError.apply(f.getMessage))
+      case Failure(f) => JsError(f.getMessage)
     }
   }
 
@@ -284,7 +283,7 @@ object JsonFormat {
       case JsNull =>
         JsSuccess(implicitly[GeneratedEnumCompanion[A]].fromValue(-1))
       case _ =>
-        JsError(ValidationError.apply("incompatible json format"))
+        JsError("incompatible json format")
     }
   }
 
