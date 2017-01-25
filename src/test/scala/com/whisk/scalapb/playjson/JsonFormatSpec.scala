@@ -59,18 +59,18 @@ class JsonFormatSpec extends FlatSpec with MustMatchers {
       |}""".stripMargin
 
   "Empty object" should "give empty json" in {
-    JsonFormat.toJson(MyTest()) must be (Json.obj())
+    JsonFormat.toJson(MyTest()) must be(Json.obj())
   }
 
   "Empty object" should "give empty json for MyTest3" in {
-    JsonFormat.toJson(MyTest3()) must be (Json.obj())
+    JsonFormat.toJson(MyTest3()) must be(Json.obj())
   }
 
   "Zero maps" should "give correct json" in {
     JsonFormat.toJson(MyTest(
       stringToInt32 = Map("" -> 17),
       intToMytest = Map(0 -> MyTest()),
-      fixed64ToBytes = Map(0L -> com.google.protobuf.ByteString.copyFromUtf8("foobar")))) must be (
+      fixed64ToBytes = Map(0L -> com.google.protobuf.ByteString.copyFromUtf8("foobar")))) must be(
       Json.parse("""|{
                |  "stringToInt32": {"": 17},
                |  "intToMytest": {"0": {}},
@@ -82,7 +82,7 @@ class JsonFormatSpec extends FlatSpec with MustMatchers {
     JsonFormat.toJson(MyTest3(
       stringToInt32 = Map("" -> 17),
       intToMytest = Map(0 -> MyTest()),
-      fixed64ToBytes = Map(0L -> com.google.protobuf.ByteString.copyFromUtf8("foobar")))) must be (
+      fixed64ToBytes = Map(0L -> com.google.protobuf.ByteString.copyFromUtf8("foobar")))) must be(
       Json.parse("""|{
                |  "stringToInt32": {"": 17},
                |  "intToMytest": {"0": {}},
@@ -91,21 +91,21 @@ class JsonFormatSpec extends FlatSpec with MustMatchers {
   }
 
   "Set treat" should "give correct json" in {
-    JsonFormat.toJson(MyTest(trickOrTreat = MyTest.TrickOrTreat.Treat(MyTest()))) must be (
+    JsonFormat.toJson(MyTest(trickOrTreat = MyTest.TrickOrTreat.Treat(MyTest()))) must be(
       Json.parse("""{"treat": {}}"""))
   }
 
   "TestProto" should "be TestJson when converted to Proto" in {
-    JsonFormat.toJson(TestProto) must be (Json.parse(TestJson))
+    JsonFormat.toJson(TestProto) must be(Json.parse(TestJson))
   }
 
   "TestJson" should "be TestProto when parsed from json" in {
-    JsonFormat.fromJsonString[MyTest](TestJson) must be (TestProto)
+    JsonFormat.fromJsonString[MyTest](TestJson) must be(TestProto)
   }
 
   "fromJsonString" should "read json produced by Java" in {
     val javaJson = JavaJsonFormat.printer().print(MyTest.toJavaProto(TestProto))
-    JsonFormat.fromJsonString[MyTest](javaJson) must be (TestProto)
+    JsonFormat.fromJsonString[MyTest](javaJson) must be(TestProto)
   }
 
   "Java parser" should "read json strings produced by us" in {
@@ -116,8 +116,7 @@ class JsonFormatSpec extends FlatSpec with MustMatchers {
 
   "Empty object" should "give full json if including default values" in {
     new Printer(includingDefaultValueFields = true).toJson(MyTest()) must be(
-      Json.parse(
-        """{
+      Json.parse("""{
           |  "hello": "",
           |  "foobar": 0,
           |  "bazinga": 0,
@@ -139,9 +138,9 @@ class JsonFormatSpec extends FlatSpec with MustMatchers {
   }
 
   "Empty object" should "with preserve field names should work" in {
-    new Printer(includingDefaultValueFields = true, preservingProtoFieldNames = true).toJson(MyTest()) must be(
-      Json.parse(
-        """{
+    new Printer(includingDefaultValueFields = true, preservingProtoFieldNames = true)
+      .toJson(MyTest()) must be(
+      Json.parse("""{
           |  "hello": "",
           |  "foobar": 0,
           |  "bazinga": 0,

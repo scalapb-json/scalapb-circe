@@ -22,7 +22,7 @@ PB.targets in Compile := Nil
 
 PB.targets in Test := Seq(
   PB.gens.java -> (sourceManaged in Test).value,
-  scalapb.gen(javaConversions=true) -> (sourceManaged in Test).value
+  scalapb.gen(javaConversions = true) -> (sourceManaged in Test).value
 )
 
 libraryDependencies ++= Seq(
