@@ -40,6 +40,7 @@ pomExtra in Global := {
       <connection>scm:git:github.com/xuwei-k/scalapb-playjson.git</connection>
       <developerConnection>scm:git:git@github.com:xuwei-k/scalapb-playjson.git</developerConnection>
       <url>github.com/xuwei-k/scalapb-playjson.git</url>
+      <tag>{tagOrHash.value}</tag>
     </scm>
     <developers>
       <developer>
