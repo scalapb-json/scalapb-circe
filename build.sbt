@@ -9,6 +9,8 @@ crossScalaVersions := Seq("2.12.4", Scala211, "2.10.7")
 
 scalacOptions ++= Seq("-feature", "-deprecation")
 
+description := "Json/Protobuf convertors for ScalaPB"
+
 licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 
 organization := "com.github.xuwei-k"
