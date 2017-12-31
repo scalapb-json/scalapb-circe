@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_package = "jsontest";
+import "scalapb/scalapb.proto";
+
+message Guitar {
+  int32 number_of_strings = 1;
+}
+
+message Studio {
+  repeated Guitar guitars = 1 [(scalapb.field).collection_type = "Set"];
+}

@@ -7,6 +7,17 @@ scalaVersion := Scala211
 
 crossScalaVersions := Seq("2.12.4", Scala211, "2.10.7")
 
+val unusedWarnings = Seq("-Ywarn-unused", "-Ywarn-unused-import")
+
+scalacOptions ++= PartialFunction
+  .condOpt(CrossVersion.partialVersion(scalaVersion.value)) {
+    case Some((2, v)) if v >= 11 => unusedWarnings
+  }
+  .toList
+  .flatten
+
+Seq(Compile, Test).flatMap(c => scalacOptions in (c, console) --= unusedWarnings)
+
 scalacOptions ++= Seq("-feature", "-deprecation")
 
 description := "Json/Protobuf convertors for ScalaPB"
@@ -28,6 +39,7 @@ PB.targets in Test := Seq(
 
 libraryDependencies ++= Seq(
   "com.trueaccord.scalapb" %% "scalapb-runtime" % scalapbVersion,
+  "com.trueaccord.scalapb" %% "scalapb-runtime" % scalapbVersion % "protobuf,test",
   "com.typesafe.play" %% "play-json" % "2.6.8",
   "org.scalatest" %% "scalatest" % "3.0.4" % "test",
   "com.google.protobuf" % "protobuf-java-util" % protobufVersion % "test",

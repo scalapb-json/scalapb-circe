@@ -2,8 +2,9 @@ syntax = "proto3";
 
 package jsontest;
 
-import "google/protobuf/duration.proto";
 import "test.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/wrappers.proto";
 
 message MyTest3 {
   string s = 1;
@@ -13,4 +14,26 @@ message MyTest3 {
   map<string, int32> string_to_int32 = 5;
   map<int32, MyTest> int_to_mytest = 6;
   map<fixed64, bytes> fixed64_to_bytes = 7;
+
+  oneof trick_or_treat {
+    int32 trick = 16;
+    MyTest3 treat = 17;
+  }
+}
+
+message Wrapper {
+  google.protobuf.DoubleValue  w_double = 1;
+  google.protobuf.FloatValue   w_float  = 2;
+  google.protobuf.Int64Value   w_int64  = 3;
+  google.protobuf.UInt64Value  w_uint64 = 4;
+  google.protobuf.Int32Value   w_int32  = 5;
+  google.protobuf.UInt32Value  w_uint32 = 6;
+  google.protobuf.BoolValue    w_bool   = 7;
+  google.protobuf.StringValue  w_string = 8;
+  google.protobuf.BytesValue   w_bytes  = 9;
+}
+
+message StructTest {
+  google.protobuf.NullValue nv = 1;
+  repeated google.protobuf.NullValue rep_nv = 2;
 }

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package jsontest;
+
+import "google/protobuf/any.proto";
+
+message AnyTest {
+    string field = 1;
+}
+
+message ManyAnyTest {
+    repeated google.protobuf.Any fields = 1;
+}

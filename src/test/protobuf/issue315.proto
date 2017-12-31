@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package jsontest;
+
+message Foo {
+  string cols = 1;
+}
+message Bar {
+  string name = 1;
+  string cols = 2;
+}
+
+message Msg {
+    string baz = 1;
+    oneof some_union {
+      Foo foo = 2;
+      Bar bar = 3;
+    }
+}

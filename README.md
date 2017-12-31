@@ -23,26 +23,6 @@ JsonFormat.fromJsonString(str) // return MessageType
 JsonFormat.fromJson(json) // return MessageType
 ```
 
-Alternatively you can define play-json `Reads[T]`, `Writes[T]` or `Format[T]` and use serialization implicitly
-
-```scala
-import play.api.libs.json._
-
-implicit val myMsgWrites: Writes[MyMsg] = JsonFormat.writes[MyMsg]
-
-implicit val myMsgReads: Reads[MyMsg] = JsonFormat.reads[MyMsg]
-
-implicit val myMsgFmt: Format[MyMsg] = JsonFormat.format[MyMsg]
-```
-
-There are helper methods for enums as well if necessary
-
-```scala
-JsonFormat.enumReads
-JsonFormat.enumWrites
-JsonFormat.enumFormat
-```
-
 ### Credits
 
 fork from https://github.com/whisklabs/scalapb-playjson
