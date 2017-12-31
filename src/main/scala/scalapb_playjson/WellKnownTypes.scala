@@ -21,7 +21,7 @@ object WellKnownTypes {
 
   def checkValid(duration: com.google.protobuf.duration.Duration) = {
     val secondsInRange = (duration.seconds >= DURATION_SECONDS_MIN &&
-        duration.seconds <= DURATION_SECONDS_MAX)
+      duration.seconds <= DURATION_SECONDS_MAX)
     val nanosInRange = duration.nanos >= -999999999L && duration.nanos <= NANOS_PER_SECOND
     val sameSign =
       !((duration.seconds < 0 || duration.nanos < 0) && (duration.seconds > 0 || duration.nanos > 0))
@@ -90,7 +90,8 @@ object WellKnownTypes {
 
     // TODO(thesamet): normalizedDuration?
 
-    com.google.protobuf.duration.Duration(seconds = if (negative) -seconds else seconds,
-                                          nanos = if (negative) -nanos else nanos)
+    com.google.protobuf.duration.Duration(
+      seconds = if (negative) -seconds else seconds,
+      nanos = if (negative) -nanos else nanos)
   }
 }

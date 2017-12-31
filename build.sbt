@@ -1,6 +1,10 @@
-scalaVersion := "2.11.8"
+import com.trueaccord.scalapb.compiler.Version._
 
-crossScalaVersions := Seq("2.11.8", "2.12.1")
+val Scala211 = "2.11.12"
+
+scalaVersion := Scala211
+
+crossScalaVersions := Seq("2.12.4", Scala211, "2.10.7")
 
 scalacOptions ++= Seq("-feature", "-deprecation")
 
@@ -9,10 +13,6 @@ licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 organization := "com.github.xuwei-k"
 
 name := "scalapb-playjson"
-
-version := "0.2.1"
-
-val scalaPbVersion = "0.5.47"
 
 Project.inConfig(Test)(sbtprotoc.ProtocPlugin.protobufConfigSettings)
 
@@ -23,31 +23,33 @@ PB.targets in Test := Seq(
   scalapb.gen(javaConversions = true) -> (sourceManaged in Test).value
 )
 
-val playVer = Def.setting[String] {
-  if (scalaVersion.value startsWith "2.11.") "2.5.10"
-  else "2.6.0-M1"
-}
-
 libraryDependencies ++= Seq(
-  "com.trueaccord.scalapb" %% "scalapb-runtime" % scalaPbVersion,
-  "com.typesafe.play" %% "play-json" % playVer.value,
-  "org.scalatest" %% "scalatest" % "3.0.1" % "test",
-  "com.google.protobuf" % "protobuf-java-util" % "3.1.0" % "test",
-  "com.google.protobuf" % "protobuf-java" % "3.1.0" % "protobuf"
+  "com.trueaccord.scalapb" %% "scalapb-runtime" % scalapbVersion,
+  "com.typesafe.play" %% "play-json" % "2.6.8",
+  "org.scalatest" %% "scalatest" % "3.0.4" % "test",
+  "com.google.protobuf" % "protobuf-java-util" % protobufVersion % "test",
+  "com.google.protobuf" % "protobuf-java" % protobufVersion % "protobuf"
 )
 
 pomExtra in Global := {
   <url>https://github.com/xuwei-k/scalapb-playjson</url>
     <scm>
-        <connection>scm:git:github.com/xuwei-k/scalapb-playjson.git</connection>
-        <developerConnection>scm:git:git@github.com:xuwei-k/scalapb-playjson.git</developerConnection>
-        <url>github.com/xuwei-k/scalapb-playjson.git</url>
+      <connection>scm:git:github.com/xuwei-k/scalapb-playjson.git</connection>
+      <developerConnection>scm:git:git@github.com:xuwei-k/scalapb-playjson.git</developerConnection>
+      <url>github.com/xuwei-k/scalapb-playjson.git</url>
     </scm>
     <developers>
-        <developer>
-            <id>xuwei-k</id>
-            <name>Kenji Yoshida</name>
-            <url>https://github.com/xuwei-k</url>
-        </developer>
+      <developer>
+        <id>xuwei-k</id>
+        <name>Kenji Yoshida</name>
+        <url>https://github.com/xuwei-k</url>
+      </developer>
     </developers>
 }
+
+publishTo := Some(
+  if (isSnapshot.value)
+    Opts.resolver.sonatypeSnapshots
+  else
+    Opts.resolver.sonatypeStaging
+)

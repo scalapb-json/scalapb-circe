@@ -67,10 +67,11 @@ class JsonFormatSpec extends FlatSpec with MustMatchers {
   }
 
   "Zero maps" should "give correct json" in {
-    JsonFormat.toJson(MyTest(
-      stringToInt32 = Map("" -> 17),
-      intToMytest = Map(0 -> MyTest()),
-      fixed64ToBytes = Map(0L -> com.google.protobuf.ByteString.copyFromUtf8("foobar")))) must be(
+    JsonFormat.toJson(
+      MyTest(
+        stringToInt32 = Map("" -> 17),
+        intToMytest = Map(0 -> MyTest()),
+        fixed64ToBytes = Map(0L -> com.google.protobuf.ByteString.copyFromUtf8("foobar")))) must be(
       Json.parse("""|{
                |  "stringToInt32": {"": 17},
                |  "intToMytest": {"0": {}},
@@ -79,10 +80,11 @@ class JsonFormatSpec extends FlatSpec with MustMatchers {
   }
 
   "Zero maps" should "give correct json for MyTest3" in {
-    JsonFormat.toJson(MyTest3(
-      stringToInt32 = Map("" -> 17),
-      intToMytest = Map(0 -> MyTest()),
-      fixed64ToBytes = Map(0L -> com.google.protobuf.ByteString.copyFromUtf8("foobar")))) must be(
+    JsonFormat.toJson(
+      MyTest3(
+        stringToInt32 = Map("" -> 17),
+        intToMytest = Map(0 -> MyTest()),
+        fixed64ToBytes = Map(0L -> com.google.protobuf.ByteString.copyFromUtf8("foobar")))) must be(
       Json.parse("""|{
                |  "stringToInt32": {"": 17},
                |  "intToMytest": {"0": {}},
