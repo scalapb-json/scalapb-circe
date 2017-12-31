@@ -1,4 +1,4 @@
-package com.whisk.scalapb.playjson
+package scalapb_playjson
 
 import org.scalatest.{FlatSpec, MustMatchers}
 import jsontest.test._

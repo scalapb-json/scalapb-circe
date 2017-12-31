@@ -1,4 +1,4 @@
-package com.whisk.scalapb.playjson
+package scalapb_playjson
 
 import com.fasterxml.jackson.core.Base64Variants
 import com.google.protobuf.ByteString

@@ -1,4 +1,4 @@
-package com.whisk.scalapb.playjson
+package scalapb_playjson
 
 import java.text.ParseException
 

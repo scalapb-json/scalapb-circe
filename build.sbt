@@ -6,9 +6,7 @@ scalacOptions ++= Seq("-feature", "-deprecation")
 
 licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 
-sonatypeProfileName := "com.whisk"
-
-organization := "com.whisk"
+organization := "com.github.xuwei-k"
 
 name := "scalapb-playjson"
 
@@ -39,17 +37,17 @@ libraryDependencies ++= Seq(
 )
 
 pomExtra in Global := {
-  <url>https://github.com/whisklabs/scalapb-playjson</url>
+  <url>https://github.com/xuwei-k/scalapb-playjson</url>
     <scm>
-        <connection>scm:git:github.com/whisklabs/scalapb-playjson.git</connection>
-        <developerConnection>scm:git:git@github.com:whisklabs/scalapb-playjson.git</developerConnection>
-        <url>github.com/whisklabs/scalapb-playjson.git</url>
+        <connection>scm:git:github.com/xuwei-k/scalapb-playjson.git</connection>
+        <developerConnection>scm:git:git@github.com:xuwei-k/scalapb-playjson.git</developerConnection>
+        <url>github.com/xuwei-k/scalapb-playjson.git</url>
     </scm>
     <developers>
         <developer>
-            <id>viktortnk</id>
-            <name>Viktor Taranenko</name>
-            <url>https://github.com/viktortnk</url>
+            <id>xuwei-k</id>
+            <name>Kenji Yoshida</name>
+            <url>https://github.com/xuwei-k</url>
         </developer>
     </developers>
 }

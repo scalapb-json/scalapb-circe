@@ -1,4 +1,4 @@
-# scalapb-playjson [![Build Status](https://travis-ci.org/whisklabs/scalapb-playjson.svg?branch=master)](https://travis-ci.org/whisklabs/scalapb-playjson)
+# scalapb-playjson [![Build Status](https://travis-ci.org/xuwei-k/scalapb-playjson.svg?branch=master)](https://travis-ci.org/xuwei-k/scalapb-playjson)
 
 The structure of this project is hugely inspired by [scalapb-json4s](https://github.com/trueaccord/scalapb-json4s)
 
@@ -9,7 +9,7 @@ Artifacts are available for Scala 2.11 and 2.12
 Include in your `build.sbt` file
 
 ```scala
-libraryDependencies += "com.whisk" %% "scalapb-playjson" % "0.2.1"
+libraryDependencies += "com.github.xuwei-k" %% "scalapb-playjson" % "0.2.1"
 ```
 
 ## Usage
