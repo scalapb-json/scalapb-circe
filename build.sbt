@@ -1,4 +1,5 @@
 import com.trueaccord.scalapb.compiler.Version._
+import sbtrelease.ReleaseStateTransformations._
 
 val Scala211 = "2.11.12"
 
@@ -12,7 +13,7 @@ licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 
 organization := "com.github.xuwei-k"
 
-name := "scalapb-playjson"
+name := UpdateReadme.scalapbPlayJsonName
 
 Project.inConfig(Test)(sbtprotoc.ProtocPlugin.protobufConfigSettings)
 
@@ -52,4 +53,42 @@ publishTo := Some(
     Opts.resolver.sonatypeSnapshots
   else
     Opts.resolver.sonatypeStaging
+)
+
+val tagName = Def.setting {
+  s"v${if (releaseUseGlobalVersion.value) (version in ThisBuild).value else version.value}"
+}
+val tagOrHash = Def.setting {
+  if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
+  else tagName.value
+}
+
+ReleasePlugin.extraReleaseCommands
+
+commands += Command.command("updateReadme")(UpdateReadme.updateReadmeTask)
+
+releaseTagName := tagName.value
+
+releaseProcess := Seq[ReleaseStep](
+  checkSnapshotDependencies,
+  inquireVersions,
+  runClean,
+  runTest,
+  setReleaseVersion,
+  commitReleaseVersion,
+  UpdateReadme.updateReadmeProcess,
+  tagRelease,
+  ReleaseStep(
+    action = { state =>
+      val extracted = Project extract state
+      extracted
+        .runAggregated(PgpKeys.publishSigned in Global in extracted.get(thisProjectRef), state)
+    },
+    enableCrossBuild = true
+  ),
+  setNextVersion,
+  commitNextVersion,
+  releaseStepCommand("sonatypeReleaseAll"),
+  UpdateReadme.updateReadmeProcess,
+  pushChanges
 )
