@@ -41,3 +41,7 @@ JsonFormat.enumReads
 JsonFormat.enumWrites
 JsonFormat.enumFormat
 ```
+
+### Credits
+
+fork from https://github.com/whisklabs/scalapb-playjson
