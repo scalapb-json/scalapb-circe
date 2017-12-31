@@ -11,7 +11,7 @@ scalacOptions ++= Seq("-feature", "-deprecation")
 
 description := "Json/Protobuf convertors for ScalaPB"
 
-licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
+licenses += ("MIT", url("https://opensource.org/licenses/MIT"))
 
 organization := "com.github.xuwei-k"
 
