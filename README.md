@@ -4,12 +4,10 @@ The structure of this project is hugely inspired by [scalapb-json4s](https://git
 
 ## Dependency
 
-Artifacts are available for Scala 2.11 and 2.12
-
 Include in your `build.sbt` file
 
 ```scala
-libraryDependencies += "com.github.xuwei-k" %% "scalapb-playjson" % "0.2.1"
+libraryDependencies += "com.github.xuwei-k" %% "scalapb-playjson" % "0.3.0"
 ```
 
 ## Usage
