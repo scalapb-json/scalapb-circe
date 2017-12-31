@@ -1,6 +1,5 @@
 package scalapb_playjson
 
-import com.fasterxml.jackson.core.Base64Variants
 import com.google.protobuf.ByteString
 import com.google.protobuf.descriptor.FieldDescriptorProto
 import com.google.protobuf.duration.Duration
@@ -251,7 +250,7 @@ class Printer(
     case PFloat(v) => JsNumber(v)
     case PBoolean(v) => JsBoolean(v)
     case PString(v) => JsString(v)
-    case PByteString(v) => JsString(Base64Variants.getDefaultVariant.encode(v.toByteArray))
+    case PByteString(v) => JsString(java.util.Base64.getEncoder.encodeToString(v.toByteArray))
     case _: PMessage | PRepeated(_) | PEmpty => throw new RuntimeException("Should not happen")
   }
 }
@@ -533,7 +532,7 @@ object JsonFormat {
     case (ScalaType.Boolean, JsBoolean(b)) => PBoolean(b)
     case (ScalaType.String, JsString(s)) => PString(s)
     case (ScalaType.ByteString, JsString(s)) =>
-      PByteString(ByteString.copyFrom(Base64Variants.getDefaultVariant.decode(s)))
+      PByteString(ByteString.copyFrom(java.util.Base64.getDecoder.decode(s)))
     case _ => onError
   }
 
