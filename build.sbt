@@ -65,6 +65,16 @@ val tagOrHash = Def.setting {
   else tagName.value
 }
 
+scalacOptions in (Compile, doc) ++= {
+  val t = tagOrHash.value
+  Seq(
+    "-sourcepath",
+    (baseDirectory in LocalRootProject).value.getAbsolutePath,
+    "-doc-source-url",
+    s"https://github.com/xuwei-k/scalapb-playjson/tree/${t}€{FILE_PATH}.scala"
+  )
+}
+
 ReleasePlugin.extraReleaseCommands
 
 commands += Command.command("updateReadme")(UpdateReadme.updateReadmeTask)
