@@ -4,7 +4,7 @@ import org.scalatest.{FlatSpec, MustMatchers}
 import com.google.protobuf.struct._
 import jsontest.test3.StructTest
 
-class StructFormatSpec extends FlatSpec with MustMatchers with JavaAssertions {
+class StructFormatSpecJVM extends FlatSpec with MustMatchers with JavaAssertions {
   val ListValueExample = ListValue(
     values = Seq(
       Value(Value.Kind.NumberValue(-245.0)),
@@ -29,7 +29,6 @@ class StructFormatSpec extends FlatSpec with MustMatchers with JavaAssertions {
 
   "Empty value" should "be serialized to null" in {
     JavaJsonPrinter.print(com.google.protobuf.Value.newBuilder().build()) must be("null")
-    JsonFormat.toJsonString(Value()) must be("null")
   }
 
   "Value" should "be serialized the same as in Java (and parsed back to original)" in {
@@ -70,10 +69,5 @@ class StructFormatSpec extends FlatSpec with MustMatchers with JavaAssertions {
     assertJsonIsSameAsJava(StructTest())
     assertJsonIsSameAsJava(StructTest(nv = NullValue.NULL_VALUE))
     assertJsonIsSameAsJava(StructTest(repNv = Seq(NullValue.NULL_VALUE, NullValue.NULL_VALUE)))
-    JsonFormat.fromJsonString[StructTest]("""{"nv": null}""") must be(StructTest())
-    JsonFormat.fromJsonString[StructTest]("""{"nv": "NULL_VALUE"}""") must be(StructTest())
-    JsonFormat.fromJsonString[StructTest]("""{"nv": 0}""") must be(StructTest())
-    JsonFormat.fromJsonString[StructTest]("""{"repNv": [null, 0, null]}""") must be(
-      StructTest(repNv = Seq(NullValue.NULL_VALUE, NullValue.NULL_VALUE, NullValue.NULL_VALUE)))
   }
 }

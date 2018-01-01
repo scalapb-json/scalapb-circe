@@ -1,7 +1,6 @@
 package scalapb_playjson
 
 import com.google.protobuf.util.JsonFormat.{TypeRegistry => JavaTypeRegistry}
-import JsonFormat.GenericCompanion
 import com.trueaccord.scalapb.{
   GeneratedMessage,
   GeneratedMessageCompanion,
@@ -10,21 +9,16 @@ import com.trueaccord.scalapb.{
 }
 import org.scalatest.MustMatchers
 
-trait JavaAssertions {
-  self: MustMatchers =>
+trait JavaAssertionsPlatform {
+  self: MustMatchers with JavaAssertions =>
 
-  def registeredCompanions: Seq[GeneratedMessageCompanion[_]] = Seq.empty
+  def registeredCompanions: Seq[GeneratedMessageCompanion[_]]
 
   val JavaJsonTypeRegistry =
     registeredCompanions.foldLeft(JavaTypeRegistry.newBuilder())(_ add _.javaDescriptor).build()
   val JavaJsonPrinter =
     com.google.protobuf.util.JsonFormat.printer().usingTypeRegistry(JavaJsonTypeRegistry)
   val JavaJsonParser = com.google.protobuf.util.JsonFormat.parser()
-
-  val ScalaTypeRegistry = registeredCompanions.foldLeft(TypeRegistry.empty)((r, c) =>
-    r.addMessageByCompanion(c.asInstanceOf[GenericCompanion]))
-  val ScalaJsonParser = new Parser(typeRegistry = ScalaTypeRegistry)
-  val ScalaJsonPrinter = new Printer(typeRegistry = ScalaTypeRegistry)
 
   def assertJsonIsSameAsJava[T <: GeneratedMessage with Message[T]](v: T)(
     implicit cmp: GeneratedMessageCompanion[T]) = {

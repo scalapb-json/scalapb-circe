@@ -66,10 +66,6 @@ class AnyFormatSpec extends FlatSpec with MustMatchers with JavaAssertions {
     ScalaJsonParser.fromJson[PBAny](AnyJson) must be(AnyExample)
   }
 
-  "Any" should "be serialized the same as in Java (and parsed back to original)" in {
-    assertJsonIsSameAsJava(AnyExample)
-  }
-
   "Any" should "resolve printers recursively" in {
     val packed = PBAny.pack(ManyExample)
     ScalaJsonPrinter.toJson(packed) must be(ManyPackedJson)

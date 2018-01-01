@@ -5,9 +5,7 @@ import play.api.libs.json.Json.parse
 import org.scalatest.{Assertion, FlatSpec, MustMatchers, OptionValues}
 import jsontest.test._
 import jsontest.test3._
-import com.google.protobuf.util.{JsonFormat => JavaJsonFormat}
 import com.google.protobuf.any.{Any => PBAny}
-import com.google.protobuf.util.JsonFormat.{TypeRegistry => JavaTypeRegistry}
 import jsontest.custom_collection.{Guitar, Studio}
 
 class JsonFormatSpec extends FlatSpec with MustMatchers with OptionValues {
@@ -184,17 +182,6 @@ class JsonFormatSpec extends FlatSpec with MustMatchers with OptionValues {
     JsonFormat.fromJsonString[MyTest](TestJson) must be(TestProto)
   }
 
-  "fromJsonString" should "read json produced by Java" in {
-    val javaJson = JavaJsonFormat.printer().print(MyTest.toJavaProto(TestProto))
-    JsonFormat.fromJsonString[MyTest](javaJson) must be(TestProto)
-  }
-
-  "Java parser" should "read json strings produced by us" in {
-    val b = jsontest.Test.MyTest.newBuilder
-    JavaJsonFormat.parser().merge(JsonFormat.toJsonString(TestProto), b)
-    TestProto must be(MyTest.fromJavaProto(b.build))
-  }
-
   "Empty object" should "give full json if including default values" in {
     new Printer(includingDefaultValueFields = true).toJson(MyTest()) must be(
       parse("""{
@@ -355,9 +342,6 @@ class JsonFormatSpec extends FlatSpec with MustMatchers with OptionValues {
     out.f.value.isNaN must be(true)
   }
 
-  val anyEnabledJavaTypeRegistry =
-    JavaTypeRegistry.newBuilder().add(TestProto.companion.javaDescriptor).build()
-  val anyEnabledJavaPrinter = JavaJsonFormat.printer().usingTypeRegistry(anyEnabledJavaTypeRegistry)
   val anyEnabledTypeRegistry = TypeRegistry.empty.addMessageByCompanion(TestProto.companion)
   val anyEnabledParser = new Parser(typeRegistry = anyEnabledTypeRegistry)
   val anyEnabledPrinter = new Printer(typeRegistry = anyEnabledTypeRegistry)
@@ -371,12 +355,6 @@ class JsonFormatSpec extends FlatSpec with MustMatchers with OptionValues {
   "TestJsonWithType" should "be TestProto packed as any when parsed from JSON" in {
     val out = anyEnabledParser.fromJson[PBAny](parse(TestJsonWithType))
     out.unpack[MyTest] must be(TestProto)
-  }
-
-  "Any" should "parse JSON produced by Java for a packed TestProto" in {
-    val javaAny = com.google.protobuf.Any.pack(MyTest.toJavaProto(TestProto))
-    val javaJson = anyEnabledJavaPrinter.print(javaAny)
-    anyEnabledParser.fromJsonString[PBAny](javaJson).unpack[MyTest] must be(TestProto)
   }
 
   "toJsonString" should "generate correct JSON for messages with custom collection type" in {
