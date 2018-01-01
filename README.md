@@ -11,6 +11,12 @@ Include in your `build.sbt` file
 libraryDependencies += "com.github.xuwei-k" %% "scalapb-playjson" % "0.5.0"
 ```
 
+for scala-js
+
+```scala
+libraryDependencies += "com.github.xuwei-k" %%% "scalapb-playjson" % "0.5.0"
+```
+
 ## Usage
 
 There are four functions you can use directly to serialize/deserialize your messages:
