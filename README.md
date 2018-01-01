@@ -8,7 +8,7 @@ The structure of this project is hugely inspired by [scalapb-json4s](https://git
 Include in your `build.sbt` file
 
 ```scala
-libraryDependencies += "com.github.xuwei-k" %% "scalapb-playjson" % "0.4.0"
+libraryDependencies += "com.github.xuwei-k" %% "scalapb-playjson" % "0.5.0"
 ```
 
 ## Usage
