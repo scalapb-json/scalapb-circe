@@ -15,7 +15,7 @@ val tagOrHash = Def.setting {
 
 val unusedWarnings = Seq("-Ywarn-unused", "-Ywarn-unused-import")
 
-val scalapbPlayJson = crossProject(JVMPlatform, JSPlatform)
+val scalapbArgonaut = crossProject(JVMPlatform, JSPlatform)
   .in(file("."))
   .settings(
     commonSettings
@@ -63,22 +63,22 @@ lazy val commonSettings = Seq[Def.SettingsDefinition](
   description := "Json/Protobuf convertors for ScalaPB",
   licenses += ("MIT", url("https://opensource.org/licenses/MIT")),
   organization := "io.github.scalapb-json",
-  name := UpdateReadme.scalapbPlayJsonName,
+  name := UpdateReadme.scalapbArgonautName,
   Project.inConfig(Test)(sbtprotoc.ProtocPlugin.protobufConfigSettings),
   PB.targets in Compile := Nil,
   PB.protoSources in Test := Seq(file("shared/src/test/protobuf")),
   libraryDependencies ++= Seq(
     "io.github.scalapb-json" %%% "scalapb-json-common" % "0.1.0",
     "com.trueaccord.scalapb" %%% "scalapb-runtime" % scalapbVersion % "protobuf,test",
-    "com.typesafe.play" %%% "play-json" % "2.6.8",
+    "io.argonaut" %%% "argonaut" % "6.2.1",
     "org.scalatest" %%% "scalatest" % "3.0.4" % "test"
   ),
   pomExtra in Global := {
-    <url>https://github.com/scalapb-json/scalapb-playjson</url>
+    <url>https://github.com/scalapb-json/scalapb-argonaut</url>
       <scm>
-        <connection>scm:git:github.com/scalapb-json/scalapb-playjson.git</connection>
-        <developerConnection>scm:git:git@github.com:scalapb-json/scalapb-playjson.git</developerConnection>
-        <url>github.com/scalapb-json/scalapb-playjson.git</url>
+        <connection>scm:git:github.com/scalapb-json/scalapb-argonaut.git</connection>
+        <developerConnection>scm:git:git@github.com:scalapb-json/scalapb-argonaut.git</developerConnection>
+        <url>github.com/scalapb-json/scalapb-argonaut.git</url>
         <tag>{tagOrHash.value}</tag>
       </scm>
       <developers>
@@ -101,7 +101,7 @@ lazy val commonSettings = Seq[Def.SettingsDefinition](
       "-sourcepath",
       (baseDirectory in LocalRootProject).value.getAbsolutePath,
       "-doc-source-url",
-      s"https://github.com/scalapb-json/scalapb-playjson/tree/${t}€{FILE_PATH}.scala"
+      s"https://github.com/scalapb-json/scalapb-argonaut/tree/${t}€{FILE_PATH}.scala"
     )
   },
   ReleasePlugin.extraReleaseCommands,
@@ -133,5 +133,5 @@ lazy val commonSettings = Seq[Def.SettingsDefinition](
   )
 ).flatMap(_.settings)
 
-val scalapbPlayJsonJVM = scalapbPlayJson.jvm
-val scalapbPlayJsonJS = scalapbPlayJson.js
+val scalapbArgonautJVM = scalapbArgonaut.jvm
+val scalapbArgonautJS = scalapbArgonaut.js

@@ -1,4 +1,4 @@
-package scalapb_playjson
+package scalapb_argonaut
 
 import com.google.protobuf.any.{Any => PBAny}
 import org.scalatest.{FlatSpec, MustMatchers}

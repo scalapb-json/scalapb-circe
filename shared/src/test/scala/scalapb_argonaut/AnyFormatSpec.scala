@@ -1,24 +1,25 @@
-package scalapb_playjson
+package scalapb_argonaut
 
 import scala.language.existentials
 import com.google.protobuf.any.{Any => PBAny}
 import jsontest.anytests.{AnyTest, ManyAnyTest}
 import org.scalatest.{FlatSpec, MustMatchers}
-import play.api.libs.json.Json.parse
+import argonaut.JsonParser.parse
 import scalapb_json._
+import EitherOps._
 
 class AnyFormatSpec extends FlatSpec with MustMatchers with JavaAssertions {
   val RawExample = AnyTest("test")
 
-  val RawJson = parse(s"""{"field":"test"}""")
+  val RawJson = parse(s"""{"field":"test"}""").getOrError
 
   val AnyExample = PBAny.pack(RawExample)
 
-  val AnyJson = parse(s"""{"@type":"type.googleapis.com/jsontest.AnyTest","field":"test"}""")
+  val AnyJson = parse(s"""{"@type":"type.googleapis.com/jsontest.AnyTest","field":"test"}""").getOrError
 
   val CustomPrefixAny = PBAny.pack(RawExample, "example.com/")
 
-  val CustomPrefixJson = parse(s"""{"@type":"example.com/jsontest.AnyTest","field":"test"}""")
+  val CustomPrefixJson = parse(s"""{"@type":"example.com/jsontest.AnyTest","field":"test"}""").getOrError
 
   val ManyExample = ManyAnyTest(
     Seq(
@@ -34,7 +35,7 @@ class AnyFormatSpec extends FlatSpec with MustMatchers with JavaAssertions {
       |    {"@type": "type.googleapis.com/jsontest.AnyTest", "field": "2"}
       |  ]
       |}
-    """.stripMargin)
+    """.stripMargin).getOrError
 
   override def registeredCompanions = Seq(AnyTest, ManyAnyTest)
 

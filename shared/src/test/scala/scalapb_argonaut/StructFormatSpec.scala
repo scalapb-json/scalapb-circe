@@ -1,4 +1,4 @@
-package scalapb_playjson
+package scalapb_argonaut
 
 import org.scalatest.{FlatSpec, MustMatchers}
 import com.google.protobuf.struct._

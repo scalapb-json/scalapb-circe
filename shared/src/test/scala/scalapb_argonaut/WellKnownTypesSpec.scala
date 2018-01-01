@@ -1,10 +1,11 @@
-package scalapb_playjson
+package scalapb_argonaut
 
 import com.google.protobuf.duration.Duration
 import com.google.protobuf.timestamp.Timestamp
 import jsontest.test.WellKnownTest
-import play.api.libs.json.Json.parse
+import argonaut.JsonParser.parse
 import org.scalatest.{FlatSpec, MustMatchers}
+import EitherOps._
 
 class WellKnownTypesSpec extends FlatSpec with MustMatchers {
 
@@ -14,7 +15,7 @@ class WellKnownTypesSpec extends FlatSpec with MustMatchers {
     val durationJson = """{
                          |  "duration": "146.000003455s"
                          |}""".stripMargin
-    JsonFormat.printer.toJson(durationProto) must be(parse(durationJson))
+    JsonFormat.printer.toJson(durationProto) must be(parse(durationJson).getOrError)
     JsonFormat.parser.fromJsonString[WellKnownTest](durationJson) must be(durationProto)
   }
 
@@ -25,6 +26,6 @@ class WellKnownTypesSpec extends FlatSpec with MustMatchers {
     val timestampProto =
       WellKnownTest(timestamp = Some(Timestamp(seconds = 1474029324, nanos = 375123456)))
     JsonFormat.parser.fromJsonString[WellKnownTest](timestampJson) must be(timestampProto)
-    JsonFormat.printer.toJson(timestampProto) must be(parse(timestampJson))
+    JsonFormat.printer.toJson(timestampProto) must be(parse(timestampJson).getOrError)
   }
 }

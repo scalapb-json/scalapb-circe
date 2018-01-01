@@ -1,3 +1,3 @@
-package scalapb_playjson
+package scalapb_argonaut
 
 trait JavaAssertionsPlatform

@@ -1,4 +1,4 @@
-package scalapb_playjson
+package scalapb_argonaut
 
 import scalapb_json.ScalapbJsonCommon.GenericCompanion
 import com.trueaccord.scalapb.GeneratedMessageCompanion
