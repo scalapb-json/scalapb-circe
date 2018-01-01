@@ -1,8 +1,5 @@
 package scalapb_playjson
 
-import java.text.SimpleDateFormat
-import java.util.{Date, GregorianCalendar, TimeZone}
-
 import com.google.protobuf.TextFormat.ParseException
 import com.google.protobuf.timestamp.Timestamp
 
@@ -10,21 +7,12 @@ object Timestamps {
   // Timestamp for "0001-01-01T00:00:00Z"
   val TIMESTAMP_SECONDS_MIN = -62135596800L
   val TIMESTAMP_SECONDS_MAX = 253402300799L
-  val MILLIS_PER_SECOND = 1000
   val MICROS_PER_SECOND = 1000000
   val NANOS_PER_SECOND = 1000000000
   val NANOS_PER_MILLISECOND = 1000000
   val NANOS_PER_MICROSECOND = 1000
 
-  private val timestampFormat: ThreadLocal[SimpleDateFormat] = new ThreadLocal[SimpleDateFormat] {
-    override def initialValue(): SimpleDateFormat = {
-      val sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-      val calendar = new GregorianCalendar(TimeZone.getTimeZone("UTC"))
-      calendar.setGregorianChange(new Date(Long.MinValue))
-      sdf.setCalendar(calendar)
-      sdf
-    }
-  }
+  private[this] val timestampFormat = java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
   def isValid(ts: Timestamp): Boolean =
     (ts.seconds >= TIMESTAMP_SECONDS_MIN &&
@@ -52,8 +40,8 @@ object Timestamps {
     checkValid(ts)
 
     val result = new StringBuilder
-    val date = new Date(ts.seconds * Timestamps.MILLIS_PER_SECOND)
-    result.append(timestampFormat.get.format(date))
+    val date = java.time.LocalDateTime.ofEpochSecond(ts.seconds, 0, java.time.ZoneOffset.UTC)
+    result.append(timestampFormat.format(date))
     if (ts.nanos != 0) {
       result.append(".")
       result.append(formatNanos(ts.nanos))
@@ -111,8 +99,9 @@ object Timestamps {
         (timeValue, "")
       else
         (timeValue.substring(0, pointPosition), timeValue.substring(pointPosition + 1))
-    val date = timestampFormat.get().parse(secondValue)
-    val seconds: Long = date.getTime / MILLIS_PER_SECOND - timezoneOffset
+
+    val date = java.time.LocalDateTime.parse(secondValue)
+    val seconds: Long = date.toEpochSecond(java.time.ZoneOffset.UTC) - timezoneOffset
     val nanos: Int = if (nanoValue.isEmpty) 0 else Durations.parseNanos(nanoValue)
     normalizedTimestamp(seconds, nanos)
   }
