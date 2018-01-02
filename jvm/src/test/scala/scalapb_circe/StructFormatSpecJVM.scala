@@ -1,4 +1,4 @@
-package scalapb_argonaut
+package scalapb_circe
 
 import org.scalatest.{FlatSpec, MustMatchers}
 import com.google.protobuf.struct._

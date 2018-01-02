@@ -1,4 +1,4 @@
-package scalapb_argonaut
+package scalapb_circe
 
 import com.google.protobuf.any.{Any => PBAny}
 import org.scalatest.{FlatSpec, MustMatchers}

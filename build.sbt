@@ -15,7 +15,7 @@ val tagOrHash = Def.setting {
 
 val unusedWarnings = Seq("-Ywarn-unused", "-Ywarn-unused-import")
 
-val scalapbArgonaut = crossProject(JVMPlatform, JSPlatform)
+val scalapbCirce = crossProject(JVMPlatform, JSPlatform)
   .in(file("."))
   .settings(
     commonSettings
@@ -63,22 +63,22 @@ lazy val commonSettings = Seq[Def.SettingsDefinition](
   description := "Json/Protobuf convertors for ScalaPB",
   licenses += ("MIT", url("https://opensource.org/licenses/MIT")),
   organization := "io.github.scalapb-json",
-  name := UpdateReadme.scalapbArgonautName,
+  name := UpdateReadme.scalapbCirceName,
   Project.inConfig(Test)(sbtprotoc.ProtocPlugin.protobufConfigSettings),
   PB.targets in Compile := Nil,
   PB.protoSources in Test := Seq(file("shared/src/test/protobuf")),
   libraryDependencies ++= Seq(
     "io.github.scalapb-json" %%% "scalapb-json-common" % "0.1.0",
     "com.trueaccord.scalapb" %%% "scalapb-runtime" % scalapbVersion % "protobuf,test",
-    "io.argonaut" %%% "argonaut" % "6.2.1",
+    "io.circe" %%% "circe-parser" % "0.9.0",
     "org.scalatest" %%% "scalatest" % "3.0.4" % "test"
   ),
   pomExtra in Global := {
-    <url>https://github.com/scalapb-json/scalapb-argonaut</url>
+    <url>https://github.com/scalapb-json/scalapb-circe</url>
       <scm>
-        <connection>scm:git:github.com/scalapb-json/scalapb-argonaut.git</connection>
-        <developerConnection>scm:git:git@github.com:scalapb-json/scalapb-argonaut.git</developerConnection>
-        <url>github.com/scalapb-json/scalapb-argonaut.git</url>
+        <connection>scm:git:github.com/scalapb-json/scalapb-circe.git</connection>
+        <developerConnection>scm:git:git@github.com:scalapb-json/scalapb-circe.git</developerConnection>
+        <url>github.com/scalapb-json/scalapb-circe.git</url>
         <tag>{tagOrHash.value}</tag>
       </scm>
       <developers>
@@ -101,7 +101,7 @@ lazy val commonSettings = Seq[Def.SettingsDefinition](
       "-sourcepath",
       (baseDirectory in LocalRootProject).value.getAbsolutePath,
       "-doc-source-url",
-      s"https://github.com/scalapb-json/scalapb-argonaut/tree/${t}€{FILE_PATH}.scala"
+      s"https://github.com/scalapb-json/scalapb-circe/tree/${t}€{FILE_PATH}.scala"
     )
   },
   ReleasePlugin.extraReleaseCommands,
@@ -133,5 +133,5 @@ lazy val commonSettings = Seq[Def.SettingsDefinition](
   )
 ).flatMap(_.settings)
 
-val scalapbArgonautJVM = scalapbArgonaut.jvm
-val scalapbArgonautJS = scalapbArgonaut.js
+val scalapbCirceJVM = scalapbCirce.jvm
+val scalapbCirceJS = scalapbCirce.js

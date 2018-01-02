@@ -1,9 +1,9 @@
-package scalapb_argonaut
+package scalapb_circe
 
 import com.google.protobuf.duration.Duration
 import com.google.protobuf.timestamp.Timestamp
 import jsontest.test.WellKnownTest
-import argonaut.JsonParser.parse
+import io.circe.parser.parse
 import org.scalatest.{FlatSpec, MustMatchers}
 import EitherOps._
 

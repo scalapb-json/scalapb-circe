@@ -1,10 +1,10 @@
-package scalapb_argonaut
+package scalapb_circe
 
 import scala.language.existentials
 import com.google.protobuf.any.{Any => PBAny}
 import jsontest.anytests.{AnyTest, ManyAnyTest}
 import org.scalatest.{FlatSpec, MustMatchers}
-import argonaut.JsonParser.parse
+import io.circe.parser.parse
 import scalapb_json._
 import EitherOps._
 

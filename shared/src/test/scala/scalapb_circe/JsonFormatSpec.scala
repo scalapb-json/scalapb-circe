@@ -1,7 +1,7 @@
-package scalapb_argonaut
+package scalapb_circe
 
-import argonaut._
-import argonaut.JsonParser.parse
+import io.circe._
+import io.circe.parser.parse
 import org.scalatest.{Assertion, FlatSpec, MustMatchers, OptionValues}
 import jsontest.test._
 import jsontest.test3._

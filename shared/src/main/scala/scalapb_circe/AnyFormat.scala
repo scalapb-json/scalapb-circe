@@ -1,7 +1,7 @@
-package scalapb_argonaut
+package scalapb_circe
 
 import com.google.protobuf.any.{Any => PBAny}
-import argonaut._
+import io.circe._
 import scala.language.existentials
 import scalapb_json._
 
@@ -19,9 +19,9 @@ object AnyFormat {
       val message = any.unpack(cmp)
 
       // ... and add the @type marker to the resulting JSON
-      printer.toJson(message).obj match {
+      printer.toJson(message).asObject match {
         case Some(fields) =>
-          Json.obj(("@type" -> Json.jString(any.typeUrl)) :: fields.toList: _*)
+          Json.obj(("@type" -> Json.fromString(any.typeUrl)) :: fields.toList: _*)
         case value =>
           // Safety net, this shouldn't happen
           throw new IllegalStateException(
@@ -30,9 +30,9 @@ object AnyFormat {
   }
 
   val anyParser: (Parser, Json) => PBAny = { case (parser, json) =>
-    json.obj match {
+    json.asObject match {
       case Some(obj) =>
-        obj.toMap.get("@type").flatMap(_.string) match {
+        obj.toMap.get("@type").flatMap(_.asString) match {
           case Some(typeUrl) =>
             val cmp = parser.typeRegistry
               .findType(typeUrl)

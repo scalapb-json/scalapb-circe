@@ -1,5 +1,5 @@
-# scalapb-argonaut [![Build Status](https://travis-ci.org/scalapb-json/scalapb-argonaut.svg?branch=master)](https://travis-ci.org/scalapb-json/scalapb-argonaut)
-[![scaladoc](https://javadoc-badge.appspot.com/com.github.scalapb-json/scalapb-argonaut_2.12.svg?label=scaladoc)](https://javadoc-badge.appspot.com/com.github.scalapb-json/scalapb-argonaut_2.12/scalapb_argonaut/index.html?javadocio=true)
+# scalapb-circe [![Build Status](https://travis-ci.org/scalapb-json/scalapb-circe.svg?branch=master)](https://travis-ci.org/scalapb-json/scalapb-circe)
+[![scaladoc](https://javadoc-badge.appspot.com/com.github.scalapb-json/scalapb-circe_2.12.svg?label=scaladoc)](https://javadoc-badge.appspot.com/com.github.scalapb-json/scalapb-circe_2.12/scalapb_circe/index.html?javadocio=true)
 
 The structure of this project is hugely inspired by [scalapb-json4s](https://github.com/scalapb/scalapb-json4s)
 
@@ -8,13 +8,13 @@ The structure of this project is hugely inspired by [scalapb-json4s](https://git
 Include in your `build.sbt` file
 
 ```scala
-libraryDependencies += "io.github.scalapb-json" %% "scalapb-argonaut" % "0.1.0"
+libraryDependencies += "io.github.scalapb-json" %% "scalapb-circe" % "0.1.0"
 ```
 
 for scala-js
 
 ```scala
-libraryDependencies += "io.github.scalapb-json" %%% "scalapb-argonaut" % "0.1.0"
+libraryDependencies += "io.github.scalapb-json" %%% "scalapb-circe" % "0.1.0"
 ```
 
 ## Usage

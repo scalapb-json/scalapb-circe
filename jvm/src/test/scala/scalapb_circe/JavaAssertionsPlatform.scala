@@ -1,4 +1,4 @@
-package scalapb_argonaut
+package scalapb_circe
 
 import com.google.protobuf.util.JsonFormat.{TypeRegistry => JavaTypeRegistry}
 import com.trueaccord.scalapb.{
@@ -26,7 +26,7 @@ trait JavaAssertionsPlatform {
     val javaJson = JavaJsonPrinter.print(
       cmp.asInstanceOf[JavaProtoSupport[T, com.google.protobuf.GeneratedMessageV3]].toJavaProto(v))
 
-    import argonaut.JsonParser.parse
+    import io.circe.parser.parse
     parse(scalaJson).isRight must be(true)
     parse(scalaJson) must be(parse(javaJson))
     ScalaJsonParser.fromJsonString[T](scalaJson) must be(v)

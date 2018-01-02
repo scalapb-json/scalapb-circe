@@ -1,3 +1,3 @@
-package scalapb_argonaut
+package scalapb_circe
 
 trait JavaAssertionsPlatform

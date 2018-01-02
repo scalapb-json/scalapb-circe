@@ -1,4 +1,4 @@
-package scalapb_argonaut
+package scalapb_circe
 
 import scalapb_json.ScalapbJsonCommon.GenericCompanion
 import com.trueaccord.scalapb.GeneratedMessageCompanion

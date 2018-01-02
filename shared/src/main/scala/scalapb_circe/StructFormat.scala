@@ -1,26 +1,26 @@
-package scalapb_argonaut
+package scalapb_circe
 
 import com.google.protobuf.struct.Value.Kind
 import com.google.protobuf.struct
-import argonaut._
+import io.circe._
 import scalapb_json._
 
 object StructFormat {
   def structValueWriter(v: struct.Value): Json = v.kind match {
-    case Kind.Empty => Json.jNull
-    case Kind.NullValue(_) => Json.jNull
-    case Kind.NumberValue(value) => Json.jNumber(value)
-    case Kind.StringValue(value) => Json.jString(value)
-    case Kind.BoolValue(value) => Json.jBool(value)
+    case Kind.Empty => Json.Null
+    case Kind.NullValue(_) => Json.Null
+    case Kind.NumberValue(value) => Json.fromDouble(value).getOrElse(sys.error(s"$value it not number"))
+    case Kind.StringValue(value) => Json.fromString(value)
+    case Kind.BoolValue(value) => Json.fromBoolean(value)
     case Kind.StructValue(value) => structWriter(value)
-    case Kind.ListValue(value) => Json.jArray(listValueWriter(value))
+    case Kind.ListValue(value) => listValueWriter(value)
   }
 
   def structValueParser(v: Json): struct.Value = {
     val kind: struct.Value.Kind = v.fold(
       jsonNull = Kind.NullValue(struct.NullValue.NULL_VALUE),
-      jsonBool = value => Kind.BoolValue(value = value),
-      jsonNumber = x => Kind.NumberValue(value = x.toBigDecimal.toDouble),
+      jsonBoolean = value => Kind.BoolValue(value = value),
+      jsonNumber = x => Kind.NumberValue(value = x.toDouble),
       jsonString = x => Kind.StringValue(value = x),
       jsonArray = x => Kind.ListValue(listValueParser(x)),
       jsonObject = x => Kind.StructValue(value = structParser(x))
@@ -32,7 +32,7 @@ object StructFormat {
     struct.Struct(fields = v.toMap.map(kv => (kv._1, structValueParser(kv._2))))
   }
 
-  def structParser(v: Json): struct.Struct = v.obj match {
+  def structParser(v: Json): struct.Struct = v.asObject match {
     case Some(x) => structParser(x)
     case None => throw new JsonFormatException("Expected an object")
   }
@@ -42,17 +42,18 @@ object StructFormat {
       case (x, y) => x -> structValueWriter(y)
     }(collection.breakOut): _*)
 
-  def listValueParser(v: Json.JsonArray): struct.ListValue = {
-    com.google.protobuf.struct.ListValue(v.map(structValueParser))
+  def listValueParser(json: Seq[Json]): struct.ListValue =
+    com.google.protobuf.struct.ListValue(json.map(structValueParser))
+
+  def listValueParser(json: Json): struct.ListValue = json.asArray match {
+    case Some(v) =>
+      listValueParser(v)
+    case None =>
+      throw new JsonFormatException("Expected an array")
   }
 
-  def listValueParser(v: Json): struct.ListValue = v.array match {
-    case Some(x) => listValueParser(x)
-    case None => throw new JsonFormatException("Expected an array")
-  }
-
-  def listValueWriter(v: struct.ListValue): Json.JsonArray =
-    v.values.map(structValueWriter).toList
+  def listValueWriter(v: struct.ListValue): Json =
+    Json.fromValues(v.values.map(structValueWriter))
 
   def nullValueParser(v: Json): struct.NullValue = {
     if(v.isNull)
