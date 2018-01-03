@@ -64,7 +64,7 @@ lazy val commonSettings = Seq[Def.SettingsDefinition](
   scalacOptions ++= Seq("-feature", "-deprecation"),
   description := "Json/Protobuf convertors for ScalaPB",
   licenses += ("MIT", url("https://opensource.org/licenses/MIT")),
-  organization := "com.github.xuwei-k",
+  organization := "io.github.scalapb-json",
   name := UpdateReadme.scalapbPlayJsonName,
   Project.inConfig(Test)(sbtprotoc.ProtocPlugin.protobufConfigSettings),
   PB.targets in Compile := Nil,
@@ -76,11 +76,11 @@ lazy val commonSettings = Seq[Def.SettingsDefinition](
     "org.scalatest" %%% "scalatest" % "3.0.4" % "test"
   ),
   pomExtra in Global := {
-    <url>https://github.com/xuwei-k/scalapb-playjson</url>
+    <url>https://github.com/scalapb-json/scalapb-playjson</url>
       <scm>
-        <connection>scm:git:github.com/xuwei-k/scalapb-playjson.git</connection>
-        <developerConnection>scm:git:git@github.com:xuwei-k/scalapb-playjson.git</developerConnection>
-        <url>github.com/xuwei-k/scalapb-playjson.git</url>
+        <connection>scm:git:github.com/scalapb-json/scalapb-playjson.git</connection>
+        <developerConnection>scm:git:git@github.com:scalapb-json/scalapb-playjson.git</developerConnection>
+        <url>github.com/scalapb-json/scalapb-playjson.git</url>
         <tag>{tagOrHash.value}</tag>
       </scm>
       <developers>
@@ -103,7 +103,7 @@ lazy val commonSettings = Seq[Def.SettingsDefinition](
       "-sourcepath",
       (baseDirectory in LocalRootProject).value.getAbsolutePath,
       "-doc-source-url",
-      s"https://github.com/xuwei-k/scalapb-playjson/tree/${t}€{FILE_PATH}.scala"
+      s"https://github.com/scalapb-json/scalapb-playjson/tree/${t}€{FILE_PATH}.scala"
     )
   },
   ReleasePlugin.extraReleaseCommands,
