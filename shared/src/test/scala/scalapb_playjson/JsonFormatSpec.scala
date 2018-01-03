@@ -7,6 +7,7 @@ import jsontest.test._
 import jsontest.test3._
 import com.google.protobuf.any.{Any => PBAny}
 import jsontest.custom_collection.{Guitar, Studio}
+import scalapb_json._
 
 class JsonFormatSpec extends FlatSpec with MustMatchers with OptionValues {
 

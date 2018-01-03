@@ -1,8 +1,9 @@
 package scalapb_playjson
 
-import JsonFormat.GenericCompanion
+import scalapb_json.ScalapbJsonCommon.GenericCompanion
 import com.trueaccord.scalapb.GeneratedMessageCompanion
 import org.scalatest.MustMatchers
+import scalapb_json._
 
 trait JavaAssertions extends JavaAssertionsPlatform {
   self: MustMatchers =>

@@ -5,6 +5,7 @@ import jsontest.test._
 import com.google.protobuf.util.{JsonFormat => JavaJsonFormat}
 import com.google.protobuf.any.{Any => PBAny}
 import com.google.protobuf.util.JsonFormat.{TypeRegistry => JavaTypeRegistry}
+import scalapb_json._
 
 class JsonFormatSpecJVM extends FlatSpec with MustMatchers with OptionValues {
 

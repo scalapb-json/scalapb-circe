@@ -7,17 +7,14 @@ import com.google.protobuf.struct.NullValue
 import com.google.protobuf.timestamp.Timestamp
 import com.trueaccord.scalapb._
 import play.api.libs.json._
+import scalapb_json._
 
 import scala.collection.mutable
 import scala.language.existentials
 import scala.reflect.ClassTag
 import _root_.scalapb.descriptors.{Reads => _, _}
-import JsonFormat.GenericCompanion
+import scalapb_json.ScalapbJsonCommon.GenericCompanion
 import scala.util.control.NonFatal
-
-case class JsonFormatException(msg: String, cause: Exception) extends Exception(msg, cause) {
-  def this(msg: String) = this(msg, null)
-}
 
 case class Formatter[T](writer: (Printer, T) => JsValue, parser: (Parser, JsValue) => T)
 
@@ -62,49 +59,6 @@ case class FormatRegistry(
     descriptor: EnumDescriptor): Option[(Parser, JsValue) => EnumValueDescriptor] = {
     enumFormatters.get(descriptor).map(_.parser)
   }
-}
-
-/** TypeRegistry is used to map the @type field in Any messages to a ScalaPB generated message.
- *
- * You need to
- */
-case class TypeRegistry(
-  companions: Map[String, GenericCompanion] = Map.empty,
-  private val filesSeen: Set[String] = Set.empty) {
-  def addMessage[T <: GeneratedMessage with Message[T]](
-    implicit cmp: GeneratedMessageCompanion[T]): TypeRegistry = {
-    addMessageByCompanion(cmp)
-  }
-
-  def addFile(file: GeneratedFileObject): TypeRegistry = {
-    if (filesSeen.contains(file.scalaDescriptor.fullName)) this
-    else {
-      val withFileSeen = copy(filesSeen = filesSeen + file.scalaDescriptor.fullName)
-
-      val withDeps: TypeRegistry =
-        file.dependencies.foldLeft(withFileSeen)((r, f) => r.addFile(f))
-
-      file.messagesCompanions.foldLeft(withDeps)((r, mc) =>
-        r.addMessageByCompanion(mc.asInstanceOf[GenericCompanion]))
-    }
-  }
-
-  def addMessageByCompanion(cmp: GenericCompanion): TypeRegistry = {
-    // TODO: need to add contained file to follow JsonFormat
-    val withNestedMessages =
-      cmp.nestedMessagesCompanions.foldLeft(this)((r, mc) =>
-        r.addMessageByCompanion(mc.asInstanceOf[GenericCompanion]))
-    copy(
-      companions = withNestedMessages.companions + ((TypeRegistry.TypePrefix + cmp.scalaDescriptor.fullName) -> cmp))
-  }
-
-  def findType(typeName: String): Option[GenericCompanion] = companions.get(typeName)
-}
-
-object TypeRegistry {
-  private val TypePrefix = "type.googleapis.com/"
-
-  def empty = TypeRegistry(Map.empty)
 }
 
 class Printer(
@@ -192,7 +146,7 @@ class Printer(
         if (includingDefaultValueFields ||
           !fd.isOptional ||
           !fd.file.isProto3 ||
-          (v != JsonFormat.defaultValue(fd))) {
+          (v != scalapb_json.ScalapbJsonCommon.defaultValue(fd))) {
           b += JField(name, serializeSingleValue(fd, v, formattingLongAsNumber))
         }
     }
@@ -206,7 +160,7 @@ class Printer(
         val descriptor = m.companion.scalaDescriptor
         b.sizeHint(descriptor.fields.size)
         descriptor.fields.foreach { f =>
-          val name = if (preservingProtoFieldNames) f.name else JsonFormat.jsonName(f)
+          val name = if (preservingProtoFieldNames) f.name else scalapb_json.ScalapbJsonCommon.jsonName(f)
           if (f.protoType.isTypeMessage) {
             serializeMessageField(f, name, m.getFieldByNumber(f.number), b)
           } else {
@@ -218,7 +172,7 @@ class Printer(
   }
 
   private def defaultJsValue(fd: FieldDescriptor): JsValue =
-    serializeSingleValue(fd, JsonFormat.defaultValue(fd), formattingLongAsNumber)
+    serializeSingleValue(fd, scalapb_json.ScalapbJsonCommon.defaultValue(fd), formattingLongAsNumber)
 
   private def unsignedInt(n: Int): Long = n & 0x00000000FFFFFFFFL
   private def unsignedLong(n: Long) =
@@ -271,7 +225,7 @@ class Parser(
   }
 
   private def serializedName(fd: FieldDescriptor): String = {
-    if (preservingProtoFieldNames) fd.asProto.getName else JsonFormat.jsonName(fd)
+    if (preservingProtoFieldNames) fd.asProto.getName else scalapb_json.ScalapbJsonCommon.jsonName(fd)
   }
 
   private def fromJsonToPMessage(cmp: GeneratedMessageCompanion[_], value: JsValue): PMessage = {
@@ -375,10 +329,7 @@ class Parser(
 
 object JsonFormat {
   import com.google.protobuf.wrappers
-
-  type GenericCompanion = GeneratedMessageCompanion[T] forSome {
-    type T <: GeneratedMessage with Message[T]
-  }
+  import scalapb_json.ScalapbJsonCommon._
 
   val DefaultRegistry = FormatRegistry()
     .registerWriter(
@@ -493,21 +444,6 @@ object JsonFormat {
     def writes(obj: T): JsValue = printer.toJson(obj)
   }
 
-  def defaultValue(fd: FieldDescriptor): PValue = {
-    require(fd.isOptional)
-    fd.scalaType match {
-      case ScalaType.Int => PInt(0)
-      case ScalaType.Long => PLong(0L)
-      case ScalaType.Float => PFloat(0)
-      case ScalaType.Double => PDouble(0)
-      case ScalaType.Boolean => PBoolean(false)
-      case ScalaType.String => PString("")
-      case ScalaType.ByteString => PByteString(ByteString.EMPTY)
-      case ScalaType.Enum(ed) => PEnum(ed.values(0))
-      case ScalaType.Message(_) => throw new RuntimeException("No default value for message")
-    }
-  }
-
   def parsePrimitive(
     scalaType: ScalaType,
     protoType: FieldDescriptorProto.Type,
@@ -536,81 +472,4 @@ object JsonFormat {
     case _ => onError
   }
 
-  def parseBigDecimal(value: String): BigDecimal = {
-    try {
-      // JSON doesn't distinguish between integer values and floating point values so "1" and
-      // "1.000" are treated as equal in JSON. For this reason we accept floating point values for
-      // integer fields as well as long as it actually is an integer (i.e., round(value) == value).
-      BigDecimal(value)
-    } catch {
-      case e: Exception =>
-        throw JsonFormatException(s"Not a numeric value: $value", e)
-    }
-  }
-
-  def parseInt32(value: String): PValue = {
-    try {
-      PInt(value.toInt)
-    } catch {
-      case _: Exception =>
-        try {
-          PInt(parseBigDecimal(value).toIntExact)
-        } catch {
-          case e: Exception =>
-            throw JsonFormatException(s"Not an int32 value: $value", e)
-        }
-    }
-  }
-
-  def parseInt64(value: String): PValue = {
-    try {
-      PLong(value.toLong)
-    } catch {
-      case _: Exception =>
-        val bd = parseBigDecimal(value)
-        try {
-          PLong(bd.toLongExact)
-        } catch {
-          case e: Exception =>
-            throw JsonFormatException(s"Not an int64 value: $value", e)
-        }
-    }
-  }
-
-  def parseUint32(value: String): PValue = {
-    try {
-      val result = value.toLong
-      if (result < 0 || result > 0xFFFFFFFFl)
-        throw new JsonFormatException(s"Out of range uint32 value: $value")
-      return PInt(result.toInt)
-    } catch {
-      case e: JsonFormatException => throw e
-      case _: Exception => // Fall through.
-    }
-    parseBigDecimal(value).toBigIntExact().map { intVal =>
-      if (intVal < 0 || intVal > 0xFFFFFFFFl)
-        throw new JsonFormatException(s"Out of range uint32 value: $value")
-      PLong(intVal.intValue())
-    } getOrElse {
-      throw new JsonFormatException(s"Not an uint32 value: $value")
-    }
-  }
-
-  val MAX_UINT64 = BigInt("FFFFFFFFFFFFFFFF", 16)
-
-  def parseUint64(value: String): PValue = {
-    parseBigDecimal(value).toBigIntExact().map { intVal =>
-      if (intVal < 0 || intVal > MAX_UINT64) {
-        throw new JsonFormatException(s"Out of range uint64 value: $value")
-      }
-      PLong(intVal.longValue())
-    } getOrElse {
-      throw new JsonFormatException(s"Not an uint64 value: $value")
-    }
-  }
-
-  def jsonName(fd: FieldDescriptor) = {
-    // protoc<3 doesn't know about json_name, so we fill it in if it's not populated.
-    fd.asProto.jsonName.getOrElse(NameUtils.snakeCaseToCamelCase(fd.asProto.getName))
-  }
 }

@@ -5,6 +5,7 @@ import com.google.protobuf.any.{Any => PBAny}
 import jsontest.anytests.{AnyTest, ManyAnyTest}
 import org.scalatest.{FlatSpec, MustMatchers}
 import play.api.libs.json.Json.parse
+import scalapb_json._
 
 class AnyFormatSpec extends FlatSpec with MustMatchers with JavaAssertions {
   val RawExample = AnyTest("test")

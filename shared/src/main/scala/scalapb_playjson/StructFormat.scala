@@ -3,6 +3,7 @@ package scalapb_playjson
 import com.google.protobuf.struct.Value.Kind
 import com.google.protobuf.struct
 import play.api.libs.json._
+import scalapb_json._
 
 object StructFormat {
   def structValueWriter(v: struct.Value): JsValue = v.kind match {

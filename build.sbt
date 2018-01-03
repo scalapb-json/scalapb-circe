@@ -31,9 +31,6 @@ val scalapbPlayJson = crossProject(JVMPlatform, JSPlatform)
     )
   )
   .jsSettings(
-    libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M12"
-    ),
     PB.targets in Test := Seq(
       scalapb.gen(javaConversions = false) -> (sourceManaged in Test).value
     )
@@ -52,6 +49,7 @@ val noPublish = Seq(
 noPublish
 
 lazy val commonSettings = Seq[Def.SettingsDefinition](
+  resolvers += Opts.resolver.sonatypeReleases,
   scalaVersion := Scala211,
   crossScalaVersions := Seq("2.12.4", Scala211, "2.10.7"),
   scalacOptions ++= PartialFunction
@@ -70,7 +68,7 @@ lazy val commonSettings = Seq[Def.SettingsDefinition](
   PB.targets in Compile := Nil,
   PB.protoSources in Test := Seq(file("shared/src/test/protobuf")),
   libraryDependencies ++= Seq(
-    "com.trueaccord.scalapb" %%% "scalapb-runtime" % scalapbVersion,
+    "io.github.scalapb-json" %%% "scalapb-json-common" % "0.1.0",
     "com.trueaccord.scalapb" %%% "scalapb-runtime" % scalapbVersion % "protobuf,test",
     "com.typesafe.play" %%% "play-json" % "2.6.8",
     "org.scalatest" %%% "scalatest" % "3.0.4" % "test"
