@@ -1,5 +1,5 @@
 # scalapb-playjson [![Build Status](https://travis-ci.org/scalapb-json/scalapb-playjson.svg?branch=master)](https://travis-ci.org/scalapb-json/scalapb-playjson)
-[![scaladoc](https://javadoc-badge.appspot.com/com.github.xuwei-k/scalapb-playjson_2.12.svg?label=scaladoc)](https://javadoc-badge.appspot.com/com.github.xuwei-k/scalapb-playjson_2.12/scalapb_playjson/index.html?javadocio=true)
+[![scaladoc](https://javadoc-badge.appspot.com/io.github.scalapb-json/scalapb-playjson_2.12.svg?label=scaladoc)](https://javadoc-badge.appspot.com/com.github.xuwei-k/scalapb-playjson_2.12/scalapb_playjson/index.html?javadocio=true)
 
 The structure of this project is hugely inspired by [scalapb-json4s](https://github.com/scalapb/scalapb-json4s)
 
