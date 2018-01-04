@@ -31,6 +31,11 @@ val scalapbCirce = crossProject(JVMPlatform, JSPlatform)
     )
   )
   .jsSettings(
+    scalacOptions += {
+      val a = (baseDirectory in LocalRootProject).value.toURI.toString
+      val g = "https://raw.githubusercontent.com/scalapb-json/scalapb-circe/" + tagOrHash.value
+      s"-P:scalajs:mapSourceURI:$a->$g/"
+    },
     PB.targets in Test := Seq(
       scalapb.gen(javaConversions = false) -> (sourceManaged in Test).value
     )
