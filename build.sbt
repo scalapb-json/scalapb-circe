@@ -73,7 +73,7 @@ lazy val commonSettings = Seq[Def.SettingsDefinition](
   PB.targets in Compile := Nil,
   PB.protoSources in Test := Seq(file("shared/src/test/protobuf")),
   libraryDependencies ++= Seq(
-    "io.github.scalapb-json" %%% "scalapb-json-common" % "0.1.0",
+    "io.github.scalapb-json" %%% "scalapb-json-common" % "0.1.1",
     "com.trueaccord.scalapb" %%% "scalapb-runtime" % scalapbVersion % "protobuf,test",
     "io.circe" %%% "circe-parser" % "0.9.0",
     "org.scalatest" %%% "scalatest" % "3.0.4" % "test"
