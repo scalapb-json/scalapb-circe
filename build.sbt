@@ -54,6 +54,7 @@ val noPublish = Seq(
 noPublish
 
 lazy val commonSettings = Seq[Def.SettingsDefinition](
+  unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
   resolvers += Opts.resolver.sonatypeReleases,
   scalaVersion := Scala211,
   crossScalaVersions := Seq("2.12.4", Scala211, "2.10.7"),
