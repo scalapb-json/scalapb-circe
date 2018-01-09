@@ -3,6 +3,8 @@ import sbtrelease.ReleaseStateTransformations._
 import sbtcrossproject.CrossPlugin.autoImport.crossProject
 
 val Scala211 = "2.11.12"
+val circeVersion = settingKey[String]("")
+val scalapbJsonCommonVersion = settingKey[String]("")
 
 val tagName = Def.setting {
   s"v${if (releaseUseGlobalVersion.value) (version in ThisBuild).value else version.value}"
@@ -17,8 +19,31 @@ val unusedWarnings = Seq("-Ywarn-unused", "-Ywarn-unused-import")
 
 val scalapbCirce = crossProject(JVMPlatform, JSPlatform)
   .in(file("."))
+  .enablePlugins(BuildInfoPlugin)
   .settings(
-    commonSettings
+    commonSettings,
+    mappings in (Compile, packageSrc) ++= (managedSources in Compile).value.map { f =>
+      // https://github.com/sbt/sbt-buildinfo/blob/v0.7.0/src/main/scala/sbtbuildinfo/BuildInfoPlugin.scala#L58
+      val buildInfoDir = "sbt-buildinfo"
+      val path = if (f.getAbsolutePath.contains(buildInfoDir)) {
+        (file(buildInfoPackage.value) / f
+          .relativeTo((sourceManaged in Compile).value / buildInfoDir)
+          .get
+          .getPath).getPath
+      } else {
+        f.relativeTo((sourceManaged in Compile).value).get.getPath
+      }
+      (f, path)
+    },
+    buildInfoPackage := "scalapb_circe",
+    buildInfoObject := "ScalapbCirceBuildInfo",
+    buildInfoKeys := Seq[BuildInfoKey](
+      "scalapbVersion" -> scalapbVersion,
+      circeVersion,
+      scalapbJsonCommonVersion,
+      scalaVersion,
+      version
+    )
   )
   .jvmSettings(
     PB.targets in Test := Seq(
@@ -31,6 +56,9 @@ val scalapbCirce = crossProject(JVMPlatform, JSPlatform)
     )
   )
   .jsSettings(
+    buildInfoKeys ++= Seq[BuildInfoKey](
+      "scalajsVersion" -> scalaJSVersion
+    ),
     scalacOptions += {
       val a = (baseDirectory in LocalRootProject).value.toURI.toString
       val g = "https://raw.githubusercontent.com/scalapb-json/scalapb-circe/" + tagOrHash.value
@@ -73,10 +101,12 @@ lazy val commonSettings = Seq[Def.SettingsDefinition](
   Project.inConfig(Test)(sbtprotoc.ProtocPlugin.protobufConfigSettings),
   PB.targets in Compile := Nil,
   PB.protoSources in Test := Seq(file("shared/src/test/protobuf")),
+  scalapbJsonCommonVersion := "0.1.1",
+  circeVersion := "0.9.0",
   libraryDependencies ++= Seq(
-    "io.github.scalapb-json" %%% "scalapb-json-common" % "0.1.1",
+    "io.github.scalapb-json" %%% "scalapb-json-common" % scalapbJsonCommonVersion.value,
     "com.trueaccord.scalapb" %%% "scalapb-runtime" % scalapbVersion % "protobuf,test",
-    "io.circe" %%% "circe-parser" % "0.9.0",
+    "io.circe" %%% "circe-parser" % circeVersion.value,
     "org.scalatest" %%% "scalatest" % "3.0.4" % "test"
   ),
   pomExtra in Global := {
