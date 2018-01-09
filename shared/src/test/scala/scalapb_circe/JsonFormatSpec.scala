@@ -342,6 +342,32 @@ class JsonFormatSpec extends FlatSpec with MustMatchers with OptionValues {
     val out = JsonFormat.fromJsonString[DoubleFloat](i)
     out.d.value.isNaN must be(true)
     out.f.value.isNaN must be(true)
+    JsonFormat.toJson(out).asObject.flatMap(_.apply("d")) must be (Some(Json.fromString(Double.NaN.toString)))
+    JsonFormat.toJson(out).asObject.flatMap(_.apply("f")) must be (Some(Json.fromString(Double.NaN.toString)))
+  }
+
+  "DoubleFloatProto" should "parse Infinity" in {
+    val i = s"""{
+      "d": "Infinity",
+      "f": "Infinity"
+    }"""
+    val out = JsonFormat.fromJsonString[DoubleFloat](i)
+    out.d.value.isPosInfinity must be (true)
+    out.f.value.isPosInfinity must be (true)
+    JsonFormat.toJson(out).asObject.flatMap(_.apply("d")) must be (Some(Json.fromString(Double.PositiveInfinity.toString)))
+    JsonFormat.toJson(out).asObject.flatMap(_.apply("f")) must be (Some(Json.fromString(Double.PositiveInfinity.toString)))
+  }
+
+  "DoubleFloatProto" should "parse -Infinity" in {
+    val i = s"""{
+      "d": "-Infinity",
+      "f": "-Infinity"
+    }"""
+    val out = JsonFormat.fromJsonString[DoubleFloat](i)
+    out.d.value.isNegInfinity must be (true)
+    out.f.value.isNegInfinity must be (true)
+    JsonFormat.toJson(out).asObject.flatMap(_.apply("d")) must be (Some(Json.fromString(Double.NegativeInfinity.toString)))
+    JsonFormat.toJson(out).asObject.flatMap(_.apply("f")) must be (Some(Json.fromString(Double.NegativeInfinity.toString)))
   }
 
   val anyEnabledTypeRegistry = TypeRegistry.empty.addMessageByCompanion(TestProto.companion)
