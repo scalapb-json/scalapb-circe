@@ -20,8 +20,9 @@ trait JavaAssertionsPlatform {
     com.google.protobuf.util.JsonFormat.printer().usingTypeRegistry(JavaJsonTypeRegistry)
   val JavaJsonParser = com.google.protobuf.util.JsonFormat.parser()
 
-  def assertJsonIsSameAsJava[T <: GeneratedMessage with Message[T]](v: T)(
-    implicit cmp: GeneratedMessageCompanion[T]) = {
+  def assertJsonIsSameAsJava[T <: GeneratedMessage with Message[T]](
+    v: T,
+    checkRoundtrip: Boolean = true)(implicit cmp: GeneratedMessageCompanion[T]) = {
     val scalaJson = ScalaJsonPrinter.print(v)
     val javaJson = JavaJsonPrinter.print(
       cmp.asInstanceOf[JavaProtoSupport[T, com.google.protobuf.GeneratedMessageV3]].toJavaProto(v))
@@ -29,7 +30,9 @@ trait JavaAssertionsPlatform {
     import io.circe.parser.parse
     parse(scalaJson).isRight must be(true)
     parse(scalaJson) must be(parse(javaJson))
-    ScalaJsonParser.fromJsonString[T](scalaJson) must be(v)
+    if (checkRoundtrip) {
+      ScalaJsonParser.fromJsonString[T](scalaJson) must be(v)
+    }
   }
 
   def javaParse[T <: com.google.protobuf.GeneratedMessageV3.Builder[T]](

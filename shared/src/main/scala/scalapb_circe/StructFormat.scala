@@ -9,7 +9,7 @@ object StructFormat {
   def structValueWriter(v: struct.Value): Json = v.kind match {
     case Kind.Empty => Json.Null
     case Kind.NullValue(_) => Json.Null
-    case Kind.NumberValue(value) => Json.fromDouble(value).getOrElse(sys.error(s"$value it not number"))
+    case Kind.NumberValue(value) => Json.fromDoubleOrString(value)
     case Kind.StringValue(value) => Json.fromString(value)
     case Kind.BoolValue(value) => Json.fromBoolean(value)
     case Kind.StructValue(value) => structWriter(value)
