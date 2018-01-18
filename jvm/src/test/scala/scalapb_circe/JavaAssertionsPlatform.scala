@@ -1,12 +1,7 @@
 package scalapb_circe
 
 import com.google.protobuf.util.JsonFormat.{TypeRegistry => JavaTypeRegistry}
-import com.trueaccord.scalapb.{
-  GeneratedMessage,
-  GeneratedMessageCompanion,
-  JavaProtoSupport,
-  Message
-}
+import scalapb.{GeneratedMessage, GeneratedMessageCompanion, JavaProtoSupport, Message}
 import org.scalatest.MustMatchers
 
 trait JavaAssertionsPlatform {

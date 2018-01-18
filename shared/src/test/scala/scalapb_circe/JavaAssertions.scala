@@ -1,7 +1,7 @@
 package scalapb_circe
 
 import scalapb_json.ScalapbJsonCommon.GenericCompanion
-import com.trueaccord.scalapb.GeneratedMessageCompanion
+import scalapb.GeneratedMessageCompanion
 import org.scalatest.MustMatchers
 import scalapb_json._
 

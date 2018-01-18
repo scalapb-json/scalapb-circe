@@ -5,13 +5,13 @@ import com.google.protobuf.descriptor.FieldDescriptorProto
 import com.google.protobuf.duration.Duration
 import com.google.protobuf.struct.NullValue
 import com.google.protobuf.timestamp.Timestamp
-import com.trueaccord.scalapb._
 import io.circe._
 import scalapb_json._
 
 import scala.collection.mutable
 import scala.reflect.ClassTag
-import _root_.scalapb.descriptors._
+import scalapb._
+import scalapb.descriptors._
 import scalapb_json.ScalapbJsonCommon.GenericCompanion
 import scala.util.control.NonFatal
 

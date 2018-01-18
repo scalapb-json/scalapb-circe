@@ -1,4 +1,4 @@
-import com.trueaccord.scalapb.compiler.Version._
+import scalapb.compiler.Version._
 import sbtrelease.ReleaseStateTransformations._
 import sbtcrossproject.CrossPlugin.autoImport.crossProject
 
@@ -101,11 +101,11 @@ lazy val commonSettings = Seq[Def.SettingsDefinition](
   Project.inConfig(Test)(sbtprotoc.ProtocPlugin.protobufConfigSettings),
   PB.targets in Compile := Nil,
   PB.protoSources in Test := Seq(file("shared/src/test/protobuf")),
-  scalapbJsonCommonVersion := "0.1.1",
+  scalapbJsonCommonVersion := "0.2.0-M1",
   circeVersion := "0.9.0",
   libraryDependencies ++= Seq(
     "io.github.scalapb-json" %%% "scalapb-json-common" % scalapbJsonCommonVersion.value,
-    "com.trueaccord.scalapb" %%% "scalapb-runtime" % scalapbVersion % "protobuf,test",
+    "com.thesamet.scalapb" %%% "scalapb-runtime" % scalapbVersion % "protobuf,test",
     "io.circe" %%% "circe-parser" % circeVersion.value,
     "org.scalatest" %%% "scalatest" % "3.0.4" % "test"
   ),

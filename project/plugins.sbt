@@ -14,4 +14,4 @@ addSbtPlugin("com.lucidchart" % "sbt-scalafmt" % "1.15")
 
 addSbtPlugin("com.thesamet" % "sbt-protoc" % "0.99.13")
 
-libraryDependencies += "com.trueaccord.scalapb" %% "compilerplugin" % "0.6.7"
+libraryDependencies += "com.thesamet.scalapb" %% "compilerplugin" % "0.7.0-rc7"
