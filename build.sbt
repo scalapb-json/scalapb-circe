@@ -93,7 +93,7 @@ lazy val commonSettings = Seq[Def.SettingsDefinition](
     .toList
     .flatten,
   Seq(Compile, Test).flatMap(c => scalacOptions in (c, console) --= unusedWarnings),
-  scalacOptions ++= Seq("-feature", "-deprecation"),
+  scalacOptions ++= Seq("-feature", "-deprecation", "-language:existentials"),
   description := "Json/Protobuf convertors for ScalaPB",
   licenses += ("MIT", url("https://opensource.org/licenses/MIT")),
   organization := "io.github.scalapb-json",

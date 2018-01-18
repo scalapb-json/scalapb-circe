@@ -10,7 +10,6 @@ import io.circe._
 import scalapb_json._
 
 import scala.collection.mutable
-import scala.language.existentials
 import scala.reflect.ClassTag
 import _root_.scalapb.descriptors._
 import scalapb_json.ScalapbJsonCommon.GenericCompanion

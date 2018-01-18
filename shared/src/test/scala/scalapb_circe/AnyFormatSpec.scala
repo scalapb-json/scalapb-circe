@@ -1,6 +1,5 @@
 package scalapb_circe
 
-import scala.language.existentials
 import com.google.protobuf.any.{Any => PBAny}
 import jsontest.anytests.{AnyTest, ManyAnyTest}
 import org.scalatest.{FlatSpec, MustMatchers}

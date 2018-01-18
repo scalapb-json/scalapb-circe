@@ -2,7 +2,6 @@ package scalapb_circe
 
 import com.google.protobuf.any.{Any => PBAny}
 import io.circe._
-import scala.language.existentials
 import scalapb_json._
 
 object AnyFormat {
