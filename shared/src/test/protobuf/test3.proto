@@ -5,6 +5,7 @@ package jsontest;
 import "test.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/wrappers.proto";
+import "google/protobuf/field_mask.proto";
 
 message MyTest3 {
   string s = 1;
@@ -36,4 +37,8 @@ message Wrapper {
 message StructTest {
   google.protobuf.NullValue nv = 1;
   repeated google.protobuf.NullValue rep_nv = 2;
+}
+
+message TestFieldMask {
+  google.protobuf.FieldMask field_mask_value = 1;
 }

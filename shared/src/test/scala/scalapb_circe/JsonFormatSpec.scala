@@ -6,6 +6,7 @@ import org.scalatest.{Assertion, FlatSpec, MustMatchers, OptionValues}
 import jsontest.test._
 import jsontest.test3._
 import com.google.protobuf.any.{Any => PBAny}
+import com.google.protobuf.field_mask.FieldMask
 import jsontest.custom_collection.{Guitar, Studio}
 import scalapb_json._
 import EitherOps._
@@ -400,4 +401,11 @@ class JsonFormatSpec extends FlatSpec with MustMatchers with OptionValues {
     studio must be(expectedStudio)
   }
 
+  "FieldMask" should "parse and write" in {
+    // https://github.com/google/protobuf/blob/47b7d2c7ca/java/util/src/test/java/com/google/protobuf/util/JsonFormatTest.java#L761-L770
+    val message = TestFieldMask(Some(FieldMask(Seq("foo.bar", "baz", "foo_bar.baz"))))
+    val json = """{"fieldMaskValue":"foo.bar,baz,fooBar.baz"}"""
+    assert(JsonFormat.toJsonString(message) == json)
+    assert(JsonFormat.fromJsonString[TestFieldMask](json) == message)
+  }
 }
