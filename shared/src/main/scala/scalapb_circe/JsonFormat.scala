@@ -3,6 +3,7 @@ package scalapb_circe
 import com.google.protobuf.ByteString
 import com.google.protobuf.descriptor.FieldDescriptorProto
 import com.google.protobuf.duration.Duration
+import com.google.protobuf.field_mask.FieldMask
 import com.google.protobuf.struct.NullValue
 import com.google.protobuf.timestamp.Timestamp
 import io.circe._
@@ -353,6 +354,16 @@ object JsonFormat {
         _.asString match {
           case Some(str) =>
             Timestamps.parseTimestamp(str)
+          case _ =>
+            throw new JsonFormatException("Expected a string.")
+        }
+      }
+    )
+    .registerWriter(
+      (f: FieldMask) => Json.fromString(ScalapbJsonCommon.fieldMaskToJsonString(f)), {
+        _.asString match {
+          case Some(str) =>
+            ScalapbJsonCommon.fieldMaskFromJsonString(str)
           case _ =>
             throw new JsonFormatException("Expected a string.")
         }
