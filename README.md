@@ -17,6 +17,10 @@ for scala-js
 libraryDependencies += "io.github.scalapb-json" %%% "scalapb-circe" % "0.2.0-M2"
 ```
 
+### for ScalaPB 0.6.x
+
+see https://github.com/scalapb-json/scalapb-circe/tree/0.1.x
+
 ## Usage
 
 There are four functions you can use directly to serialize/deserialize your messages:
