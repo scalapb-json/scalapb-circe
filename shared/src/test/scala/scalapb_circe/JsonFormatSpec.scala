@@ -154,6 +154,15 @@ class JsonFormatSpec extends FlatSpec with MustMatchers with OptionValues {
       MyTest3(trickOrTreat = MyTest3.TrickOrTreat.Treat(MyTest3())))
   }
 
+  "JsonFormat" should "encode and decode enums for proto3" in {
+    val v1Value = MyTest3(optEnum = MyTest3.MyEnum3.V1)
+    assert(JsonFormat.toJson(v1Value) === parse("""{"optEnum": "V1"}""").getOrError)
+    val defaultValue = MyTest3(optEnum = MyTest3.MyEnum3.UNKNOWN)
+    assert(JsonFormat.toJson(defaultValue) === parse("""{}""").getOrError)
+    JsonFormat.fromJsonString[MyTest3](JsonFormat.toJsonString(v1Value)) must be(v1Value)
+    JsonFormat.fromJsonString[MyTest3](JsonFormat.toJsonString(defaultValue)) must be(defaultValue)
+  }
+
   "parsing one offs" should "work correctly for issue 315" in {
     JsonFormat.fromJsonString[jsontest.issue315.Msg]("""
     {
