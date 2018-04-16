@@ -142,6 +142,7 @@ lazy val commonSettings = Seq[Def.SettingsDefinition](
   },
   ReleasePlugin.extraReleaseCommands,
   commands += Command.command("updateReadme")(UpdateReadme.updateReadmeTask),
+  releaseCrossBuild := true,
   releaseTagName := tagName.value,
   releaseProcess := Seq[ReleaseStep](
     checkSnapshotDependencies,
