@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package jsontest;
+
+import "google/protobuf/wrappers.proto";
+
+message OneOf {
+    oneof field {
+        string primitive = 1;
+        google.protobuf.StringValue wrapper = 2;
+        OneOfMessage message = 3;
+    }
+}
+
+message OneOfMessage {
+    // Used wrapper type here because we need something independent to includingDefaultValueFields flag
+    google.protobuf.StringValue field = 1;
+}

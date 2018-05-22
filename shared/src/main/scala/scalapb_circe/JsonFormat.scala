@@ -134,7 +134,7 @@ class Printer(
     b: FieldBuilder) = {
     value match {
       case PEmpty =>
-        if (includingDefaultValueFields) {
+        if (includingDefaultValueFields && fd.containingOneof.isEmpty) {
           b += JField(name, defaultJson(fd))
         }
       case PRepeated(xs) =>
@@ -150,7 +150,8 @@ class Printer(
         if (includingDefaultValueFields ||
           !fd.isOptional ||
           !fd.file.isProto3 ||
-          (v != scalapb_json.ScalapbJsonCommon.defaultValue(fd))) {
+          (v != scalapb_json.ScalapbJsonCommon.defaultValue(fd)) ||
+          fd.containingOneof.isDefined) {
           b += JField(name, serializeSingleValue(fd, v, formattingLongAsNumber))
         }
     }
