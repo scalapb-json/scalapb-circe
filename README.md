@@ -8,13 +8,13 @@ The structure of this project is hugely inspired by [scalapb-json4s](https://git
 Include in your `build.sbt` file
 
 ```scala
-libraryDependencies += "io.github.scalapb-json" %% "scalapb-circe" % "0.2.2"
+libraryDependencies += "io.github.scalapb-json" %% "scalapb-circe" % "0.3.0-M1"
 ```
 
 for scala-js
 
 ```scala
-libraryDependencies += "io.github.scalapb-json" %%% "scalapb-circe" % "0.2.2"
+libraryDependencies += "io.github.scalapb-json" %%% "scalapb-circe" % "0.3.0-M1"
 ```
 
 ### for ScalaPB 0.6.x
