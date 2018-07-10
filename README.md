@@ -17,9 +17,9 @@ for scala-js
 libraryDependencies += "io.github.scalapb-json" %%% "scalapb-circe" % "0.3.0-M1"
 ```
 
-### for ScalaPB 0.6.x
+### for ScalaPB 0.7.x
 
-see https://github.com/scalapb-json/scalapb-circe/tree/0.1.x
+see https://github.com/scalapb-json/scalapb-circe/tree/0.2.x
 
 ## Usage
 
