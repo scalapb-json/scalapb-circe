@@ -14,4 +14,4 @@ addSbtPlugin("com.geirsson" % "sbt-scalafmt" % "1.5.1")
 
 addSbtPlugin("com.thesamet" % "sbt-protoc" % "0.99.18")
 
-libraryDependencies += "com.thesamet.scalapb" %% "compilerplugin" % "0.8.0-RC1"
+libraryDependencies += "com.thesamet.scalapb" %% "compilerplugin" % "0.8.0"
