@@ -85,13 +85,8 @@ lazy val commonSettings = Seq[Def.SettingsDefinition](
   unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
   resolvers += Opts.resolver.sonatypeReleases,
   scalaVersion := Scala211,
-  crossScalaVersions := Seq("2.12.6", Scala211, "2.10.7"),
-  scalacOptions ++= PartialFunction
-    .condOpt(CrossVersion.partialVersion(scalaVersion.value)) {
-      case Some((2, v)) if v >= 11 => unusedWarnings
-    }
-    .toList
-    .flatten,
+  crossScalaVersions := Seq("2.12.6", Scala211),
+  scalacOptions ++= unusedWarnings,
   Seq(Compile, Test).flatMap(c => scalacOptions in (c, console) --= unusedWarnings),
   scalacOptions ++= Seq("-feature", "-deprecation", "-language:existentials"),
   description := "Json/Protobuf convertors for ScalaPB",
@@ -102,7 +97,7 @@ lazy val commonSettings = Seq[Def.SettingsDefinition](
   PB.targets in Compile := Nil,
   PB.protoSources in Test := Seq(file("shared/src/test/protobuf")),
   scalapbJsonCommonVersion := "0.3.0-M1",
-  circeVersion := "0.9.3",
+  circeVersion := "0.10.0",
   libraryDependencies ++= Seq(
     "io.github.scalapb-json" %%% "scalapb-json-common" % scalapbJsonCommonVersion.value,
     "com.thesamet.scalapb" %%% "scalapb-runtime" % scalapbVersion % "protobuf,test",
