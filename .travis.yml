@@ -5,7 +5,7 @@ scala:
 - 2.12.6
 jdk: oraclejdk8
 script:
-- sbt "scalafmt::test" "test:scalafmt::test" "sbt:scalafmt::test" "++ ${TRAVIS_SCALA_VERSION}! -v" test
+- sbt scalafmtSbtCheck scalafmtCheck test:scalafmtCheck "++ ${TRAVIS_SCALA_VERSION}! -v" test
 cache:
   directories:
   - $HOME/.ivy2/cache

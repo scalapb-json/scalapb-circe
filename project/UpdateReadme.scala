@@ -9,23 +9,27 @@ object UpdateReadme {
   val updateReadmeTask = { state: State =>
     val extracted = Project.extract(state)
     val v = extracted get version
-    val org =  extracted get organization
+    val org = extracted get organization
     val modules = scalapbCirceName :: Nil
     val readme = "README.md"
     val readmeFile = file(readme)
-    val newReadme = Predef.augmentString(IO.read(readmeFile)).lines.map{ line =>
-      val matchReleaseOrSnapshot = line.contains("SNAPSHOT") == v.contains("SNAPSHOT")
-      if(line.startsWith("libraryDependencies") && matchReleaseOrSnapshot){
-        val i = modules.map("\"" + _ + "\"").indexWhere(line.contains)
-        if(line.contains(" %%% ")) {
-          s"""libraryDependencies += "$org" %%% "${modules(i)}" % "$v""""
+    val newReadme = Predef
+      .augmentString(IO.read(readmeFile))
+      .lines
+      .map { line =>
+        val matchReleaseOrSnapshot = line.contains("SNAPSHOT") == v.contains("SNAPSHOT")
+        if (line.startsWith("libraryDependencies") && matchReleaseOrSnapshot) {
+          val i = modules.map("\"" + _ + "\"").indexWhere(line.contains)
+          if (line.contains(" %%% ")) {
+            s"""libraryDependencies += "$org" %%% "${modules(i)}" % "$v""""
+          } else {
+            s"""libraryDependencies += "$org" %% "${modules(i)}" % "$v""""
+          }
         } else {
-          s"""libraryDependencies += "$org" %% "${modules(i)}" % "$v""""
+          line
         }
-      } else {
-        line
       }
-    }.mkString("", "\n", "\n")
+      .mkString("", "\n", "\n")
     IO.write(readmeFile, newReadme)
     val git = new Git(extracted get baseDirectory)
     git.add(readme) ! state.log

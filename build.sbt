@@ -151,9 +151,7 @@ lazy val commonSettings = Seq[Def.SettingsDefinition](
     ReleaseStep(
       action = { state =>
         val extracted = Project extract state
-        extracted.runAggregated(
-          PgpKeys.publishSigned in Global in extracted.get(thisProjectRef),
-          state)
+        extracted.runAggregated(PgpKeys.publishSigned in Global in extracted.get(thisProjectRef), state)
       },
       enableCrossBuild = true
     ),

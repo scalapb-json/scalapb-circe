@@ -16,8 +16,7 @@ class StructFormatSpecJVM extends FlatSpec with MustMatchers with JavaAssertions
     fields = Map(
       "f1" -> Value(Value.Kind.StringValue("Boo")),
       "f2" -> Value(Value.Kind.ListValue(ListValueExample)),
-      "f3" -> Value(
-        Value.Kind.StructValue(Struct(fields = Map("f4" -> Value(Value.Kind.StringValue("f5"))))))
+      "f3" -> Value(Value.Kind.StructValue(Struct(fields = Map("f4" -> Value(Value.Kind.StringValue("f5"))))))
     ))
 
   val StructExample2 = Struct(
@@ -34,17 +33,12 @@ class StructFormatSpecJVM extends FlatSpec with MustMatchers with JavaAssertions
   "Value" should "be serialized the same as in Java (and parsed back to original)" in {
     assertJsonIsSameAsJava(Value(kind = Value.Kind.NumberValue(1.0)))
     assertJsonIsSameAsJava(Value(kind = Value.Kind.NumberValue(-25)))
-    assertJsonIsSameAsJava(
-      Value(kind = Value.Kind.NumberValue(Double.PositiveInfinity)),
-      checkRoundtrip = false)
-    assertJsonIsSameAsJava(
-      Value(kind = Value.Kind.NumberValue(Double.NegativeInfinity)),
-      checkRoundtrip = false)
+    assertJsonIsSameAsJava(Value(kind = Value.Kind.NumberValue(Double.PositiveInfinity)), checkRoundtrip = false)
+    assertJsonIsSameAsJava(Value(kind = Value.Kind.NumberValue(Double.NegativeInfinity)), checkRoundtrip = false)
     assertJsonIsSameAsJava(Value(kind = Value.Kind.StringValue("boo")))
     assertJsonIsSameAsJava(Value(kind = Value.Kind.BoolValue(true)))
     assertJsonIsSameAsJava(Value(kind = Value.Kind.BoolValue(false)))
-    assertJsonIsSameAsJava(
-      Value(kind = Value.Kind.NullValue(com.google.protobuf.struct.NullValue.NULL_VALUE)))
+    assertJsonIsSameAsJava(Value(kind = Value.Kind.NullValue(com.google.protobuf.struct.NullValue.NULL_VALUE)))
     assertJsonIsSameAsJava(Value(kind = Value.Kind.StructValue(value = StructExample)))
 
     assertJsonIsSameAsJava(

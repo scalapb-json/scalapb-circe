@@ -171,9 +171,8 @@ class JsonFormatSpec extends FlatSpec with MustMatchers with OptionValues {
             "cols" : "1"
           }
     }""") must be(
-      jsontest.issue315.Msg(
-        baz = "1",
-        someUnion = jsontest.issue315.Msg.SomeUnion.Foo(jsontest.issue315.Foo(cols = "1"))))
+      jsontest.issue315
+        .Msg(baz = "1", someUnion = jsontest.issue315.Msg.SomeUnion.Foo(jsontest.issue315.Foo(cols = "1"))))
   }
 
   "parsing null" should "give default value" in {
@@ -217,8 +216,7 @@ class JsonFormatSpec extends FlatSpec with MustMatchers with OptionValues {
   }
 
   "Empty object" should "with preserve field names should work" in {
-    new Printer(includingDefaultValueFields = true, preservingProtoFieldNames = true)
-      .toJson(MyTest()) must be(
+    new Printer(includingDefaultValueFields = true, preservingProtoFieldNames = true).toJson(MyTest()) must be(
       parse("""{
           |  "hello": "",
           |  "foobar": 0,
@@ -244,8 +242,7 @@ class JsonFormatSpec extends FlatSpec with MustMatchers with OptionValues {
   }
 
   "TestProto" should "format int64 as JSON number" in {
-    new Printer(formattingLongAsNumber = true).print(MyTest(bazinga = Some(642))) must be(
-      """{"bazinga":642}""")
+    new Printer(formattingLongAsNumber = true).print(MyTest(bazinga = Some(642))) must be("""{"bazinga":642}""")
   }
 
   "TestProto" should "parse numbers formatted as JSON string" in {
@@ -286,12 +283,8 @@ class JsonFormatSpec extends FlatSpec with MustMatchers with OptionValues {
     validateRejects("""{"ulong":"-1"}""")
 
     // sint32
-    validateAccepts(
-      s"""{"sint":"${Integer.MAX_VALUE}"}""",
-      IntFields(sint = Some(Integer.MAX_VALUE)))
-    validateAccepts(
-      s"""{"sint":"${Integer.MIN_VALUE}"}""",
-      IntFields(sint = Some(Integer.MIN_VALUE)))
+    validateAccepts(s"""{"sint":"${Integer.MAX_VALUE}"}""", IntFields(sint = Some(Integer.MAX_VALUE)))
+    validateAccepts(s"""{"sint":"${Integer.MIN_VALUE}"}""", IntFields(sint = Some(Integer.MIN_VALUE)))
     validateRejects(s"""{"sint":"${Integer.MAX_VALUE.toLong + 1}"}""")
     validateRejects(s"""{"sint":"${Integer.MIN_VALUE.toLong - 1}"}""")
 
@@ -315,11 +308,9 @@ class JsonFormatSpec extends FlatSpec with MustMatchers with OptionValues {
 
   "TestProto" should "produce valid JSON output for unsigned integers" in {
     val uint32max: Long = (1L << 32) - 1
-    JsonFormat.toJson(IntFields(uint = Some(uint32max.toInt))) must be(
-      parse(s"""{"uint":$uint32max}""").getOrError)
+    JsonFormat.toJson(IntFields(uint = Some(uint32max.toInt))) must be(parse(s"""{"uint":$uint32max}""").getOrError)
     JsonFormat.toJson(IntFields(uint = Some(1))) must be(parse(s"""{"uint":1}""").getOrError)
-    JsonFormat.toJson(IntFields(fixint = Some(uint32max.toInt))) must be(
-      parse(s"""{"fixint":$uint32max}""").getOrError)
+    JsonFormat.toJson(IntFields(fixint = Some(uint32max.toInt))) must be(parse(s"""{"fixint":$uint32max}""").getOrError)
     JsonFormat.toJson(IntFields(fixint = Some(1))) must be(parse(s"""{"fixint":1}""").getOrError)
     val uint64max: BigInt = (BigInt(1) << 64) - 1
     JsonFormat.toJson(IntFields(ulong = Some(uint64max.toLong))) must be(
@@ -331,15 +322,12 @@ class JsonFormatSpec extends FlatSpec with MustMatchers with OptionValues {
   }
 
   "TestProto" should "parse an enum formatted as number" in {
-    new Parser().fromJsonString[MyTest]("""{"optEnum":1}""") must be(
-      MyTest(optEnum = Some(MyEnum.V1)))
-    new Parser().fromJsonString[MyTest]("""{"optEnum":2}""") must be(
-      MyTest(optEnum = Some(MyEnum.V2)))
+    new Parser().fromJsonString[MyTest]("""{"optEnum":1}""") must be(MyTest(optEnum = Some(MyEnum.V1)))
+    new Parser().fromJsonString[MyTest]("""{"optEnum":2}""") must be(MyTest(optEnum = Some(MyEnum.V2)))
   }
 
   "PreservedTestJson" should "be TestProto when parsed from json" in {
-    new Parser(preservingProtoFieldNames = true).fromJsonString[MyTest](PreservedTestJson) must be(
-      TestProto)
+    new Parser(preservingProtoFieldNames = true).fromJsonString[MyTest](PreservedTestJson) must be(TestProto)
   }
 
   "DoubleFloatProto" should "parse NaNs" in {
@@ -350,8 +338,8 @@ class JsonFormatSpec extends FlatSpec with MustMatchers with OptionValues {
     val out = JsonFormat.fromJsonString[DoubleFloat](i)
     out.d.value.isNaN must be(true)
     out.f.value.isNaN must be(true)
-    JsonFormat.toJson(out).asObject.flatMap(_.apply("d")) must be (Some(Json.fromString(Double.NaN.toString)))
-    JsonFormat.toJson(out).asObject.flatMap(_.apply("f")) must be (Some(Json.fromString(Double.NaN.toString)))
+    JsonFormat.toJson(out).asObject.flatMap(_.apply("d")) must be(Some(Json.fromString(Double.NaN.toString)))
+    JsonFormat.toJson(out).asObject.flatMap(_.apply("f")) must be(Some(Json.fromString(Double.NaN.toString)))
   }
 
   "DoubleFloatProto" should "parse Infinity" in {
@@ -360,10 +348,12 @@ class JsonFormatSpec extends FlatSpec with MustMatchers with OptionValues {
       "f": "Infinity"
     }"""
     val out = JsonFormat.fromJsonString[DoubleFloat](i)
-    out.d.value.isPosInfinity must be (true)
-    out.f.value.isPosInfinity must be (true)
-    JsonFormat.toJson(out).asObject.flatMap(_.apply("d")) must be (Some(Json.fromString(Double.PositiveInfinity.toString)))
-    JsonFormat.toJson(out).asObject.flatMap(_.apply("f")) must be (Some(Json.fromString(Double.PositiveInfinity.toString)))
+    out.d.value.isPosInfinity must be(true)
+    out.f.value.isPosInfinity must be(true)
+    JsonFormat.toJson(out).asObject.flatMap(_.apply("d")) must be(
+      Some(Json.fromString(Double.PositiveInfinity.toString)))
+    JsonFormat.toJson(out).asObject.flatMap(_.apply("f")) must be(
+      Some(Json.fromString(Double.PositiveInfinity.toString)))
   }
 
   "DoubleFloatProto" should "parse -Infinity" in {
@@ -372,10 +362,12 @@ class JsonFormatSpec extends FlatSpec with MustMatchers with OptionValues {
       "f": "-Infinity"
     }"""
     val out = JsonFormat.fromJsonString[DoubleFloat](i)
-    out.d.value.isNegInfinity must be (true)
-    out.f.value.isNegInfinity must be (true)
-    JsonFormat.toJson(out).asObject.flatMap(_.apply("d")) must be (Some(Json.fromString(Double.NegativeInfinity.toString)))
-    JsonFormat.toJson(out).asObject.flatMap(_.apply("f")) must be (Some(Json.fromString(Double.NegativeInfinity.toString)))
+    out.d.value.isNegInfinity must be(true)
+    out.f.value.isNegInfinity must be(true)
+    JsonFormat.toJson(out).asObject.flatMap(_.apply("d")) must be(
+      Some(Json.fromString(Double.NegativeInfinity.toString)))
+    JsonFormat.toJson(out).asObject.flatMap(_.apply("f")) must be(
+      Some(Json.fromString(Double.NegativeInfinity.toString)))
   }
 
   val anyEnabledTypeRegistry = TypeRegistry.empty.addMessageByCompanion(TestProto.companion)

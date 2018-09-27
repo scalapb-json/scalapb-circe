@@ -56,7 +56,7 @@ object StructFormat {
     Json.fromValues(v.values.map(structValueWriter))
 
   def nullValueParser(v: Json): struct.NullValue = {
-    if(v.isNull)
+    if (v.isNull)
       com.google.protobuf.struct.NullValue.NULL_VALUE
     else
       throw new JsonFormatException("Expected a null")
