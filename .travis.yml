@@ -6,6 +6,10 @@ scala:
 jdk: oraclejdk8
 script:
 - sbt scalafmtSbtCheck scalafmtCheck test:scalafmtCheck "++ ${TRAVIS_SCALA_VERSION}! -v" test
+matrix:
+  include:
+  - jdk: openjdk11
+    scala: 2.12.7
 cache:
   directories:
   - $HOME/.ivy2/cache
