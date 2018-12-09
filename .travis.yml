@@ -2,14 +2,14 @@ language: scala
 sudo: false
 scala:
 - 2.11.12
-- 2.12.7
+- 2.12.8
 jdk: oraclejdk8
 script:
 - sbt scalafmtSbtCheck scalafmtCheck test:scalafmtCheck "++ ${TRAVIS_SCALA_VERSION}! -v" test
 matrix:
   include:
   - jdk: openjdk11
-    scala: 2.12.7
+    scala: 2.12.8
 cache:
   directories:
   - $HOME/.ivy2/cache
