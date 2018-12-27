@@ -17,6 +17,30 @@ val tagOrHash = Def.setting {
 
 val unusedWarnings = Seq("-Ywarn-unused")
 
+lazy val macros = project
+  .in(file("macros"))
+  .settings(
+    commonSettings,
+    name := UpdateReadme.scalapbCirceMacrosName,
+    libraryDependencies ++= Seq(
+      "io.github.scalapb-json" %%% "scalapb-json-macros" % scalapbJsonCommonVersion.value,
+    )
+  )
+  .dependsOn(
+    scalapbCirceJVM
+  )
+
+lazy val tests = crossProject(JVMPlatform, JSPlatform)
+  .in(file("tests"))
+  .settings(
+    commonSettings,
+    noPublish,
+  )
+  .configure(_ dependsOn macros)
+  .dependsOn(
+    scalapbCirce % "test->test"
+  )
+
 val scalapbCirce = crossProject(JVMPlatform, JSPlatform)
   .in(file("core"))
   .enablePlugins(BuildInfoPlugin)

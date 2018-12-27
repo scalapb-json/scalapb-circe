@@ -5,12 +5,13 @@ import sbtrelease.Git
 object UpdateReadme {
 
   val scalapbCirceName = "scalapb-circe"
+  val scalapbCirceMacrosName = "scalapb-circe-macros"
 
   val updateReadmeTask = { state: State =>
     val extracted = Project.extract(state)
     val v = extracted get version
     val org = extracted get organization
-    val modules = scalapbCirceName :: Nil
+    val modules = scalapbCirceName :: scalapbCirceMacrosName :: Nil
     val readme = "README.md"
     val readmeFile = file(readme)
     val newReadme = Predef
