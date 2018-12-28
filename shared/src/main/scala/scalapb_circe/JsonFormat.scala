@@ -21,16 +21,19 @@ case class Formatter[T](writer: (Printer, T) => Json, parser: (Parser, Json) => 
 case class FormatRegistry(
   messageFormatters: Map[Class[_], Formatter[_]] = Map.empty,
   enumFormatters: Map[EnumDescriptor, Formatter[EnumValueDescriptor]] = Map.empty,
-  registeredCompanions: Seq[GenericCompanion] = Seq.empty) {
+  registeredCompanions: Seq[GenericCompanion] = Seq.empty
+) {
 
   def registerMessageFormatter[T <: GeneratedMessage](writer: (Printer, T) => Json, parser: (Parser, Json) => T)(
-    implicit ct: ClassTag[T]): FormatRegistry = {
+    implicit ct: ClassTag[T]
+  ): FormatRegistry = {
     copy(messageFormatters = messageFormatters + (ct.runtimeClass -> Formatter(writer, parser)))
   }
 
   def registerEnumFormatter[E <: GeneratedEnum](
     writer: (Printer, EnumValueDescriptor) => Json,
-    parser: (Parser, Json) => EnumValueDescriptor)(implicit cmp: GeneratedEnumCompanion[E]): FormatRegistry = {
+    parser: (Parser, Json) => EnumValueDescriptor
+  )(implicit cmp: GeneratedEnumCompanion[E]): FormatRegistry = {
     copy(enumFormatters = enumFormatters + (cmp.scalaDescriptor -> Formatter(writer, parser)))
   }
 
@@ -61,7 +64,8 @@ class Printer(
   formattingLongAsNumber: Boolean = false,
   formattingEnumsAsNumber: Boolean = false,
   formatRegistry: FormatRegistry = JsonFormat.DefaultRegistry,
-  val typeRegistry: TypeRegistry = TypeRegistry.empty) {
+  val typeRegistry: TypeRegistry = TypeRegistry.empty
+) {
   def print[A](m: GeneratedMessage): String = {
     toJson(m).noSpaces
   }
@@ -163,7 +167,7 @@ class Printer(
     serializeSingleValue(fd, scalapb_json.ScalapbJsonCommon.defaultValue(fd), formattingLongAsNumber)
 
   private def unsignedLong(n: Long) =
-    if (n < 0) BigDecimal(BigInt(n & 0x7FFFFFFFFFFFFFFFL).setBit(63)) else BigDecimal(n)
+    if (n < 0) BigDecimal(BigInt(n & 0X7FFFFFFFFFFFFFFFL).setBit(63)) else BigDecimal(n)
 
   private def formatLong(n: Long, protoType: FieldDescriptorProto.Type, formattingLongAsNumber: Boolean): Json = {
     val v =
@@ -193,10 +197,12 @@ class Printer(
 class Parser(
   preservingProtoFieldNames: Boolean = false,
   formatRegistry: FormatRegistry = JsonFormat.DefaultRegistry,
-  val typeRegistry: TypeRegistry = TypeRegistry.empty) {
+  val typeRegistry: TypeRegistry = TypeRegistry.empty
+) {
 
-  def fromJsonString[A <: GeneratedMessage with Message[A]](str: String)(
-    implicit cmp: GeneratedMessageCompanion[A]): A = {
+  def fromJsonString[A <: GeneratedMessage with Message[A]](
+    str: String
+  )(implicit cmp: GeneratedMessageCompanion[A]): A = {
     fromJson(io.circe.parser.parse(str).fold(throw _, identity))
   }
 
@@ -234,11 +240,15 @@ class Parser(
                     valueDescriptor -> parseSingleValue(
                       cmp.messageCompanionForFieldNumber(fd.number),
                       valueDescriptor,
-                      jValue)))
+                      jValue
+                    )
+                  )
+                )
             }(scala.collection.breakOut))
           case _ =>
             throw new JsonFormatException(
-              s"Expected an object for map field ${serializedName(fd)} of ${fd.containingMessage.name}")
+              s"Expected an object for map field ${serializedName(fd)} of ${fd.containingMessage.name}"
+            )
         }
       } else if (fd.isRepeated) {
         value.asArray match {
@@ -246,7 +256,8 @@ class Parser(
             PRepeated(vals.map(parseSingleValue(cmp, fd, _)).toVector)
           case _ =>
             throw new JsonFormatException(
-              s"Expected an.asArray for repeated field ${serializedName(fd)} of ${fd.containingMessage.name}")
+              s"Expected an.asArray for repeated field ${serializedName(fd)} of ${fd.containingMessage.name}"
+            )
         }
       } else parseSingleValue(cmp, fd, value)
     }
@@ -276,7 +287,8 @@ class Parser(
         v.toInt.flatMap { i =>
           enumDescriptor.findValueByNumber(i)
         }.getOrElse(
-          throw new JsonFormatException(s"Invalid enum value: ${v.toInt} for enum type: ${enumDescriptor.fullName}"))
+          throw new JsonFormatException(s"Invalid enum value: ${v.toInt} for enum type: ${enumDescriptor.fullName}")
+        )
       case _ =>
         value.asString match {
           case Some(s) =>
@@ -291,7 +303,8 @@ class Parser(
   protected def parseSingleValue(
     containerCompanion: GeneratedMessageCompanion[_],
     fd: FieldDescriptor,
-    value: Json): PValue = fd.scalaType match {
+    value: Json
+  ): PValue = fd.scalaType match {
     case ScalaType.Enum(ed) =>
       PEnum(formatRegistry.getEnumParser(ed) match {
         case Some(parser) => parser(this, value)
@@ -305,7 +318,9 @@ class Parser(
         fd.protoType,
         value,
         throw new JsonFormatException(
-          s"Unexpected value ($value) for field ${serializedName(fd)} of ${fd.containingMessage.name}"))
+          s"Unexpected value ($value) for field ${serializedName(fd)} of ${fd.containingMessage.name}"
+        )
+      )
   }
 }
 
@@ -346,21 +361,25 @@ object JsonFormat {
     )
     .registerMessageFormatter[wrappers.DoubleValue](
       primitiveWrapperWriter,
-      primitiveWrapperParser[wrappers.DoubleValue])
+      primitiveWrapperParser[wrappers.DoubleValue]
+    )
     .registerMessageFormatter[wrappers.FloatValue](primitiveWrapperWriter, primitiveWrapperParser[wrappers.FloatValue])
     .registerMessageFormatter[wrappers.Int32Value](primitiveWrapperWriter, primitiveWrapperParser[wrappers.Int32Value])
     .registerMessageFormatter[wrappers.Int64Value](primitiveWrapperWriter, primitiveWrapperParser[wrappers.Int64Value])
     .registerMessageFormatter[wrappers.UInt32Value](
       primitiveWrapperWriter,
-      primitiveWrapperParser[wrappers.UInt32Value])
+      primitiveWrapperParser[wrappers.UInt32Value]
+    )
     .registerMessageFormatter[wrappers.UInt64Value](
       primitiveWrapperWriter,
-      primitiveWrapperParser[wrappers.UInt64Value])
+      primitiveWrapperParser[wrappers.UInt64Value]
+    )
     .registerMessageFormatter[wrappers.BoolValue](primitiveWrapperWriter, primitiveWrapperParser[wrappers.BoolValue])
     .registerMessageFormatter[wrappers.BytesValue](primitiveWrapperWriter, primitiveWrapperParser[wrappers.BytesValue])
     .registerMessageFormatter[wrappers.StringValue](
       primitiveWrapperWriter,
-      primitiveWrapperParser[wrappers.StringValue])
+      primitiveWrapperParser[wrappers.StringValue]
+    )
     .registerEnumFormatter[NullValue](
       (_, _) => Json.Null,
       (parser, value) => {
@@ -375,18 +394,20 @@ object JsonFormat {
     .registerWriter[com.google.protobuf.struct.Struct](StructFormat.structWriter, StructFormat.structParser)
     .registerWriter[com.google.protobuf.struct.ListValue](
       x => StructFormat.listValueWriter(x),
-      StructFormat.listValueParser(_))
+      StructFormat.listValueParser(_)
+    )
     .registerMessageFormatter[com.google.protobuf.any.Any](AnyFormat.anyWriter, AnyFormat.anyParser)
 
   def primitiveWrapperWriter[T <: GeneratedMessage with Message[T]](
-    implicit cmp: GeneratedMessageCompanion[T]): ((Printer, T) => Json) = {
+    implicit cmp: GeneratedMessageCompanion[T]
+  ): ((Printer, T) => Json) = {
     val fieldDesc = cmp.scalaDescriptor.findFieldByNumber(1).get
-    (printer, t) =>
-      printer.serializeSingleValue(fieldDesc, t.getField(fieldDesc), formattingLongAsNumber = false)
+    (printer, t) => printer.serializeSingleValue(fieldDesc, t.getField(fieldDesc), formattingLongAsNumber = false)
   }
 
   def primitiveWrapperParser[T <: GeneratedMessage with Message[T]](
-    implicit cmp: GeneratedMessageCompanion[T]): ((Parser, Json) => T) = {
+    implicit cmp: GeneratedMessageCompanion[T]
+  ): ((Parser, Json) => T) = {
     val fieldDesc = cmp.scalaDescriptor.findFieldByNumber(1).get
     (parser, jv) =>
       cmp.messageReads.read(
@@ -396,7 +417,11 @@ object JsonFormat {
               fieldDesc.scalaType,
               fieldDesc.protoType,
               jv,
-              throw new JsonFormatException(s"Unexpected value for ${cmp.scalaDescriptor.name}")))))
+              throw new JsonFormatException(s"Unexpected value for ${cmp.scalaDescriptor.name}")
+            )
+          )
+        )
+      )
   }
 
   val printer = new Printer()
@@ -449,7 +474,7 @@ object JsonFormat {
               parseInt32(x)
             } else {
               parseUint32(x)
-          },
+            },
           jsonArray = x => onError,
           jsonObject = x => onError
         )
@@ -468,7 +493,7 @@ object JsonFormat {
               parseInt64(x)
             } else {
               parseUint64(x)
-          },
+            },
           jsonArray = x => onError,
           jsonObject = x => onError
         )

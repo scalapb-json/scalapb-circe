@@ -11,8 +11,11 @@ object AnyFormat {
       // including the original GeneratedMessage with the Any (at least in memory).
       val cmp = printer.typeRegistry
         .findType(any.typeUrl)
-        .getOrElse(throw new IllegalStateException(
-          s"Unknown type ${any.typeUrl}; you may have to register it via FormatRegistry.registerCompanion"))
+        .getOrElse(
+          throw new IllegalStateException(
+            s"Unknown type ${any.typeUrl}; you may have to register it via FormatRegistry.registerCompanion"
+          )
+        )
 
       // Unpack the message...
       val message = any.unpack(cmp)

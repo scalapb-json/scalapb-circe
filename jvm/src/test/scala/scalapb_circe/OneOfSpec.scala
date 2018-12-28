@@ -27,13 +27,15 @@ class OneOfSpec extends FlatSpec with MustMatchers with TableDrivenPropertyCheck
     new Printer(includingDefaultValueFields = false).toJson(message) must be(
       parse(
         ProtobufJavaPrinter().print(toJavaProto(message))
-      ).getOrError)
+      ).getOrError
+    )
 
     new Printer(includingDefaultValueFields = true).toJson(message) must be(parse(json).getOrError)
     new Printer(includingDefaultValueFields = true).toJson(message) must be(
       parse(
         ProtobufJavaPrinter().includingDefaultValueFields().print(toJavaProto(message))
-      ).getOrError)
+      ).getOrError
+    )
   }
 
 }

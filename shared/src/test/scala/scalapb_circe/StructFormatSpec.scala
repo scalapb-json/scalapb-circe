@@ -14,6 +14,7 @@ class StructFormatSpec extends FlatSpec with MustMatchers with JavaAssertions {
     JsonFormat.fromJsonString[StructTest]("""{"nv": "NULL_VALUE"}""") must be(StructTest())
     JsonFormat.fromJsonString[StructTest]("""{"nv": 0}""") must be(StructTest())
     JsonFormat.fromJsonString[StructTest]("""{"repNv": [null, 0, null]}""") must be(
-      StructTest(repNv = Seq(NullValue.NULL_VALUE, NullValue.NULL_VALUE, NullValue.NULL_VALUE)))
+      StructTest(repNv = Seq(NullValue.NULL_VALUE, NullValue.NULL_VALUE, NullValue.NULL_VALUE))
+    )
   }
 }

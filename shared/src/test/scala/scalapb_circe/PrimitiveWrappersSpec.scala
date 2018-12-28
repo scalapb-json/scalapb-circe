@@ -27,7 +27,8 @@ class PrimitiveWrappersSpec extends FlatSpec with MustMatchers {
     JsonFormat.toJson(Wrapper(wString = Some("bar"))) must be(render(Map("wString" -> Json.fromString("bar"))))
     JsonFormat.toJson(Wrapper(wString = Some(""))) must be(render(Map("wString" -> Json.fromString(""))))
     JsonFormat.toJson(Wrapper(wBytes = Some(ByteString.copyFrom(Array[Byte](3, 5, 4))))) must be(
-      render(Map("wBytes" -> Json.fromString("AwUE"))))
+      render(Map("wBytes" -> Json.fromString("AwUE")))
+    )
     JsonFormat.toJson(Wrapper(wBytes = Some(ByteString.EMPTY))) must be(render(Map("wBytes" -> Json.fromString(""))))
   }
 
@@ -42,12 +43,15 @@ class PrimitiveWrappersSpec extends FlatSpec with MustMatchers {
     JsonFormat.fromJson[Wrapper](render(Map("wUint32" -> Json.fromLong(125)))) must be(Wrapper(wUint32 = Some(125)))
     JsonFormat.fromJson[Wrapper](render(Map("wUint64" -> Json.fromString("125")))) must be(Wrapper(wUint64 = Some(125)))
     JsonFormat.fromJson[Wrapper](render(Map("wString" -> Json.fromString("bar")))) must be(
-      Wrapper(wString = Some("bar")))
+      Wrapper(wString = Some("bar"))
+    )
     JsonFormat.fromJson[Wrapper](render(Map("wString" -> Json.fromString("")))) must be(Wrapper(wString = Some("")))
     JsonFormat.fromJson[Wrapper](render(Map("wBytes" -> Json.fromString("AwUE")))) must be(
-      Wrapper(wBytes = Some(ByteString.copyFrom(Array[Byte](3, 5, 4)))))
+      Wrapper(wBytes = Some(ByteString.copyFrom(Array[Byte](3, 5, 4))))
+    )
     JsonFormat.fromJson[Wrapper](render(Map("wBytes" -> Json.fromString("")))) must be(
-      Wrapper(wBytes = Some(ByteString.EMPTY)))
+      Wrapper(wBytes = Some(ByteString.EMPTY))
+    )
   }
 
 }
