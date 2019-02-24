@@ -61,7 +61,7 @@ case class FormatRegistry(
 class Printer(
   includingDefaultValueFields: Boolean = false,
   preservingProtoFieldNames: Boolean = false,
-  formattingLongAsNumber: Boolean = false,
+  val formattingLongAsNumber: Boolean = false,
   formattingEnumsAsNumber: Boolean = false,
   formatRegistry: FormatRegistry = JsonFormat.DefaultRegistry,
   val typeRegistry: TypeRegistry = TypeRegistry.empty
@@ -402,7 +402,12 @@ object JsonFormat {
     implicit cmp: GeneratedMessageCompanion[T]
   ): ((Printer, T) => Json) = {
     val fieldDesc = cmp.scalaDescriptor.findFieldByNumber(1).get
-    (printer, t) => printer.serializeSingleValue(fieldDesc, t.getField(fieldDesc), formattingLongAsNumber = false)
+    (printer, t) =>
+      printer.serializeSingleValue(
+        fieldDesc,
+        t.getField(fieldDesc),
+        formattingLongAsNumber = printer.formattingLongAsNumber
+      )
   }
 
   def primitiveWrapperParser[T <: GeneratedMessage with Message[T]](

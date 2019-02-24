@@ -30,6 +30,12 @@ class PrimitiveWrappersSpec extends FlatSpec with MustMatchers {
       render(Map("wBytes" -> Json.fromString("AwUE")))
     )
     JsonFormat.toJson(Wrapper(wBytes = Some(ByteString.EMPTY))) must be(render(Map("wBytes" -> Json.fromString(""))))
+    new Printer(formattingLongAsNumber = true).toJson(Wrapper(wUint64 = Some(125))) must be(
+      render(Map("wUint64" -> Json.fromLong(125)))
+    )
+    new Printer(formattingLongAsNumber = true).toJson(Wrapper(wInt64 = Some(125))) must be(
+      render(Map("wInt64" -> Json.fromLong(125)))
+    )
   }
 
   "primitive values" should "parse properly" in {
