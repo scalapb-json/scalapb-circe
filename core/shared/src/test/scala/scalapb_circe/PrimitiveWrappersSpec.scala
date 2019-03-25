@@ -2,7 +2,7 @@ package scalapb_circe
 
 import com.google.protobuf.ByteString
 import jsontest.test3._
-import io.circe._
+import io.circe.{Encoder, Json}
 import org.scalatest.{FlatSpec, MustMatchers}
 
 class PrimitiveWrappersSpec extends FlatSpec with MustMatchers {

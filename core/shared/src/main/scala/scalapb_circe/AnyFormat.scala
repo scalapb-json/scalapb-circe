@@ -1,7 +1,7 @@
 package scalapb_circe
 
 import com.google.protobuf.any.{Any => PBAny}
-import io.circe._
+import io.circe.Json
 import scalapb_json._
 
 object AnyFormat {

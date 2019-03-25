@@ -6,7 +6,7 @@ import com.google.protobuf.duration.Duration
 import com.google.protobuf.field_mask.FieldMask
 import com.google.protobuf.struct.NullValue
 import com.google.protobuf.timestamp.Timestamp
-import io.circe._
+import io.circe.{Decoder, DecodingFailure, Encoder, Json}
 import scalapb_json._
 
 import scala.collection.mutable

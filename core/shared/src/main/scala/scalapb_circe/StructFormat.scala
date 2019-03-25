@@ -2,7 +2,7 @@ package scalapb_circe
 
 import com.google.protobuf.struct.Value.Kind
 import com.google.protobuf.struct
-import io.circe._
+import io.circe.{Json, JsonObject}
 import scalapb_json._
 
 object StructFormat {

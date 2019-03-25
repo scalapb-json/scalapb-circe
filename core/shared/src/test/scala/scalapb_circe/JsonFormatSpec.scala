@@ -1,6 +1,6 @@
 package scalapb_circe
 
-import io.circe._
+import io.circe.Json
 import io.circe.parser.parse
 import org.scalatest.{Assertion, FlatSpec, MustMatchers, OptionValues}
 import jsontest.test._
