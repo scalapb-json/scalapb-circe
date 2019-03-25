@@ -109,7 +109,7 @@ class Printer(
             }.toList: _*)
           )
         } else {
-          b += JField(name, Json.fromValues(xs.map(toJson)(collection.breakOut)))
+          b += JField(name, Json.fromValues(xs.map(toJson)))
         }
       case msg: GeneratedMessage =>
         b += JField(name, toJson(msg))
@@ -223,7 +223,7 @@ class Parser(
             val mapEntryDesc = fd.scalaType.asInstanceOf[ScalaType.Message].descriptor
             val keyDescriptor = mapEntryDesc.findFieldByNumber(1).get
             val valueDescriptor = mapEntryDesc.findFieldByNumber(2).get
-            PRepeated(vals.toList.map {
+            PRepeated(vals.toVector.map {
               case (key, jValue) =>
                 val keyObj = keyDescriptor.scalaType match {
                   case ScalaType.Boolean => PBoolean(java.lang.Boolean.valueOf(key))
@@ -244,7 +244,7 @@ class Parser(
                     )
                   )
                 )
-            }(scala.collection.breakOut))
+            })
           case _ =>
             throw new JsonFormatException(
               s"Expected an object for map field ${serializedName(fd)} of ${fd.containingMessage.name}"

@@ -38,9 +38,9 @@ object StructFormat {
   }
 
   def structWriter(v: struct.Struct): Json =
-    Json.obj(v.fields.map {
+    Json.obj(v.fields.iterator.map {
       case (x, y) => x -> structValueWriter(y)
-    }(collection.breakOut): _*)
+    }.toList: _*)
 
   def listValueParser(json: Seq[Json]): struct.ListValue =
     com.google.protobuf.struct.ListValue(json.map(structValueParser))
