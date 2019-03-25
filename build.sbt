@@ -110,7 +110,7 @@ lazy val commonSettings = Seq[Def.SettingsDefinition](
   unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
   resolvers += Opts.resolver.sonatypeReleases,
   scalaVersion := Scala211,
-  crossScalaVersions := Seq("2.12.8", Scala211),
+  crossScalaVersions := Seq("2.12.8", Scala211, "2.13.0-M5"),
   scalacOptions ++= unusedWarnings,
   Seq(Compile, Test).flatMap(c => scalacOptions in (c, console) --= unusedWarnings),
   scalacOptions ++= Seq("-feature", "-deprecation", "-language:existentials"),
