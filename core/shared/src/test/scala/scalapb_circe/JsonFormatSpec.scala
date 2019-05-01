@@ -426,4 +426,15 @@ class JsonFormatSpec extends FlatSpec with MustMatchers with OptionValues {
     assert(JsonFormat.toJsonString(message) == json)
     assert(JsonFormat.fromJsonString[TestFieldMask](json) == message)
   }
+
+  "booleans" should "be accepted as string" in {
+    assert(
+      JsonFormat.fromJsonString[MyTest]("""{"optBool": "true"}""") == MyTest(optBool = Some(true))
+    )
+    assert(
+      JsonFormat.fromJsonString[MyTest]("""{"optBool": "false"}""") == MyTest(
+        optBool = Some(false)
+      )
+    )
+  }
 }
