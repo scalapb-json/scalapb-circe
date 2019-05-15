@@ -15,7 +15,14 @@ val tagOrHash = Def.setting {
   else tagName.value
 }
 
-val unusedWarnings = Seq("-Ywarn-unused")
+val unusedWarnings = Def.setting(
+  CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, 11)) =>
+      Seq("-Ywarn-unused-import")
+    case _ =>
+      Seq("-Ywarn-unused:imports")
+  }
+)
 
 lazy val macros = project
   .in(file("macros"))
@@ -111,8 +118,8 @@ lazy val commonSettings = Def.settings(
   resolvers += Opts.resolver.sonatypeReleases,
   scalaVersion := Scala211,
   crossScalaVersions := Seq("2.12.8", Scala211, "2.13.0-M5"),
-  scalacOptions ++= unusedWarnings,
-  Seq(Compile, Test).flatMap(c => scalacOptions in (c, console) --= unusedWarnings),
+  scalacOptions ++= unusedWarnings.value,
+  Seq(Compile, Test).flatMap(c => scalacOptions in (c, console) --= unusedWarnings.value),
   scalacOptions ++= Seq("-feature", "-deprecation", "-language:existentials"),
   description := "Json/Protobuf convertors for ScalaPB",
   licenses += ("MIT", url("https://opensource.org/licenses/MIT")),
