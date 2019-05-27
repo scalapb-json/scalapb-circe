@@ -3,7 +3,6 @@ sudo: false
 scala:
 - 2.11.12
 - 2.12.8
-- 2.13.0-M5
 jdk: oraclejdk8
 script:
 - sbt scalafmtSbtCheck scalafmtCheck test:scalafmtCheck "++ ${TRAVIS_SCALA_VERSION}! -v" test
@@ -11,6 +10,9 @@ matrix:
   include:
   - jdk: openjdk11
     scala: 2.12.8
+  - scala: 2.13.0-RC1
+    script:
+    - sbt "scalafmtCheck" "test:scalafmtCheck" "scalafmtSbtCheck" "++ ${TRAVIS_SCALA_VERSION}! -v" "all scalapbCirceJVM/test testsJVM/test"
 cache:
   directories:
   - $HOME/.ivy2/cache

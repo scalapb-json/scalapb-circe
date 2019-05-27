@@ -117,7 +117,7 @@ lazy val commonSettings = Def.settings(
   unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
   resolvers += Opts.resolver.sonatypeReleases,
   scalaVersion := Scala211,
-  crossScalaVersions := Seq("2.12.8", Scala211, "2.13.0-M5"),
+  crossScalaVersions := Seq("2.12.8", Scala211, "2.13.0-RC1"),
   scalacOptions ++= unusedWarnings.value,
   Seq(Compile, Test).flatMap(c => scalacOptions in (c, console) --= unusedWarnings.value),
   scalacOptions ++= Seq("-feature", "-deprecation", "-language:existentials"),
@@ -127,13 +127,13 @@ lazy val commonSettings = Def.settings(
   Project.inConfig(Test)(sbtprotoc.ProtocPlugin.protobufConfigSettings),
   PB.targets in Compile := Nil,
   PB.protoSources in Test := Seq(baseDirectory.value.getParentFile / "shared/src/test/protobuf"),
-  scalapbJsonCommonVersion := "0.5.0-M3",
-  circeVersion := "0.11.1",
+  scalapbJsonCommonVersion := "0.5.0-M5",
+  circeVersion := "0.12.0-M1",
   libraryDependencies ++= Seq(
     "io.github.scalapb-json" %%% "scalapb-json-common" % scalapbJsonCommonVersion.value,
     "com.thesamet.scalapb" %%% "scalapb-runtime" % scalapbVersion % "protobuf,test",
     "io.circe" %%% "circe-parser" % circeVersion.value,
-    "org.scalatest" %%% "scalatest" % "3.0.7" % "test"
+    "org.scalatest" %%% "scalatest" % "3.0.8-RC2" % "test"
   ),
   pomExtra in Global := {
     <url>https://github.com/scalapb-json/scalapb-circe</url>
