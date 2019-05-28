@@ -114,6 +114,7 @@ val noPublish = Seq(
 noPublish
 
 lazy val commonSettings = Def.settings(
+  scalapropsCoreSettings,
   unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
   resolvers += Opts.resolver.sonatypeReleases,
   scalaVersion := Scala211,
@@ -130,6 +131,7 @@ lazy val commonSettings = Def.settings(
   scalapbJsonCommonVersion := "0.5.0-M5",
   circeVersion := "0.12.0-M1",
   libraryDependencies ++= Seq(
+    "com.github.scalaprops" %%% "scalaprops" % "0.6.0" % "test",
     "io.github.scalapb-json" %%% "scalapb-json-common" % scalapbJsonCommonVersion.value,
     "com.thesamet.scalapb" %%% "scalapb-runtime" % scalapbVersion % "protobuf,test",
     "io.circe" %%% "circe-parser" % circeVersion.value,
