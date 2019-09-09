@@ -116,7 +116,6 @@ noPublish
 lazy val commonSettings = Def.settings(
   scalapropsCoreSettings,
   unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
-  resolvers += Opts.resolver.sonatypeReleases,
   scalaVersion := Scala211,
   crossScalaVersions := Seq("2.12.8", Scala211, "2.13.0"),
   scalacOptions ++= unusedWarnings.value,
