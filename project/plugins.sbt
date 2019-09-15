@@ -10,10 +10,10 @@ addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.11")
 
 addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.7")
 
-addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.2")
+addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.0.0")
 
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.0.4")
 
 addSbtPlugin("com.thesamet" % "sbt-protoc" % "0.99.25")
 
-libraryDependencies += "com.thesamet.scalapb" %% "compilerplugin" % "0.9.0"
+libraryDependencies += "com.thesamet.scalapb" %% "compilerplugin" % "0.9.1"
