@@ -2,7 +2,7 @@ language: scala
 sudo: false
 scala:
 - 2.11.12
-- 2.12.8
+- 2.12.10
 - 2.13.0
 dist: xenial
 jdk: openjdk8
@@ -11,7 +11,7 @@ script:
 matrix:
   include:
   - jdk: openjdk11
-    scala: 2.12.8
+    scala: 2.12.10
 cache:
   directories:
   - $HOME/.ivy2/cache
