@@ -132,7 +132,14 @@ lazy val commonSettings = Def.settings(
   PB.protocVersion := "-v371",
   PB.protoSources in Test := Seq(baseDirectory.value.getParentFile / "shared/src/test/protobuf"),
   scalapbJsonCommonVersion := "0.5.2",
-  circeVersion := "0.12.0-M3",
+  circeVersion := {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, v)) if v <= 11 =>
+        "0.12.0-M3"
+      case _ =>
+        "0.12.1" // circe 0.12 dropped Scala 2.11 https://github.com/circe/circe/pull/1176
+    }
+  },
   libraryDependencies ++= Seq(
     "com.github.scalaprops" %%% "scalaprops" % "0.6.1" % "test",
     "io.github.scalapb-json" %%% "scalapb-json-common" % scalapbJsonCommonVersion.value,
