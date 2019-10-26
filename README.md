@@ -25,10 +25,6 @@ libraryDependencies += "io.github.scalapb-json" %%% "scalapb-circe" % "0.5.1"
 libraryDependencies += "io.github.scalapb-json" %% "scalapb-circe-macros" % "0.5.1"
 ```
 
-### for ScalaPB 0.7.x
-
-see https://github.com/scalapb-json/scalapb-circe/tree/0.2.x
-
 ## Usage
 
 There are four functions you can use directly to serialize/deserialize your messages:
