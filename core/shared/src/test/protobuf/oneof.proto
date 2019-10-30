@@ -16,3 +16,17 @@ message OneOfMessage {
     // Used wrapper type here because we need something independent to includingDefaultValueFields flag
     google.protobuf.StringValue field = 1;
 }
+
+
+message Dictionary {
+    repeated Pair pairs = 1;
+}
+
+
+message Pair {
+    string key = 1;
+    oneof value_by_type {
+        string string_value = 2;
+        uint32 uint32_value = 3;
+    }
+}

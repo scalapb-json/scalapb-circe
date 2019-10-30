@@ -52,3 +52,7 @@ message StructTest {
 message TestFieldMask {
   google.protobuf.FieldMask field_mask_value = 1;
 }
+
+message EnumTest3 {
+  MyTest3.MyEnum3 enum = 1;
+}
