@@ -5,10 +5,11 @@ import jsontest.oneof.OneOf._
 import jsontest.oneof.{OneOf, OneOfMessage}
 import io.circe.parser.parse
 import org.scalatest.prop._
-import org.scalatest.{FlatSpec, MustMatchers}
 import EitherOps._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.must.Matchers
 
-class OneOfSpec extends FlatSpec with MustMatchers with TableDrivenPropertyChecks {
+class OneOfSpec extends AnyFlatSpec with Matchers with TableDrivenPropertyChecks {
 
   val examples = Table(
     ("message", "json"),

@@ -4,10 +4,11 @@ import com.google.protobuf.duration.Duration
 import com.google.protobuf.timestamp.Timestamp
 import jsontest.test.WellKnownTest
 import io.circe.parser.parse
-import org.scalatest.{FlatSpec, MustMatchers}
 import EitherOps._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.must.Matchers
 
-class WellKnownTypesSpec extends FlatSpec with MustMatchers {
+class WellKnownTypesSpec extends AnyFlatSpec with Matchers {
 
   val durationProto = WellKnownTest(duration = Some(Duration(146, 3455)))
 

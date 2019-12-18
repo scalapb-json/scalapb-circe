@@ -1,10 +1,11 @@
 package scalapb_circe
 
-import org.scalatest.{FlatSpec, MustMatchers}
 import com.google.protobuf.struct._
 import jsontest.test3.StructTest
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.must.Matchers
 
-class StructFormatSpec extends FlatSpec with MustMatchers with JavaAssertions {
+class StructFormatSpec extends AnyFlatSpec with Matchers with JavaAssertions {
   "Empty value" should "be serialized to null" in {
     JsonFormat.toJsonString(Value()) must be("null")
   }

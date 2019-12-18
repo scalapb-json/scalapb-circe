@@ -1,13 +1,15 @@
 package scalapb_circe
 
-import org.scalatest.{FlatSpec, MustMatchers, OptionValues}
+import org.scalatest.OptionValues
 import jsontest.test._
 import com.google.protobuf.util.{JsonFormat => JavaJsonFormat}
 import com.google.protobuf.any.{Any => PBAny}
 import com.google.protobuf.util.JsonFormat.{TypeRegistry => JavaTypeRegistry}
 import scalapb_json._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.must.Matchers
 
-class JsonFormatSpecJVM extends FlatSpec with MustMatchers with OptionValues {
+class JsonFormatSpecJVM extends AnyFlatSpec with Matchers with OptionValues {
 
   val TestProto = MyTest().update(
     _.hello := "Foo",

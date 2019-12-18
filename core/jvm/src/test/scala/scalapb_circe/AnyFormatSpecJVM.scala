@@ -1,10 +1,11 @@
 package scalapb_circe
 
 import com.google.protobuf.any.{Any => PBAny}
-import org.scalatest.{FlatSpec, MustMatchers}
 import jsontest.anytests.AnyTest
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.must.Matchers
 
-class AnyFormatSpecJVM extends FlatSpec with MustMatchers with JavaAssertions {
+class AnyFormatSpecJVM extends AnyFlatSpec with Matchers with JavaAssertions {
 
   override def registeredCompanions = Seq(AnyTest)
 

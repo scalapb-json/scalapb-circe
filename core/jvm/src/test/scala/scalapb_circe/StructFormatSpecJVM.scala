@@ -1,10 +1,11 @@
 package scalapb_circe
 
-import org.scalatest.{FlatSpec, MustMatchers}
 import com.google.protobuf.struct._
 import jsontest.test3.StructTest
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.must.Matchers
 
-class StructFormatSpecJVM extends FlatSpec with MustMatchers with JavaAssertions {
+class StructFormatSpecJVM extends AnyFlatSpec with Matchers with JavaAssertions {
   val ListValueExample = ListValue(
     values = Seq(
       Value(Value.Kind.NumberValue(-245.0)),

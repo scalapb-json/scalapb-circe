@@ -2,7 +2,7 @@ package scalapb_circe
 
 import io.circe.Json
 import io.circe.parser.parse
-import org.scalatest.{Assertion, FlatSpec, MustMatchers, OptionValues}
+import org.scalatest.{Assertion, OptionValues}
 import jsontest.test._
 import jsontest.test3._
 import com.google.protobuf.any.{Any => PBAny}
@@ -10,8 +10,10 @@ import com.google.protobuf.field_mask.FieldMask
 import jsontest.custom_collection.{Guitar, Studio}
 import scalapb_json._
 import EitherOps._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.must.Matchers
 
-class JsonFormatSpec extends FlatSpec with MustMatchers with OptionValues {
+class JsonFormatSpec extends AnyFlatSpec with Matchers with OptionValues {
 
   val TestProto = MyTest().update(
     _.hello := "Foo",

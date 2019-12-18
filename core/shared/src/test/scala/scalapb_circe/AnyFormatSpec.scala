@@ -2,12 +2,13 @@ package scalapb_circe
 
 import com.google.protobuf.any.{Any => PBAny}
 import jsontest.anytests.{AnyTest, ManyAnyTest}
-import org.scalatest.{FlatSpec, MustMatchers}
 import io.circe.parser.parse
 import scalapb_json._
 import EitherOps._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.must.Matchers
 
-class AnyFormatSpec extends FlatSpec with MustMatchers with JavaAssertions {
+class AnyFormatSpec extends AnyFlatSpec with Matchers with JavaAssertions {
   val RawExample = AnyTest("test")
 
   val RawJson = parse(s"""{"field":"test"}""").getOrError

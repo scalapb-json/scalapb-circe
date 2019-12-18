@@ -2,11 +2,11 @@ package scalapb_circe
 
 import scalapb_json.ScalapbJsonCommon.GenericCompanion
 import scalapb.GeneratedMessageCompanion
-import org.scalatest.MustMatchers
+import org.scalatest.matchers.must.Matchers
 import scalapb_json._
 
 trait JavaAssertions extends JavaAssertionsPlatform {
-  self: MustMatchers =>
+  self: Matchers =>
 
   def registeredCompanions: Seq[GeneratedMessageCompanion[_]] = Seq.empty
 

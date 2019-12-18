@@ -3,9 +3,10 @@ package scalapb_circe
 import com.google.protobuf.ByteString
 import jsontest.test3._
 import io.circe.{Encoder, Json}
-import org.scalatest.{FlatSpec, MustMatchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.must.Matchers
 
-class PrimitiveWrappersSpec extends FlatSpec with MustMatchers {
+class PrimitiveWrappersSpec extends AnyFlatSpec with Matchers {
 
   private[this] def render[A](a: A)(implicit A: Encoder[A]): Json =
     A.apply(a)

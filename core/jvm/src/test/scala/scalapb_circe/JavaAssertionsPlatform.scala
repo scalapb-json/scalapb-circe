@@ -2,10 +2,10 @@ package scalapb_circe
 
 import com.google.protobuf.util.JsonFormat.{TypeRegistry => JavaTypeRegistry}
 import scalapb.{GeneratedMessage, GeneratedMessageCompanion, JavaProtoSupport, Message}
-import org.scalatest.MustMatchers
+import org.scalatest.matchers.must.Matchers
 
 trait JavaAssertionsPlatform {
-  self: MustMatchers with JavaAssertions =>
+  self: Matchers with JavaAssertions =>
 
   def registeredCompanions: Seq[GeneratedMessageCompanion[_]]
 

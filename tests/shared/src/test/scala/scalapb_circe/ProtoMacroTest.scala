@@ -1,14 +1,14 @@
 package scalapb_circe
 
-import org.scalatest.FunSpec
-import org.scalatest.Matchers
+import org.scalatest.funspec.AnyFunSpec
+import org.scalatest.matchers.should.Matchers
 import scalapb_circe.ProtoMacrosCirce._
 import com.google.protobuf.struct._
 import jsontest.test.MyTest
 
 import scala.util.Success
 
-class ProtoMacrosCirceTest extends FunSpec with Matchers {
+class ProtoMacrosCirceTest extends AnyFunSpec with Matchers {
   describe("ProtoMacrosCirce") {
     it("struct") {
       assert(struct"{}" == Struct.defaultInstance)
