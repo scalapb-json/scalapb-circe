@@ -137,11 +137,11 @@ lazy val commonSettings = Def.settings(
       case Some((2, v)) if v <= 11 =>
         "0.12.0-M3"
       case _ =>
-        "0.12.3" // circe 0.12 dropped Scala 2.11 https://github.com/circe/circe/pull/1176
+        "0.13.0" // circe 0.12 dropped Scala 2.11 https://github.com/circe/circe/pull/1176
     }
   },
   libraryDependencies ++= Seq(
-    "com.github.scalaprops" %%% "scalaprops" % "0.6.1" % "test",
+    "com.github.scalaprops" %%% "scalaprops" % "0.6.3" % "test",
     "io.github.scalapb-json" %%% "scalapb-json-common" % scalapbJsonCommonVersion.value,
     "com.thesamet.scalapb" %%% "scalapb-runtime" % scalapbVersion % "protobuf,test",
     "io.circe" %%% "circe-parser" % circeVersion.value,
