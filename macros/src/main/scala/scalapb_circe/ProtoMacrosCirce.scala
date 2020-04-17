@@ -1,6 +1,6 @@
 package scalapb_circe
 
-import scalapb.{GeneratedMessage, GeneratedMessageCompanion, Message}
+import scalapb.{GeneratedMessage, GeneratedMessageCompanion}
 
 import scala.reflect.macros.blackbox
 import language.experimental.macros
@@ -15,7 +15,7 @@ object ProtoMacrosCirce {
       macro ProtoMacrosCirce.protoValueInterpolation
   }
 
-  implicit class FromJsonCirce[A <: GeneratedMessage with Message[A]](
+  implicit class FromJsonCirce[A <: GeneratedMessage](
     private val companion: GeneratedMessageCompanion[A]
   ) extends AnyVal {
     def fromJsonConstant(json: String): A =
@@ -47,7 +47,7 @@ class ProtoMacrosCirce(override val c: blackbox.Context) extends scalapb_json.Pr
     q"_root_.scalapb_circe.JsonFormat.fromJsonString[$A]($json)"
   }
 
-  override def fromJsonConstantImpl[A <: GeneratedMessage with Message[A]: c.WeakTypeTag: GeneratedMessageCompanion](
+  override def fromJsonConstantImpl[A <: GeneratedMessage: c.WeakTypeTag: GeneratedMessageCompanion](
     string: String
   ): c.Tree = {
     val A = weakTypeTag[A]
