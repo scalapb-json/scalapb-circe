@@ -200,13 +200,13 @@ class Parser(
   val typeRegistry: TypeRegistry = TypeRegistry.empty
 ) {
 
-  def fromJsonString[A <: GeneratedMessage with Message[A]](
+  def fromJsonString[A <: GeneratedMessage](
     str: String
   )(implicit cmp: GeneratedMessageCompanion[A]): A = {
     fromJson(io.circe.parser.parse(str).fold(throw _, identity))
   }
 
-  def fromJson[A <: GeneratedMessage with Message[A]](value: Json)(implicit cmp: GeneratedMessageCompanion[A]): A = {
+  def fromJson[A <: GeneratedMessage](value: Json)(implicit cmp: GeneratedMessageCompanion[A]): A = {
     cmp.messageReads.read(fromJsonToPMessage(cmp, value))
   }
 
@@ -398,7 +398,7 @@ object JsonFormat {
     )
     .registerMessageFormatter[com.google.protobuf.any.Any](AnyFormat.anyWriter, AnyFormat.anyParser)
 
-  def primitiveWrapperWriter[T <: GeneratedMessage with Message[T]](
+  def primitiveWrapperWriter[T <: GeneratedMessage](
     implicit cmp: GeneratedMessageCompanion[T]
   ): ((Printer, T) => Json) = {
     val fieldDesc = cmp.scalaDescriptor.findFieldByNumber(1).get
@@ -410,7 +410,7 @@ object JsonFormat {
       )
   }
 
-  def primitiveWrapperParser[T <: GeneratedMessage with Message[T]](
+  def primitiveWrapperParser[T <: GeneratedMessage](
     implicit cmp: GeneratedMessageCompanion[T]
   ): ((Parser, Json) => T) = {
     val fieldDesc = cmp.scalaDescriptor.findFieldByNumber(1).get
@@ -436,15 +436,15 @@ object JsonFormat {
 
   def toJson[A <: GeneratedMessage](m: A): Json = printer.toJson(m)
 
-  def fromJson[A <: GeneratedMessage with Message[A]: GeneratedMessageCompanion](value: Json): A = {
+  def fromJson[A <: GeneratedMessage: GeneratedMessageCompanion](value: Json): A = {
     parser.fromJson(value)
   }
 
-  def fromJsonString[A <: GeneratedMessage with Message[A]: GeneratedMessageCompanion](str: String): A = {
+  def fromJsonString[A <: GeneratedMessage: GeneratedMessageCompanion](str: String): A = {
     parser.fromJsonString(str)
   }
 
-  implicit def protoToDecoder[T <: GeneratedMessage with Message[T]: GeneratedMessageCompanion]: Decoder[T] =
+  implicit def protoToDecoder[T <: GeneratedMessage: GeneratedMessageCompanion]: Decoder[T] =
     Decoder.instance { value =>
       try {
         Right(parser.fromJson(value.value))
@@ -454,7 +454,7 @@ object JsonFormat {
       }
     }
 
-  implicit def protoToEncoder[T <: GeneratedMessage with Message[T]]: Encoder[T] =
+  implicit def protoToEncoder[T <: GeneratedMessage]: Encoder[T] =
     Encoder.instance(printer.toJson(_))
 
   def parsePrimitive(

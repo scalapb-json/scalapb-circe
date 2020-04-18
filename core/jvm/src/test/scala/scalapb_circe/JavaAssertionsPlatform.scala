@@ -1,7 +1,7 @@
 package scalapb_circe
 
 import com.google.protobuf.util.JsonFormat.{TypeRegistry => JavaTypeRegistry}
-import scalapb.{GeneratedMessage, GeneratedMessageCompanion, JavaProtoSupport, Message}
+import scalapb.{GeneratedMessage, GeneratedMessageCompanion, JavaProtoSupport}
 import org.scalatest.matchers.must.Matchers
 
 trait JavaAssertionsPlatform {
@@ -15,7 +15,7 @@ trait JavaAssertionsPlatform {
     com.google.protobuf.util.JsonFormat.printer().usingTypeRegistry(JavaJsonTypeRegistry)
   val JavaJsonParser = com.google.protobuf.util.JsonFormat.parser()
 
-  def assertJsonIsSameAsJava[T <: GeneratedMessage with Message[T]](v: T, checkRoundtrip: Boolean = true)(
+  def assertJsonIsSameAsJava[T <: GeneratedMessage](v: T, checkRoundtrip: Boolean = true)(
     implicit cmp: GeneratedMessageCompanion[T]
   ) = {
     val scalaJson = ScalaJsonPrinter.print(v)

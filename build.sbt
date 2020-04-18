@@ -2,7 +2,7 @@ import scalapb.compiler.Version._
 import sbtrelease.ReleaseStateTransformations._
 import sbtcrossproject.CrossPlugin.autoImport.crossProject
 
-val Scala211 = "2.11.12"
+val Scala212 = "2.12.10"
 val circeVersion = settingKey[String]("")
 val scalapbJsonCommonVersion = settingKey[String]("")
 
@@ -116,8 +116,8 @@ noPublish
 lazy val commonSettings = Def.settings(
   scalapropsCoreSettings,
   unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
-  scalaVersion := Scala211,
-  crossScalaVersions := Seq("2.12.10", Scala211, "2.13.1"),
+  scalaVersion := Scala212,
+  crossScalaVersions := Seq(Scala212, "2.13.1"),
   scalacOptions ++= unusedWarnings.value,
   Seq(Compile, Test).flatMap(c => scalacOptions in (c, console) --= unusedWarnings.value),
   scalacOptions ++= Seq("-feature", "-deprecation", "-language:existentials"),
@@ -131,15 +131,8 @@ lazy val commonSettings = Def.settings(
   // https://github.com/scalapb/ScalaPB/commit/d3cc69515ea90f1af7eaf2732d22facb6c9e95e3
   PB.protocVersion := "-v371",
   PB.protoSources in Test := Seq(baseDirectory.value.getParentFile / "shared/src/test/protobuf"),
-  scalapbJsonCommonVersion := "0.5.3",
-  circeVersion := {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, v)) if v <= 11 =>
-        "0.12.0-M3"
-      case _ =>
-        "0.13.0" // circe 0.12 dropped Scala 2.11 https://github.com/circe/circe/pull/1176
-    }
-  },
+  scalapbJsonCommonVersion := "0.6.0",
+  circeVersion := "0.13.0",
   libraryDependencies ++= Seq(
     "com.github.scalaprops" %%% "scalaprops" % "0.6.3" % "test",
     "io.github.scalapb-json" %%% "scalapb-json-common" % scalapbJsonCommonVersion.value,
