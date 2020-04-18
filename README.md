@@ -1,4 +1,4 @@
-# scalapb-circe [![Build Status](https://travis-ci.org/scalapb-json/scalapb-circe.svg?branch=master)](https://travis-ci.org/scalapb-json/scalapb-circe)
+# scalapb-circe [![Build Status](https://travis-ci.com/scalapb-json/scalapb-circe.svg?branch=master)](https://travis-ci.com/github/scalapb-json/scalapb-circe)
 [![scaladoc](https://javadoc-badge.appspot.com/io.github.scalapb-json/scalapb-circe_2.12.svg?label=scaladoc)](https://javadoc-badge.appspot.com/io.github.scalapb-json/scalapb-circe_2.12/scalapb_circe/index.html?javadocio=true)
 
 The structure of this project is hugely inspired by [scalapb-json4s](https://github.com/scalapb/scalapb-json4s)
