@@ -284,9 +284,7 @@ class Parser(
   def defaultEnumParser(enumDescriptor: EnumDescriptor, value: Json): EnumValueDescriptor =
     value.asNumber match {
       case Some(v) =>
-        v.toInt.flatMap { i =>
-          enumDescriptor.findValueByNumber(i)
-        }.getOrElse(
+        v.toInt.flatMap { i => enumDescriptor.findValueByNumber(i) }.getOrElse(
           throw new JsonFormatException(s"Invalid enum value: ${v.toInt} for enum type: ${enumDescriptor.fullName}")
         )
       case _ =>
