@@ -30,6 +30,7 @@ lazy val macros = project
     commonSettings,
     name := UpdateReadme.scalapbCirceMacrosName,
     libraryDependencies ++= Seq(
+      "io.circe" %% "circe-parser" % circeVersion.value, // don't use %%%
       "io.github.scalapb-json" %%% "scalapb-json-macros" % scalapbJsonCommonVersion.value,
     )
   )
@@ -54,6 +55,7 @@ val scalapbCirce = crossProject(JVMPlatform, JSPlatform)
   .settings(
     commonSettings,
     name := UpdateReadme.scalapbCirceName,
+    libraryDependencies += "io.circe" %%% "circe-parser" % circeVersion.value,
     mappings in (Compile, packageSrc) ++= (managedSources in Compile).value.map { f =>
       // https://github.com/sbt/sbt-buildinfo/blob/v0.7.0/src/main/scala/sbtbuildinfo/BuildInfoPlugin.scala#L58
       val buildInfoDir = "sbt-buildinfo"
@@ -117,7 +119,7 @@ lazy val commonSettings = Def.settings(
   scalapropsCoreSettings,
   unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
   scalaVersion := Scala212,
-  crossScalaVersions := Seq(Scala212, "2.13.2"),
+  crossScalaVersions := Seq(Scala212, "2.13.3"),
   scalacOptions ++= unusedWarnings.value,
   Seq(Compile, Test).flatMap(c => scalacOptions in (c, console) --= unusedWarnings.value),
   scalacOptions ++= Seq("-feature", "-deprecation", "-language:existentials"),
@@ -126,19 +128,14 @@ lazy val commonSettings = Def.settings(
   organization := "io.github.scalapb-json",
   Project.inConfig(Test)(sbtprotoc.ProtocPlugin.protobufConfigSettings),
   PB.targets in Compile := Nil,
-  // Can't use -v380
-  // https://github.com/scalapb/ScalaPB/commit/ff99b075625fe684ce2eef7686d587fdbbf19b62
-  // https://github.com/scalapb/ScalaPB/commit/d3cc69515ea90f1af7eaf2732d22facb6c9e95e3
-  PB.protocVersion := "-v371",
   PB.protoSources in Test := Seq(baseDirectory.value.getParentFile / "shared/src/test/protobuf"),
-  scalapbJsonCommonVersion := "0.6.0",
+  scalapbJsonCommonVersion := "0.6.2",
   circeVersion := "0.13.0",
   libraryDependencies ++= Seq(
-    "com.github.scalaprops" %%% "scalaprops" % "0.6.3" % "test",
+    "com.github.scalaprops" %%% "scalaprops" % "0.8.0" % "test",
     "io.github.scalapb-json" %%% "scalapb-json-common" % scalapbJsonCommonVersion.value,
     "com.thesamet.scalapb" %%% "scalapb-runtime" % scalapbVersion % "protobuf,test",
-    "io.circe" %%% "circe-parser" % circeVersion.value,
-    "org.scalatest" %%% "scalatest" % "3.1.1" % "test"
+    "org.scalatest" %%% "scalatest" % "3.2.0" % "test"
   ),
   pomExtra in Global := {
     <url>https://github.com/scalapb-json/scalapb-circe</url>
