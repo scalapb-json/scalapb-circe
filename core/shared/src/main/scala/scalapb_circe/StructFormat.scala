@@ -6,15 +6,16 @@ import io.circe.{Json, JsonObject}
 import scalapb_json._
 
 object StructFormat {
-  def structValueWriter(v: struct.Value): Json = v.kind match {
-    case Kind.Empty => Json.Null
-    case Kind.NullValue(_) => Json.Null
-    case Kind.NumberValue(value) => Json.fromDoubleOrString(value)
-    case Kind.StringValue(value) => Json.fromString(value)
-    case Kind.BoolValue(value) => Json.fromBoolean(value)
-    case Kind.StructValue(value) => structWriter(value)
-    case Kind.ListValue(value) => listValueWriter(value)
-  }
+  def structValueWriter(v: struct.Value): Json =
+    v.kind match {
+      case Kind.Empty => Json.Null
+      case Kind.NullValue(_) => Json.Null
+      case Kind.NumberValue(value) => Json.fromDoubleOrString(value)
+      case Kind.StringValue(value) => Json.fromString(value)
+      case Kind.BoolValue(value) => Json.fromBoolean(value)
+      case Kind.StructValue(value) => structWriter(value)
+      case Kind.ListValue(value) => listValueWriter(value)
+    }
 
   def structValueParser(v: Json): struct.Value = {
     val kind: struct.Value.Kind = v.fold(
@@ -32,10 +33,11 @@ object StructFormat {
     struct.Struct(fields = v.toMap.map(kv => (kv._1, structValueParser(kv._2))))
   }
 
-  def structParser(v: Json): struct.Struct = v.asObject match {
-    case Some(x) => structParser(x)
-    case None => throw new JsonFormatException("Expected an object")
-  }
+  def structParser(v: Json): struct.Struct =
+    v.asObject match {
+      case Some(x) => structParser(x)
+      case None => throw new JsonFormatException("Expected an object")
+    }
 
   def structWriter(v: struct.Struct): Json =
     Json.obj(v.fields.iterator.map {
@@ -45,12 +47,13 @@ object StructFormat {
   def listValueParser(json: Seq[Json]): struct.ListValue =
     com.google.protobuf.struct.ListValue(json.map(structValueParser))
 
-  def listValueParser(json: Json): struct.ListValue = json.asArray match {
-    case Some(v) =>
-      listValueParser(v)
-    case None =>
-      throw new JsonFormatException("Expected an array")
-  }
+  def listValueParser(json: Json): struct.ListValue =
+    json.asArray match {
+      case Some(v) =>
+        listValueParser(v)
+      case None =>
+        throw new JsonFormatException("Expected an array")
+    }
 
   def listValueWriter(v: struct.ListValue): Json =
     Json.fromValues(v.values.map(structValueWriter))

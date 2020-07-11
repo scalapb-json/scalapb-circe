@@ -134,11 +134,13 @@ class Printer(
           )
         }
       case v =>
-        if (includingDefaultValueFields ||
+        if (
+          includingDefaultValueFields ||
           !fd.isOptional ||
           !fd.file.isProto3 ||
           (v != scalapb_json.ScalapbJsonCommon.defaultValue(fd)) ||
-          fd.containingOneof.isDefined) {
+          fd.containingOneof.isDefined
+        ) {
           b += JField(name, serializeSingleValue(fd, v, formattingLongAsNumber))
         }
     }
@@ -167,7 +169,7 @@ class Printer(
     serializeSingleValue(fd, scalapb_json.ScalapbJsonCommon.defaultValue(fd), formattingLongAsNumber)
 
   private def unsignedLong(n: Long) =
-    if (n < 0) BigDecimal(BigInt(n & 0X7FFFFFFFFFFFFFFFL).setBit(63)) else BigDecimal(n)
+    if (n < 0) BigDecimal(BigInt(n & 0x7fffffffffffffffL).setBit(63)) else BigDecimal(n)
 
   private def formatLong(n: Long, protoType: FieldDescriptorProto.Type, formattingLongAsNumber: Boolean): Json = {
     val v =
@@ -175,23 +177,24 @@ class Printer(
     if (formattingLongAsNumber) Json.fromBigDecimal(v) else Json.fromString(v.toString())
   }
 
-  def serializeSingleValue(fd: FieldDescriptor, value: PValue, formattingLongAsNumber: Boolean): Json = value match {
-    case PEnum(e) =>
-      formatRegistry.getEnumWriter(e.containingEnum) match {
-        case Some(writer) => writer(this, e)
-        case None => if (formattingEnumsAsNumber) Json.fromLong(e.number) else Json.fromString(e.name)
-      }
-    case PInt(v) if fd.protoType.isTypeUint32 => Json.fromLong(ScalapbJsonCommon.unsignedInt(v))
-    case PInt(v) if fd.protoType.isTypeFixed32 => Json.fromLong(ScalapbJsonCommon.unsignedInt(v))
-    case PInt(v) => Json.fromLong(v)
-    case PLong(v) => formatLong(v, fd.protoType, formattingLongAsNumber)
-    case PDouble(v) => Json.fromDoubleOrString(v)
-    case PFloat(v) => Json.fromFloatOrString(v)
-    case PBoolean(v) => Json.fromBoolean(v)
-    case PString(v) => Json.fromString(v)
-    case PByteString(v) => Json.fromString(java.util.Base64.getEncoder.encodeToString(v.toByteArray))
-    case _: PMessage | PRepeated(_) | PEmpty => throw new RuntimeException("Should not happen")
-  }
+  def serializeSingleValue(fd: FieldDescriptor, value: PValue, formattingLongAsNumber: Boolean): Json =
+    value match {
+      case PEnum(e) =>
+        formatRegistry.getEnumWriter(e.containingEnum) match {
+          case Some(writer) => writer(this, e)
+          case None => if (formattingEnumsAsNumber) Json.fromLong(e.number) else Json.fromString(e.name)
+        }
+      case PInt(v) if fd.protoType.isTypeUint32 => Json.fromLong(ScalapbJsonCommon.unsignedInt(v))
+      case PInt(v) if fd.protoType.isTypeFixed32 => Json.fromLong(ScalapbJsonCommon.unsignedInt(v))
+      case PInt(v) => Json.fromLong(v)
+      case PLong(v) => formatLong(v, fd.protoType, formattingLongAsNumber)
+      case PDouble(v) => Json.fromDoubleOrString(v)
+      case PFloat(v) => Json.fromFloatOrString(v)
+      case PBoolean(v) => Json.fromBoolean(v)
+      case PString(v) => Json.fromString(v)
+      case PByteString(v) => Json.fromString(java.util.Base64.getEncoder.encodeToString(v.toByteArray))
+      case _: PMessage | PRepeated(_) | PEmpty => throw new RuntimeException("Should not happen")
+    }
 }
 
 class Parser(
@@ -302,24 +305,25 @@ class Parser(
     containerCompanion: GeneratedMessageCompanion[_],
     fd: FieldDescriptor,
     value: Json
-  ): PValue = fd.scalaType match {
-    case ScalaType.Enum(ed) =>
-      PEnum(formatRegistry.getEnumParser(ed) match {
-        case Some(parser) => parser(this, value)
-        case None => defaultEnumParser(ed, value)
-      })
-    case ScalaType.Message(_) =>
-      fromJsonToPMessage(containerCompanion.messageCompanionForFieldNumber(fd.number), value)
-    case st =>
-      JsonFormat.parsePrimitive(
-        st,
-        fd.protoType,
-        value,
-        throw new JsonFormatException(
-          s"Unexpected value ($value) for field ${serializedName(fd)} of ${fd.containingMessage.name}"
+  ): PValue =
+    fd.scalaType match {
+      case ScalaType.Enum(ed) =>
+        PEnum(formatRegistry.getEnumParser(ed) match {
+          case Some(parser) => parser(this, value)
+          case None => defaultEnumParser(ed, value)
+        })
+      case ScalaType.Message(_) =>
+        fromJsonToPMessage(containerCompanion.messageCompanionForFieldNumber(fd.number), value)
+      case st =>
+        JsonFormat.parsePrimitive(
+          st,
+          fd.protoType,
+          value,
+          throw new JsonFormatException(
+            s"Unexpected value ($value) for field ${serializedName(fd)} of ${fd.containingMessage.name}"
+          )
         )
-      )
-  }
+    }
 }
 
 object JsonFormat {
@@ -396,8 +400,8 @@ object JsonFormat {
     )
     .registerMessageFormatter[com.google.protobuf.any.Any](AnyFormat.anyWriter, AnyFormat.anyParser)
 
-  def primitiveWrapperWriter[T <: GeneratedMessage](
-    implicit cmp: GeneratedMessageCompanion[T]
+  def primitiveWrapperWriter[T <: GeneratedMessage](implicit
+    cmp: GeneratedMessageCompanion[T]
   ): ((Printer, T) => Json) = {
     val fieldDesc = cmp.scalaDescriptor.findFieldByNumber(1).get
     (printer, t) =>
@@ -408,8 +412,8 @@ object JsonFormat {
       )
   }
 
-  def primitiveWrapperParser[T <: GeneratedMessage](
-    implicit cmp: GeneratedMessageCompanion[T]
+  def primitiveWrapperParser[T <: GeneratedMessage](implicit
+    cmp: GeneratedMessageCompanion[T]
   ): ((Parser, Json) => T) = {
     val fieldDesc = cmp.scalaDescriptor.findFieldByNumber(1).get
     (parser, jv) =>
