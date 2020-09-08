@@ -40,8 +40,8 @@ object StructFormat {
     }
 
   def structWriter(v: struct.Struct): Json =
-    Json.obj(v.fields.iterator.map {
-      case (x, y) => x -> structValueWriter(y)
+    Json.obj(v.fields.iterator.map { case (x, y) =>
+      x -> structValueWriter(y)
     }.toList: _*)
 
   def listValueParser(json: Seq[Json]): struct.ListValue =
