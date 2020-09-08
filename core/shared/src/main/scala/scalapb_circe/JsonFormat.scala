@@ -226,27 +226,26 @@ class Parser(
             val mapEntryDesc = fd.scalaType.asInstanceOf[ScalaType.Message].descriptor
             val keyDescriptor = mapEntryDesc.findFieldByNumber(1).get
             val valueDescriptor = mapEntryDesc.findFieldByNumber(2).get
-            PRepeated(vals.toVector.map {
-              case (key, jValue) =>
-                val keyObj = keyDescriptor.scalaType match {
-                  case ScalaType.Boolean => PBoolean(java.lang.Boolean.valueOf(key))
-                  case ScalaType.Double => PDouble(java.lang.Double.valueOf(key))
-                  case ScalaType.Float => PFloat(java.lang.Float.valueOf(key))
-                  case ScalaType.Int => PInt(java.lang.Integer.valueOf(key))
-                  case ScalaType.Long => PLong(java.lang.Long.valueOf(key))
-                  case ScalaType.String => PString(key)
-                  case _ => throw new RuntimeException(s"Unsupported type for key for ${fd.name}")
-                }
-                PMessage(
-                  Map(
-                    keyDescriptor -> keyObj,
-                    valueDescriptor -> parseSingleValue(
-                      cmp.messageCompanionForFieldNumber(fd.number),
-                      valueDescriptor,
-                      jValue
-                    )
+            PRepeated(vals.toVector.map { case (key, jValue) =>
+              val keyObj = keyDescriptor.scalaType match {
+                case ScalaType.Boolean => PBoolean(java.lang.Boolean.valueOf(key))
+                case ScalaType.Double => PDouble(java.lang.Double.valueOf(key))
+                case ScalaType.Float => PFloat(java.lang.Float.valueOf(key))
+                case ScalaType.Int => PInt(java.lang.Integer.valueOf(key))
+                case ScalaType.Long => PLong(java.lang.Long.valueOf(key))
+                case ScalaType.String => PString(key)
+                case _ => throw new RuntimeException(s"Unsupported type for key for ${fd.name}")
+              }
+              PMessage(
+                Map(
+                  keyDescriptor -> keyObj,
+                  valueDescriptor -> parseSingleValue(
+                    cmp.messageCompanionForFieldNumber(fd.number),
+                    valueDescriptor,
+                    jValue
                   )
                 )
+              )
             })
           case _ =>
             throw new JsonFormatException(
