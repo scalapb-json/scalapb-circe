@@ -113,6 +113,8 @@ class Printer(
         }
       case msg: GeneratedMessage =>
         b += JField(name, toJson(msg))
+      case xs: Array[GeneratedMessage] =>
+        serializeMessageField(fd, name, xs, b)
       case v =>
         throw new JsonFormatException(v.toString)
     }
