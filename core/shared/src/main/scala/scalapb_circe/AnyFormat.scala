@@ -5,6 +5,7 @@ import io.circe.Json
 import scalapb_json._
 
 object AnyFormat {
+
   val anyWriter: (Printer, PBAny) => Json = { case (printer, any) =>
     // Find the companion so it can be used to JSON-serialize the message. Perhaps this can be circumvented by
     // including the original GeneratedMessage with the Any (at least in memory).
