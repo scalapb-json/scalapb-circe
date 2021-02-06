@@ -1,9 +1,12 @@
 package scalapb_circe
 
+import jsontest.test3.MyTest3.MyEnum3
+
 object Playground extends App {
 
   import io.circe._
   import io.circe.syntax._
+  import scalapb_circe.codec._
 
   case class Thing(foo: String, bar: Int)
 
@@ -27,8 +30,6 @@ object Playground extends App {
   val t = Thing("foo", 99)
   println(t.asJson.noSpaces)
 
-  import jsontest.anytests.AnyTest
-  println(AnyTest("blah"))
-
+  println(MyEnum3.UNKNOWN.asJson)
 
 }
