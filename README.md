@@ -27,6 +27,8 @@ libraryDependencies += "io.github.scalapb-json" %% "scalapb-circe-macros" % "0.8
 
 ## Usage
 
+### JsonFormat
+
 There are four functions you can use directly to serialize/deserialize your messages:
 
 ```scala
@@ -37,11 +39,60 @@ JsonFormat.fromJsonString(str) // return MessageType
 JsonFormat.fromJson(json) // return MessageType
 ```
 
-You can optionally import implicit encoders and decoders to support Circe's implicit syntax:
+### Implicit Circe Codecs
+
+You can import codecs to support Circe's implicit syntax on objects of type 
+`GeneratedMessage` and `GeneratedEnum`.
+
+Assume a proto message:
 
 ```scala
-
+message Guitar {
+  int32 number_of_strings = 1;
+}
 ```
+
+```scala
+import io.circe.syntax._
+import io.circe.parser._
+import scalapb_circe.codec._
+
+Guitar(42).asJson.noSpaces // returns {"numberOfStrings":42}
+
+decode[Guitar]("""{"numberOfStrings": 42}""") // returns Right(Guitar(42))
+Json.obj("foo" -> Json.fromInt(42)).as[Guitar] // returns Right(Guitar(42))
+```
+
+You can define an implicit `scalapb_circe.Printer` and/or `scalapb_circe.Parser` to control printing and parsing settings. 
+For example, to include default values in Json:
+
+```scala
+import io.circe.syntax._
+import io.circe.parser._
+import scalapb_circe.codec._
+import scalapb_circe.Printer
+
+implicit val p: Printer = new Printer(includingDefaultValueFields = true)
+
+Guitar(0).asJson.noSpaces // returns {"numberOfStrings": 0}
+```
+
+Finally, you can include scalapb `GeneratedMessage` and `GeneratedEnum`s in regular case classes with semi-auto derivation:
+
+```scala
+import io.circe.generic.semiauto._
+import io.circe.syntax._
+import io.circe._
+import scalapb_circe.codec._ // IntelliJ might say this is unused.
+
+case class Band(guitars: Seq[Guitar])
+object Band {
+  implicit val dec: Decoder[Band] = deriveDecoder[Band]
+  implicit val enc: Encoder[Band] = deriveEncoder[Band]
+}
+Band(Seq(Guitar(42))).asJson.noSpaces // returns {"guitars":[{"numberOfStrings":42}]}
+```
+
 
 ### Credits
 

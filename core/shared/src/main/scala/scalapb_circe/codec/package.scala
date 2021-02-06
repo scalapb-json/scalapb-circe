@@ -10,6 +10,9 @@ import scala.util.{Failure, Success, Try}
  */
 package object codec {
 
+  implicit def printer: Printer = JsonFormat.printer
+  implicit def parser: Parser = JsonFormat.parser
+
   /**
    * Encoder for [[GeneratedMessage]] using a specific implicit [[Printer]].
    * The [[Printer]] class lets you control some details about the encoding,
@@ -18,10 +21,6 @@ package object codec {
   implicit def generatedMessageEncoderWithPrinter[M <: GeneratedMessage](implicit p: Printer): Encoder[M] =
     (a: M) => p.toJson(a)
 
-  implicit def generatedMessageEncoder[M <: GeneratedMessage]: Encoder[M] = {
-    implicit val printer: Printer = JsonFormat.printer
-    generatedMessageEncoderWithPrinter
-  }
 
   /**
    * Decoder for [[GeneratedMessage]] using a specific implicit [[Parser]].
@@ -35,12 +34,6 @@ package object codec {
         case Success(m) => Right(m)
       }
 
-  implicit def generatedMessageDecoder[
-    M <: GeneratedMessage: GeneratedMessageCompanion]: Decoder[M] = {
-    implicit val parser: Parser = JsonFormat.parser
-    generatedMessageDecoderWithParser
-  }
-
   /**
    * Encoder for [[GeneratedEnum]] using a specific implicit [[Printer]].
    * The [[Printer]] class lets you control some details about the encoding,
@@ -48,11 +41,6 @@ package object codec {
    */
   implicit def generatedEnumEncoderWithPrinter[E <: GeneratedEnum](implicit p: Printer): Encoder[E] =
     (a: E) => p.serializeEnum(a.scalaValueDescriptor)
-
-  implicit def generatedEnumEncoder[E <: GeneratedEnum]: Encoder[E] = {
-    implicit val printer: Printer = JsonFormat.printer
-    generatedEnumEncoderWithPrinter
-  }
 
   /**
    * Decoder for [[GeneratedEnum]] using a specific implicit [[Parser]].
@@ -66,12 +54,5 @@ package object codec {
         case Failure(t) => Left(DecodingFailure(t.getMessage, List.empty))
       }
     }
-
-  implicit def generatedEnumDecoder[E <: GeneratedEnum : GeneratedEnumCompanion]: Decoder[E] = {
-    implicit val parser: Parser = JsonFormat.parser
-    generatedEnumDecoderWithParser
-  }
-
-
 
 }
