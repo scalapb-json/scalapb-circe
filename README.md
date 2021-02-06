@@ -41,8 +41,7 @@ JsonFormat.fromJson(json) // return MessageType
 
 ### Implicit Circe Codecs
 
-You can import codecs to support Circe's implicit syntax on objects of type 
-`GeneratedMessage` and `GeneratedEnum`.
+You can also import codecs to support Circe's implicit syntax for objects of type `GeneratedMessage` and `GeneratedEnum`.
 
 Assume a proto message:
 
@@ -60,7 +59,7 @@ import scalapb_circe.codec._
 Guitar(42).asJson.noSpaces // returns {"numberOfStrings":42}
 
 decode[Guitar]("""{"numberOfStrings": 42}""") // returns Right(Guitar(42))
-Json.obj("foo" -> Json.fromInt(42)).as[Guitar] // returns Right(Guitar(42))
+Json.obj("numberOfStrings" -> Json.fromInt(42)).as[Guitar] // returns Right(Guitar(42))
 ```
 
 You can define an implicit `scalapb_circe.Printer` and/or `scalapb_circe.Parser` to control printing and parsing settings. 
