@@ -21,13 +21,14 @@ package object codec {
   implicit def generatedMessageEncoderWithPrinter[M <: GeneratedMessage](implicit p: Printer): Encoder[M] =
     (a: M) => p.toJson(a)
 
-
   /**
    * Decoder for [[GeneratedMessage]] using a specific implicit [[Parser]].
    * The [[Parser]] class lets you control some details about the decoding,
    * such as whether to preserve the raw field names.
    */
-  implicit def generatedMessageDecoderWithParser[M <: GeneratedMessage: GeneratedMessageCompanion](implicit p: Parser): Decoder[M] =
+  implicit def generatedMessageDecoderWithParser[M <: GeneratedMessage: GeneratedMessageCompanion](implicit
+    p: Parser
+  ): Decoder[M] =
     (c: HCursor) =>
       Try(p.fromJson[M](c.value)) match {
         case Failure(t) => Left(DecodingFailure(t.getMessage, List.empty))
@@ -46,7 +47,9 @@ package object codec {
    * Decoder for [[GeneratedEnum]] using a specific implicit [[Parser]].
    * The [[Parser]] class lets you control some details about the decoding.
    */
-  implicit def generatedEnumDecoderWithParser[E <: GeneratedEnum : GeneratedEnumCompanion](implicit p: Parser): Decoder[E] =
+  implicit def generatedEnumDecoderWithParser[E <: GeneratedEnum: GeneratedEnumCompanion](implicit
+    p: Parser
+  ): Decoder[E] =
     (c: HCursor) => {
       val companion = implicitly[GeneratedEnumCompanion[E]]
       Try(p.defaultEnumParser(companion.scalaDescriptor, c.value)) match {
