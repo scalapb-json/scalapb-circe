@@ -30,6 +30,7 @@ object Playground extends App {
   val t = Thing("foo", 99)
   println(t.asJson.noSpaces)
 
+
   println(MyEnum3.UNKNOWN.asJson)
 
 }

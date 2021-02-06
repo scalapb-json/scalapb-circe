@@ -37,6 +37,12 @@ JsonFormat.fromJsonString(str) // return MessageType
 JsonFormat.fromJson(json) // return MessageType
 ```
 
+You can optionally import implicit encoders and decoders to support Circe's implicit syntax:
+
+```scala
+
+```
+
 ### Credits
 
 - https://github.com/whisklabs/scalapb-playjson
