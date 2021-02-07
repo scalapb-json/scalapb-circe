@@ -177,13 +177,18 @@ class Printer(
     if (formattingLongAsNumber) Json.fromBigDecimal(v) else Json.fromString(v.toString())
   }
 
+  private[scalapb_circe] def serializeEnum(e: EnumValueDescriptor): Json = {
+    formatRegistry.getEnumWriter(e.containingEnum) match {
+      case Some(writer) => writer(this, e)
+      case None =>
+        if (formattingEnumsAsNumber) Json.fromLong(e.number)
+        else Json.fromString(e.name)
+    }
+  }
+
   def serializeSingleValue(fd: FieldDescriptor, value: PValue, formattingLongAsNumber: Boolean): Json =
     value match {
-      case PEnum(e) =>
-        formatRegistry.getEnumWriter(e.containingEnum) match {
-          case Some(writer) => writer(this, e)
-          case None => if (formattingEnumsAsNumber) Json.fromLong(e.number) else Json.fromString(e.name)
-        }
+      case PEnum(e) => serializeEnum(e)
       case PInt(v) if fd.protoType.isTypeUint32 => Json.fromLong(ScalapbJsonCommon.unsignedInt(v))
       case PInt(v) if fd.protoType.isTypeFixed32 => Json.fromLong(ScalapbJsonCommon.unsignedInt(v))
       case PInt(v) => Json.fromLong(v)
