@@ -136,7 +136,7 @@ lazy val commonSettings = Def.settings(
     "io.circe" %%% "circe-generic" % circeVersion.value % "test",
     "io.github.scalapb-json" %%% "scalapb-json-common" % scalapbJsonCommonVersion.value,
     "com.thesamet.scalapb" %%% "scalapb-runtime" % scalapbVersion % "protobuf,test",
-    "org.scalatest" %%% "scalatest" % "3.2.4" % "test"
+    "org.scalatest" %%% "scalatest" % "3.2.5" % "test"
   ),
   pomExtra in Global := {
     <url>https://github.com/scalapb-json/scalapb-circe</url>
