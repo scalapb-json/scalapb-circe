@@ -7,7 +7,7 @@ val circeVersion = settingKey[String]("")
 val scalapbJsonCommonVersion = settingKey[String]("")
 
 val tagName = Def.setting {
-  s"v${if (releaseUseGlobalVersion.value) (version in ThisBuild).value else version.value}"
+  s"v${if (releaseUseGlobalVersion.value) (ThisBuild / version).value else version.value}"
 }
 
 val tagOrHash = Def.setting {
@@ -56,16 +56,16 @@ val scalapbCirce = crossProject(JVMPlatform, JSPlatform)
     commonSettings,
     name := UpdateReadme.scalapbCirceName,
     libraryDependencies += "io.circe" %%% "circe-parser" % circeVersion.value,
-    mappings in (Compile, packageSrc) ++= (managedSources in Compile).value.map { f =>
+    (Compile / packageSrc / mappings) ++= (Compile / managedSources).value.map { f =>
       // https://github.com/sbt/sbt-buildinfo/blob/v0.7.0/src/main/scala/sbtbuildinfo/BuildInfoPlugin.scala#L58
       val buildInfoDir = "sbt-buildinfo"
       val path = if (f.getAbsolutePath.contains(buildInfoDir)) {
         (file(buildInfoPackage.value) / f
-          .relativeTo((sourceManaged in Compile).value / buildInfoDir)
+          .relativeTo((Compile / sourceManaged).value / buildInfoDir)
           .get
           .getPath).getPath
       } else {
-        f.relativeTo((sourceManaged in Compile).value).get.getPath
+        f.relativeTo((Compile / sourceManaged).value).get.getPath
       }
       (f, path)
     },
@@ -80,9 +80,9 @@ val scalapbCirce = crossProject(JVMPlatform, JSPlatform)
     )
   )
   .jvmSettings(
-    PB.targets in Test := Seq(
-      PB.gens.java -> (sourceManaged in Test).value,
-      scalapb.gen(javaConversions = true) -> (sourceManaged in Test).value
+    (Test / PB.targets) := Seq(
+      PB.gens.java -> (Test / sourceManaged).value,
+      scalapb.gen(javaConversions = true) -> (Test / sourceManaged).value
     ),
     libraryDependencies ++= Seq(
       "com.google.protobuf" % "protobuf-java-util" % protobufVersion % "test",
@@ -94,12 +94,12 @@ val scalapbCirce = crossProject(JVMPlatform, JSPlatform)
       "scalajsVersion" -> scalaJSVersion
     ),
     scalacOptions += {
-      val a = (baseDirectory in LocalRootProject).value.toURI.toString
+      val a = (LocalRootProject / baseDirectory).value.toURI.toString
       val g = "https://raw.githubusercontent.com/scalapb-json/scalapb-circe/" + tagOrHash.value
       s"-P:scalajs:mapSourceURI:$a->$g/"
     },
-    PB.targets in Test := Seq(
-      scalapb.gen(javaConversions = false) -> (sourceManaged in Test).value
+    (Test / PB.targets) := Seq(
+      scalapb.gen(javaConversions = false) -> (Test / sourceManaged).value
     )
   )
 
@@ -110,25 +110,25 @@ val noPublish = Seq(
   PgpKeys.publishSigned := {},
   publishLocal := {},
   publish := {},
-  publishArtifact in Compile := false
+  Compile / publishArtifact := false
 )
 
 noPublish
 
 lazy val commonSettings = Def.settings(
   scalapropsCoreSettings,
-  unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
+  (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
   scalaVersion := Scala212,
   crossScalaVersions := Seq(Scala212, "2.13.5"),
   scalacOptions ++= unusedWarnings.value,
-  Seq(Compile, Test).flatMap(c => scalacOptions in (c, console) --= unusedWarnings.value),
+  Seq(Compile, Test).flatMap(c => (c / console / scalacOptions) --= unusedWarnings.value),
   scalacOptions ++= Seq("-feature", "-deprecation", "-language:existentials"),
   description := "Json/Protobuf convertors for ScalaPB",
   licenses += ("MIT", url("https://opensource.org/licenses/MIT")),
   organization := "io.github.scalapb-json",
   Project.inConfig(Test)(sbtprotoc.ProtocPlugin.protobufConfigSettings),
-  PB.targets in Compile := Nil,
-  PB.protoSources in Test := Seq(baseDirectory.value.getParentFile / "shared/src/test/protobuf"),
+  Compile / PB.targets := Nil,
+  (Test / PB.protoSources) := Seq(baseDirectory.value.getParentFile / "shared/src/test/protobuf"),
   scalapbJsonCommonVersion := "0.7.0",
   circeVersion := "0.13.0",
   libraryDependencies ++= Seq(
@@ -138,7 +138,7 @@ lazy val commonSettings = Def.settings(
     "com.thesamet.scalapb" %%% "scalapb-runtime" % scalapbVersion % "protobuf,test",
     "org.scalatest" %%% "scalatest" % "3.2.5" % "test"
   ),
-  pomExtra in Global := {
+  (Global / pomExtra) := {
     <url>https://github.com/scalapb-json/scalapb-circe</url>
       <scm>
         <connection>scm:git:github.com/scalapb-json/scalapb-circe.git</connection>
@@ -155,11 +155,11 @@ lazy val commonSettings = Def.settings(
       </developers>
   },
   publishTo := sonatypePublishToBundle.value,
-  scalacOptions in (Compile, doc) ++= {
+  (Compile / doc / scalacOptions) ++= {
     val t = tagOrHash.value
     Seq(
       "-sourcepath",
-      (baseDirectory in LocalRootProject).value.getAbsolutePath,
+      (LocalRootProject / baseDirectory).value.getAbsolutePath,
       "-doc-source-url",
       s"https://github.com/scalapb-json/scalapb-circe/tree/${t}€{FILE_PATH}.scala"
     )
@@ -180,7 +180,7 @@ lazy val commonSettings = Def.settings(
     ReleaseStep(
       action = { state =>
         val extracted = Project extract state
-        extracted.runAggregated(PgpKeys.publishSigned in Global in extracted.get(thisProjectRef), state)
+        extracted.runAggregated(extracted.get(thisProjectRef) / (Global / PgpKeys.publishSigned), state)
       },
       enableCrossBuild = true
     ),
