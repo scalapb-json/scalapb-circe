@@ -168,6 +168,15 @@ lazy val commonSettings = Def.settings(
       s"https://github.com/scalapb-json/scalapb-circe/tree/${t}€{FILE_PATH}.scala"
     )
   },
+  compileOrder := {
+    if (scalaBinaryVersion.value == "3") {
+      // https://github.com/lampepfl/dotty/issues/10956
+      // https://github.com/lampepfl/dotty/issues/6138
+      CompileOrder.JavaThenScala
+    } else {
+      compileOrder.value
+    }
+  },
   ReleasePlugin.extraReleaseCommands,
   commands += Command.command("updateReadme")(UpdateReadme.updateReadmeTask),
   releaseCrossBuild := true,
