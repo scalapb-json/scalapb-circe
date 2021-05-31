@@ -10,7 +10,7 @@ trait JavaAssertionsPlatform {
   def registeredCompanions: Seq[GeneratedMessageCompanion[_]]
 
   val JavaJsonTypeRegistry =
-    registeredCompanions.foldLeft(JavaTypeRegistry.newBuilder())(_ add _.javaDescriptor).build()
+    this.registeredCompanions.foldLeft(JavaTypeRegistry.newBuilder())(_ add _.javaDescriptor).build()
   val JavaJsonPrinter =
     com.google.protobuf.util.JsonFormat.printer().usingTypeRegistry(JavaJsonTypeRegistry)
   val JavaJsonParser = com.google.protobuf.util.JsonFormat.parser()
