@@ -36,7 +36,7 @@ object RepeatablesSpec extends Scalaprops {
     JsonFormat.fromJson[RepeatablesTest](j) == rep
   }
 
-  val `fromJson invert toJson` = forAll { rep: RepeatablesTest =>
+  val `fromJson invert toJson` = forAll { (rep: RepeatablesTest) =>
     val j = JsonFormat.toJson(rep)
     JsonFormat.fromJson[RepeatablesTest](j) == rep
   }
