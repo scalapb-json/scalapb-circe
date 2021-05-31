@@ -23,7 +23,8 @@ jobs:
       with:
         java-version: "adopt@1.${{ matrix.java }}"
     - uses: coursier/cache-action@v6
-    - run: sbt -v
+    - shell: bash
+      run: sbt -v
            "+ scalafmtCheckAll"
            scalafmtSbtCheck
            "+ test"
