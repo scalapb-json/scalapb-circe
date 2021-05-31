@@ -10,19 +10,19 @@ Include in your `build.sbt` file
 ### core
 
 ```scala
-libraryDependencies += "io.github.scalapb-json" %% "scalapb-circe" % "0.11.0"
+libraryDependencies += "io.github.scalapb-json" %% "scalapb-circe" % "0.11.1"
 ```
 
 for scala-js
 
 ```scala
-libraryDependencies += "io.github.scalapb-json" %%% "scalapb-circe" % "0.11.0"
+libraryDependencies += "io.github.scalapb-json" %%% "scalapb-circe" % "0.11.1"
 ```
 
 ### macros
 
 ```scala
-libraryDependencies += "io.github.scalapb-json" %% "scalapb-circe-macros" % "0.11.0"
+libraryDependencies += "io.github.scalapb-json" %% "scalapb-circe-macros" % "0.11.1"
 ```
 
 ## Usage
