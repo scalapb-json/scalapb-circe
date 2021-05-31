@@ -197,7 +197,7 @@ class Printer(
       case PFloat(v) => Json.fromFloatOrString(v)
       case PBoolean(v) => Json.fromBoolean(v)
       case PString(v) => Json.fromString(v)
-      case PByteString(v) => Json.fromString(java.util.Base64.getEncoder.encodeToString(v.toByteArray))
+      case PByteString(v) => Json.fromString(java.util.Base64.getEncoder.encodeToString(v.toByteArray()))
       case _: PMessage | PRepeated(_) | PEmpty => throw new RuntimeException("Should not happen")
     }
 }
