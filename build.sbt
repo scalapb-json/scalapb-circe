@@ -43,12 +43,7 @@ val tagOrHash = Def.setting {
 }
 
 val unusedWarnings = Def.setting(
-  CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, 11)) =>
-      Seq("-Ywarn-unused-import")
-    case _ =>
-      Seq("-Ywarn-unused:imports")
-  }
+  Seq("-Ywarn-unused:imports")
 )
 
 lazy val macros = project
@@ -157,7 +152,7 @@ lazy val commonSettings = Def.settings(
     if (scalaBinaryVersion.value == "3") {
       Nil
     } else {
-      unusedWarnings
+      unusedWarnings.value
     }
   },
   Seq(Compile, Test).flatMap(c => (c / console / scalacOptions) --= unusedWarnings.value),
