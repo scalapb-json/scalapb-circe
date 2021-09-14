@@ -2,7 +2,7 @@ import scalapb.compiler.Version._
 import sbtrelease.ReleaseStateTransformations._
 import sbtcrossproject.CrossPlugin.autoImport.crossProject
 
-val Scala212 = "2.12.14"
+val Scala212 = "2.12.15"
 val circeVersion = settingKey[String]("")
 val scalapbJsonCommonVersion = settingKey[String]("")
 
