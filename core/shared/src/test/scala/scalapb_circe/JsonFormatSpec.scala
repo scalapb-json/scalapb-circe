@@ -338,6 +338,11 @@ class JsonFormatSpec extends AnyFlatSpec with Matchers with OptionValues {
     new Parser().fromJsonString[MyTest]("""{"optEnum":2}""") must be(MyTest(optEnum = Some(MyEnum.V2)))
   }
 
+  "TestProto" should "parse original field names" in {
+    new Parser().fromJsonString[MyTest]("""{"opt_enum":1}""") must be(MyTest(optEnum = Some(MyEnum.V1)))
+    new Parser().fromJsonString[MyTest]("""{"opt_enum":2}""") must be(MyTest(optEnum = Some(MyEnum.V2)))
+  }
+
   "PreservedTestJson" should "be TestProto when parsed from json" in {
     new Parser(preservingProtoFieldNames = true).fromJsonString[MyTest](PreservedTestJson) must be(TestProto)
   }

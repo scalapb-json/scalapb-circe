@@ -278,7 +278,8 @@ class Parser(
 
             val valueMap: Map[FieldDescriptor, PValue] = (for {
               fd <- cmp.scalaDescriptor.fields
-              jsValue <- values.get(serializedName(fd)) if !jsValue.isNull
+              jsValue <- values.get(ScalapbJsonCommon.jsonName(fd)).orElse(values.get(fd.asProto.getName))
+              if !jsValue.isNull
             } yield (fd, parseValue(fd, jsValue))).toMap
 
             PMessage(valueMap)
@@ -331,6 +332,7 @@ class Parser(
 }
 
 object JsonFormat {
+
   import com.google.protobuf.wrappers
   import scalapb_json.ScalapbJsonCommon._
 
