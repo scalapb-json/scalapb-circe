@@ -55,7 +55,6 @@ lazy val macros = project
       "io.circe" %% "circe-parser" % circeVersion.value, // don't use %%%
       "io.github.scalapb-json" %%% "scalapb-json-macros" % scalapbJsonCommonVersion.value,
     ),
-    disableScala3, // TODO
   )
   .dependsOn(
     scalapbCirceJVM
@@ -66,6 +65,8 @@ lazy val tests = crossProject(JVMPlatform, JSPlatform)
   .settings(
     commonSettings,
     noPublish,
+  )
+  .jsSettings(
     disableScala3, // TODO
   )
   .configure(_ dependsOn macros)
