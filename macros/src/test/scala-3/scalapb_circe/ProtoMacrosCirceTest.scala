@@ -10,8 +10,8 @@ import scala.quoted.FromExpr
 import scala.quoted.ToExpr
 import scala.quoted.Quotes
 import scala.quoted.staging.Compiler
-import scala.quoted.staging.run
 import scala.quoted.staging.withQuotes
+import scala.util.NotGiven
 
 object ProtoMacrosCommonTest extends Scalaprops {
   private[this] implicit val jsonGen: Gen[Json] = {
@@ -22,8 +22,8 @@ object ProtoMacrosCommonTest extends Scalaprops {
       Gen[Long].map(Json.fromLong),
       Gen[Double].map(Json.fromDoubleOrString),
       Gen[Float].map(Json.fromFloatOrString),
-//      Gen[BigInt].map(Json.fromBigInt),
-//      Gen[BigDecimal].map(Json.fromBigDecimal),
+      Gen[BigInt].map(Json.fromBigInt),
+      Gen[BigDecimal].map(Json.fromBigDecimal),
       Gen.alphaNumString.map(Json.fromString)
     )
 
@@ -39,13 +39,14 @@ object ProtoMacrosCommonTest extends Scalaprops {
 
   val test: Property = {
     given Compiler = Compiler.make(getClass.getClassLoader)
-    withQuotes(testImpl)
+    withQuotes(testImpl[Json])
   }
 
-  private[this] def testImpl(using Quotes): Property = {
-    Property.forAll { (x1: Json) =>
-      val x2 = summon[FromExpr[Json]].unapply(Expr(x1))
-      assert(Some(x1) == x2, s"$x1 != $x2")
+  private[this] def testImpl[A: Gen: FromExpr: ToExpr: NotGiven](using Quotes): Property = {
+    Property.forAll { (x1: A) =>
+      val expr = Expr(x1)
+      val x2 = summon[FromExpr[A]].unapply(expr)
+      assert(Some(x1) == x2, s"$x1 != $x2. ${expr.show}")
       true
     }
   }

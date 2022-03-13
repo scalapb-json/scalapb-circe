@@ -68,14 +68,6 @@ object ProtoMacrosCirce {
           Json.arr(x)
         case '{ Json.obj(${ Expr(x) }) } =>
           Json.obj(x)
-        /*
-        case '{ Json.fromBigInt(${Expr(x)}) } =>
-          Json.fromBigInt(x)
-        case '{ Json.fromBigDecimal(${Expr(x)}) } =>
-          Json.fromBigDecimal(x)
-         */
-        case _ =>
-          sys.error(j.show)
       }
     }
 
