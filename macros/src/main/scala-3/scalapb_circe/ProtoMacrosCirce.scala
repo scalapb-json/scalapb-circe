@@ -17,14 +17,33 @@ import scala.util.control.NonFatal
 object ProtoMacrosCirce {
   implicit val fromExprJsonNumber: FromExpr[JsonNumber] =
     new FromExpr[JsonNumber] {
-      def unapply(j: Expr[JsonNumber])(using Quotes) = PartialFunction.condOpt(j){
-        case '{ JsonNumber.fromDecimalStringUnsafe(${Expr(x)}) } =>
+      def unapply(j: Expr[JsonNumber])(using Quotes) = PartialFunction.condOpt(j) {
+        case '{ JsonNumber.fromDecimalStringUnsafe(${ Expr(x) }) } =>
           JsonNumber.fromDecimalStringUnsafe(x)
       }
     }
 
   implicit val fromExprJson: FromExpr[Json] =
     new FromExpr[Json] {
+      object IterableExprs {
+        def unapply[T](exprs: Iterable[Expr[T]])(using FromExpr[T])(using Quotes): Option[Iterable[T]] = {
+          val xs = exprs.map(_.value).collect { case Some(value) => value }
+          if (xs.sizeIs == exprs.size) {
+            Some(xs)
+          } else {
+            None
+          }
+        }
+      }
+
+      given IterableFromExpr[T](using Type[T], FromExpr[T]): FromExpr[Iterable[T]] with {
+        def unapply(x: Expr[Seq[T]])(using Quotes) = x match {
+          case Varargs(Exprs(elems)) => Some(elems)
+          case '{ scala.Iterable[T](${ Varargs(IterableExprs(elems)) }: _*) } => Some(elems)
+          case _ => None
+        }
+      }
+
       def unapply(j: Expr[Json])(using Quotes) = PartialFunction.condOpt(j) {
         case '{ Json.Null } =>
           Json.Null
@@ -32,32 +51,38 @@ object ProtoMacrosCirce {
           Json.True
         case '{ Json.False } =>
           Json.False
-        case '{ Json.fromBoolean(${Expr(x)}) } =>
+        case '{ Json.fromBoolean(${ Expr(x) }) } =>
           Json.fromBoolean(x)
-        case '{ Json.fromInt(${Expr(x)}) } =>
+        case '{ Json.fromInt(${ Expr(x) }) } =>
           Json.fromInt(x)
-        case '{ Json.fromLong(${Expr(x)}) } =>
+        case '{ Json.fromLong(${ Expr(x) }) } =>
           Json.fromLong(x)
-        case '{ Json.fromFloatOrString(${Expr(x)}) } =>
+        case '{ Json.fromFloatOrString(${ Expr(x) }) } =>
           Json.fromFloatOrString(x)
-        case '{ Json.fromDoubleOrString(${Expr(x)}) } =>
+        case '{ Json.fromDoubleOrString(${ Expr(x) }) } =>
           Json.fromDoubleOrString(x)
-        case '{ Json.fromFloatOrNull(${Expr(x)}) } =>
+        case '{ Json.fromFloatOrNull(${ Expr(x) }) } =>
           Json.fromFloatOrNull(x)
-        case '{ Json.fromDoubleOrNull(${Expr(x)}) } =>
+        case '{ Json.fromDoubleOrNull(${ Expr(x) }) } =>
           Json.fromDoubleOrNull(x)
-        case '{ Json.fromString(${Expr(x)}) } =>
+        case '{ Json.fromString(${ Expr(x) }) } =>
           Json.fromString(x)
-/*
-        case '{ Json.arr(${Expr(x)}) } =>
+        case '{ Json.fromJsonNumber(${ Expr(x) }) } =>
+          Json.fromJsonNumber(x)
+        case '{ Json.fromValues(${ Expr(x) }) } =>
+          Json.fromValues(x)
+        case '{ Json.arr(${ Expr(x) }) } =>
           Json.arr(x)
-        case '{ Json.obj(${Expr(x)}) } =>
+        case '{ Json.obj(${ Expr(x) }) } =>
           Json.obj(x)
+        case _ =>
+          sys.error(j.show)
+        /*
         case '{ Json.fromBigInt(${Expr(x)}) } =>
           Json.fromBigInt(x)
         case '{ Json.fromBigDecimal(${Expr(x)}) } =>
           Json.fromBigDecimal(x)
-*/
+         */
       }
     }
 

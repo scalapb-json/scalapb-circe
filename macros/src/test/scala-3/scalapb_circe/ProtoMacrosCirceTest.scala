@@ -32,8 +32,8 @@ object ProtoMacrosCommonTest extends Scalaprops {
 
     Gen.oneOf(
       primitive,
-//      list1,
-//      map1,
+      list1,
+      map1,
     )
   }
 
