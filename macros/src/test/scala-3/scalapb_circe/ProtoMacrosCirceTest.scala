@@ -39,12 +39,12 @@ object ProtoMacrosCommonTest extends Scalaprops {
 
   val test: Property = {
     given Compiler = Compiler.make(getClass.getClassLoader)
-    val x1: Quotes => Property = run(testImpl)
+    val x1: Quotes => Property = testImpl
     val x2: Quotes ?=> Property = x1.apply(summon[Quotes])
     withQuotes(x2)
   }
 
-  private[this] def testImpl(using Quotes): Expr[Quotes => Property] = '{ implicit q: Quotes =>
+  private[this] def testImpl: Quotes => Property = { implicit q: Quotes =>
     Property.forAll { (x1: Json) =>
       val x2 = summon[FromExpr[Json]].unapply(Expr(x1))
       assert(Some(x1) == x2, s"$x1 != $x2")
