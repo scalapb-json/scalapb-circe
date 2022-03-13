@@ -45,12 +45,10 @@ object ProtoMacrosCommonTest extends Scalaprops {
   }
 
   private[this] def testImpl(using Quotes): Expr[Quotes => Property] = '{ implicit q: Quotes =>
-    {
-      Property.forAll { (x1: Json) =>
-        val x2 = summon[FromExpr[Json]].unapply(Expr(x1))
-        assert(Some(x1) == x2, s"$x1 != $x2")
-        true
-      }
+    Property.forAll { (x1: Json) =>
+      val x2 = summon[FromExpr[Json]].unapply(Expr(x1))
+      assert(Some(x1) == x2, s"$x1 != $x2")
+      true
     }
   }
 }
