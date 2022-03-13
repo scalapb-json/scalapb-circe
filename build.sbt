@@ -51,6 +51,15 @@ lazy val macros = project
   .settings(
     commonSettings,
     name := UpdateReadme.scalapbCirceMacrosName,
+    libraryDependencies ++= {
+      if (scalaBinaryVersion.value == "3") {
+        Seq(
+          "org.scala-lang" %% "scala3-staging" % scalaVersion.value % "test",
+        )
+      } else {
+        Nil
+      }
+    },
     libraryDependencies ++= Seq(
       "io.circe" %% "circe-parser" % circeVersion.value, // don't use %%%
       "io.github.scalapb-json" %%% "scalapb-json-macros" % scalapbJsonCommonVersion.value,

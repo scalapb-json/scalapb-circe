@@ -15,6 +15,52 @@ import scala.util.Try
 import scala.util.control.NonFatal
 
 object ProtoMacrosCirce {
+  implicit val fromExprJsonNumber: FromExpr[JsonNumber] =
+    new FromExpr[JsonNumber] {
+      def unapply(j: Expr[JsonNumber])(using Quotes) = PartialFunction.condOpt(j){
+        case '{ JsonNumber.fromDecimalStringUnsafe(${Expr(x)}) } =>
+          JsonNumber.fromDecimalStringUnsafe(x)
+      }
+    }
+
+  implicit val fromExprJson: FromExpr[Json] =
+    new FromExpr[Json] {
+      def unapply(j: Expr[Json])(using Quotes) = PartialFunction.condOpt(j) {
+        case '{ Json.Null } =>
+          Json.Null
+        case '{ Json.True } =>
+          Json.True
+        case '{ Json.False } =>
+          Json.False
+        case '{ Json.fromBoolean(${Expr(x)}) } =>
+          Json.fromBoolean(x)
+        case '{ Json.fromInt(${Expr(x)}) } =>
+          Json.fromInt(x)
+        case '{ Json.fromLong(${Expr(x)}) } =>
+          Json.fromLong(x)
+        case '{ Json.fromFloatOrString(${Expr(x)}) } =>
+          Json.fromFloatOrString(x)
+        case '{ Json.fromDoubleOrString(${Expr(x)}) } =>
+          Json.fromDoubleOrString(x)
+        case '{ Json.fromFloatOrNull(${Expr(x)}) } =>
+          Json.fromFloatOrNull(x)
+        case '{ Json.fromDoubleOrNull(${Expr(x)}) } =>
+          Json.fromDoubleOrNull(x)
+        case '{ Json.fromString(${Expr(x)}) } =>
+          Json.fromString(x)
+/*
+        case '{ Json.arr(${Expr(x)}) } =>
+          Json.arr(x)
+        case '{ Json.obj(${Expr(x)}) } =>
+          Json.obj(x)
+        case '{ Json.fromBigInt(${Expr(x)}) } =>
+          Json.fromBigInt(x)
+        case '{ Json.fromBigDecimal(${Expr(x)}) } =>
+          Json.fromBigDecimal(x)
+*/
+      }
+    }
+
   implicit val toExprJsonNumber: ToExpr[JsonNumber] =
     new ToExpr[JsonNumber] {
       def apply(j: JsonNumber)(using Quotes) = '{
