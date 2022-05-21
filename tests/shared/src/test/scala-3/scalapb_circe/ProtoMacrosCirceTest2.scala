@@ -21,11 +21,11 @@ class ProtoMacrosCirceTest2 extends AnyFunSpec {
     }
 
     it("struct") {
-      val decodeError = "DecodingFailure at : JsonObject"
-      checkTypeError(""" struct"null" """, decodeError)
-      checkTypeError(""" struct"[3]" """, decodeError)
-      checkTypeError(""" struct"true" """, decodeError)
-      checkTypeError(""" struct"12345" """, decodeError)
+      def decodeError(x: String) = s"DecodingFailure at : Got value '${x}' with wrong type, expecting object"
+      checkTypeError(""" struct"null" """, decodeError("null"))
+      checkTypeError(""" struct"[3]" """, decodeError("[3]"))
+      checkTypeError(""" struct"true" """, decodeError("true"))
+      checkTypeError(""" struct"12345" """, decodeError("12345"))
 
       checkTypeError(""" struct" ] " """, "ParsingFailure: expected json value got '] ' (line 1, column 2)")
     }
