@@ -110,8 +110,8 @@ val scalapbCirce = crossProject(JVMPlatform, JSPlatform)
       scalapb.gen(javaConversions = true) -> (Test / sourceManaged).value
     ),
     libraryDependencies ++= Seq(
-      "com.google.protobuf" % "protobuf-java-util" % "3.21.0" % "test",
-      "com.google.protobuf" % "protobuf-java" % "3.21.0" % "protobuf"
+      "com.google.protobuf" % "protobuf-java-util" % "3.21.1" % "test",
+      "com.google.protobuf" % "protobuf-java" % "3.21.1" % "protobuf"
     )
   )
   .jsSettings(
