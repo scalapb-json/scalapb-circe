@@ -60,21 +60,21 @@ lazy val macros = project
     scalapbCirceJVM
   )
 
-lazy val tests = crossProject(JVMPlatform, JSPlatform)
+lazy val tests = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   .in(file("tests"))
   .settings(
     commonSettings,
     noPublish,
   )
-  .jsSettings(
-    disableScala3, // TODO
+  .platformsSettings(JSPlatform, NativePlatform)(
+    disableScala3,
   )
   .configure(_ dependsOn macros)
   .dependsOn(
     scalapbCirce % "test->test"
   )
 
-val scalapbCirce = crossProject(JVMPlatform, JSPlatform)
+val scalapbCirce = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   .in(file("core"))
   .enablePlugins(BuildInfoPlugin)
   .settings(
@@ -127,9 +127,17 @@ val scalapbCirce = crossProject(JVMPlatform, JSPlatform)
         "-P:scalajs:mapSourceURI:$a->$g/"
       }
     },
+  )
+  .platformsSettings(JVMPlatform, JSPlatform)(
+    scalapropsCoreSettings,
+  )
+  .platformsSettings(JSPlatform, NativePlatform)(
     (Test / PB.targets) := Seq(
       scalapb.gen(javaConversions = false) -> (Test / sourceManaged).value
     )
+  )
+  .nativeSettings(
+    disableScala3,
   )
 
 commonSettings
@@ -145,7 +153,6 @@ val noPublish = Seq(
 noPublish
 
 lazy val commonSettings = Def.settings(
-  scalapropsCoreSettings,
   (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
   scalaVersion := Scala212,
   crossScalaVersions := Seq(Scala212, "2.13.9", "3.2.0"),
@@ -238,3 +245,4 @@ lazy val commonSettings = Def.settings(
 
 val scalapbCirceJVM = scalapbCirce.jvm
 val scalapbCirceJS = scalapbCirce.js
+val scalapbCirceNative = scalapbCirce.native
