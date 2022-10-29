@@ -136,9 +136,6 @@ val scalapbCirce = crossProject(JVMPlatform, JSPlatform, NativePlatform)
       scalapb.gen(javaConversions = false) -> (Test / sourceManaged).value
     )
   )
-  .nativeSettings(
-    disableScala3,
-  )
 
 commonSettings
 
