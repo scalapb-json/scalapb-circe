@@ -175,7 +175,11 @@ lazy val commonSettings = Def.settings(
     "io.circe" %%% "circe-generic" % circeVersion.value % "test",
     "io.github.scalapb-json" %%% "scalapb-json-common" % scalapbJsonCommonVersion.value,
     "com.thesamet.scalapb" %%% "scalapb-runtime" % scalapbVersion % "protobuf,test",
-    "org.scalatest" %%% "scalatest" % "3.2.15" % "test"
+    "org.scalatest" %%% "scalatest-funspec" % "3.2.15" % "test",
+    "org.scalatest" %%% "scalatest-flatspec" % "3.2.15" % "test",
+    "org.scalatest" %%% "scalatest-freespec" % "3.2.15" % "test",
+    "org.scalatest" %%% "scalatest-mustmatchers" % "3.2.15" % "test",
+    "org.scalatest" %%% "scalatest-shouldmatchers" % "3.2.15" % "test",
   ),
   (Global / pomExtra) := {
     <url>https://github.com/scalapb-json/scalapb-circe</url>
