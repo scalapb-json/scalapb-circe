@@ -1,8 +1,8 @@
 package scalapb_circe
 
 import com.google.protobuf.util.JsonFormat.{printer => ProtobufJavaPrinter}
-import jsontest.oneof.OneOf._
-import jsontest.oneof.{OneOf, OneOfMessage}
+import jsontest.oneof_test.OneOf._
+import jsontest.oneof_test.{OneOf, OneOfMessage}
 import io.circe.parser.parse
 import org.scalatest.prop._
 import EitherOps._
