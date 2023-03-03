@@ -28,3 +28,9 @@ jobs:
            "+ scalafmtCheckAll"
            scalafmtSbtCheck
            "+ test"
+    - uses: mikepenz/action-junit-report@4fa23552acda20a6a1d44f16224a90efbeb6c5f1 # v3.7.5
+      if: always()
+      with:
+        report_paths: '**/target/test-reports/*.xml'
+        require_tests: true
+        check_name: "${{ matrix.java }}"
