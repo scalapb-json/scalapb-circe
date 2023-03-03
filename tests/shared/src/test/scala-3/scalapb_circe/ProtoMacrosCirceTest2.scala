@@ -31,8 +31,8 @@ class ProtoMacrosCirceTest2 extends AnyFunSpec {
     }
 
     it("value") {
-      checkTypeError(""" value" ] " """, "io.circe.ParsingFailure: expected json value got '] ' (line 1, column 2)")
-      checkTypeError(""" value" } " """, "io.circe.ParsingFailure: expected json value got '} ' (line 1, column 2)")
+      checkTypeError(""" value" ] " """, "ParsingFailure: expected json value got '] ' (line 1, column 2)")
+      checkTypeError(""" value" } " """, "ParsingFailure: expected json value got '} ' (line 1, column 2)")
     }
   }
 }
