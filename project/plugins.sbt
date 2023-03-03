@@ -21,3 +21,11 @@ addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.2.0")
 addSbtPlugin("com.thesamet" % "sbt-protoc" % "1.0.6")
 
 libraryDependencies += "com.thesamet.scalapb" %% "compilerplugin" % "0.11.13"
+
+if (sys.env.isDefinedAt("GITHUB_ACTION")) {
+  Def.settings(
+    addSbtPlugin("net.virtual-void" % "sbt-hackers-digest" % "0.1.2")
+  )
+} else {
+  Nil
+}
