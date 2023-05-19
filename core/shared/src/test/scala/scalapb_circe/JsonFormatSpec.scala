@@ -103,6 +103,24 @@ class JsonFormatSpec extends AnyFlatSpec with Matchers with OptionValues {
       |}
       |""".stripMargin
 
+  val TestJsonWithMapEntriesAsKeyValuePairs =
+    """{
+      |  "hello": "Foo",
+      |  "foobar": 37,
+      |  "primitiveSequence": ["a", "b", "c"],
+      |  "repMessage": [{}, {"hello": "h11"}],
+      |  "optMessage": {"foobar": 39},
+      |  "stringToInt32": [{"key": "foo", "value": 14}, {"key": "bar", "value": 19}],
+      |  "intToMytest": [{"key": 14, "value": {}}, {"key": 35, "value": {"hello": "boo"}}],
+      |  "repEnum": ["V1", "V2", "UNKNOWN"],
+      |  "optEnum": "V2",
+      |  "intToEnum": [{"key": 32, "value": "V1"}, {"key": 35, "value": "V2"}],
+      |  "stringToBool": [{"key": "ff", "value": false}, {"key": "tt", "value": true}],
+      |  "boolToString": [{"key": false, "value": "ff"}, {"key": true, "value": "tt"}],
+      |  "optBool": false
+      |}
+      |""".stripMargin
+
   "Empty object" should "give empty json" in {
     JsonFormat.toJson(MyTest()) must be(Json.obj())
   }
@@ -437,6 +455,18 @@ class JsonFormatSpec extends AnyFlatSpec with Matchers with OptionValues {
       JsonFormat.fromJsonString[MyTest]("""{"optBool": "false"}""") == MyTest(
         optBool = Some(false)
       )
+    )
+  }
+
+  "TestProto" should "be TestJsonWithMapEntriesAsKeyValuePairs when converted to Proto with mapEntriesAsKeyValuePairs setting" in {
+    new Printer(formattingMapEntriesAsKeyValuePairs = true).toJson(TestProto) must be(
+      parse(TestJsonWithMapEntriesAsKeyValuePairs).getOrError
+    )
+  }
+
+  "TestJsonWithMapEntriesAsKeyValuePairs" should "be TestProto when parsed from json with mapEntriesAsKeyValuePairs setting" in {
+    new Parser(mapEntriesAsKeyValuePairs = true).fromJsonString[MyTest](TestJsonWithMapEntriesAsKeyValuePairs) must be(
+      TestProto
     )
   }
 }
