@@ -63,6 +63,7 @@ class Printer(
   preservingProtoFieldNames: Boolean = false,
   val formattingLongAsNumber: Boolean = false,
   formattingEnumsAsNumber: Boolean = false,
+  formattingMapEntriesAsKeyValuePairs: Boolean = false,
   formatRegistry: FormatRegistry = JsonFormat.DefaultRegistry,
   val typeRegistry: TypeRegistry = TypeRegistry.empty
 ) {
@@ -81,10 +82,10 @@ class Printer(
       // We are never printing empty optional messages to prevent infinite recursion.
       case Nil =>
         if (includingDefaultValueFields) {
-          b += ((name, if (fd.isMapField) Json.obj() else Json.arr()))
+          b += ((name, if (fd.isMapField && !formattingMapEntriesAsKeyValuePairs) Json.obj() else Json.arr()))
         }
       case xs: Iterable[GeneratedMessage] @unchecked =>
-        if (fd.isMapField) {
+        if (fd.isMapField && !formattingMapEntriesAsKeyValuePairs) {
           val mapEntryDescriptor = fd.scalaType.asInstanceOf[ScalaType.Message].descriptor
           val keyDescriptor = mapEntryDescriptor.findFieldByNumber(1).get
           val valueDescriptor = mapEntryDescriptor.findFieldByNumber(2).get
@@ -204,6 +205,7 @@ class Printer(
 
 class Parser(
   preservingProtoFieldNames: Boolean = false,
+  mapEntriesAsKeyValuePairs: Boolean = false,
   formatRegistry: FormatRegistry = JsonFormat.DefaultRegistry,
   val typeRegistry: TypeRegistry = TypeRegistry.empty
 ) {
@@ -225,7 +227,7 @@ class Parser(
   private def fromJsonToPMessage(cmp: GeneratedMessageCompanion[_], value: Json): PMessage = {
 
     def parseValue(fd: FieldDescriptor, value: Json): PValue = {
-      if (fd.isMapField) {
+      if (fd.isMapField && !mapEntriesAsKeyValuePairs) {
         value.asObject match {
           case Some(vals) =>
             val mapEntryDesc = fd.scalaType.asInstanceOf[ScalaType.Message].descriptor
