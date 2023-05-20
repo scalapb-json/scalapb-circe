@@ -8,7 +8,7 @@ import scala.util.{Failure, Success, Try}
 /**
  * Implicit circe [[Encoder]] and [[Decoder]]s for scalapb's [[GeneratedMessage]] and [[GeneratedEnum]] classes.
  */
-package object codec {
+object codec {
 
   implicit def printer: Printer = JsonFormat.printer
   implicit def parser: Parser = JsonFormat.parser
