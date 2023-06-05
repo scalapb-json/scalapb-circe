@@ -14,7 +14,7 @@ addSbtPlugin("com.github.sbt" % "sbt-pgp" % "2.2.1")
 
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.0")
 
-addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.4.12")
+addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.4.13")
 
 addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.3.1")
 
