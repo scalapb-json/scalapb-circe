@@ -53,7 +53,7 @@ object codec {
     (c: HCursor) => {
       val companion = implicitly[GeneratedEnumCompanion[E]]
       Try(p.defaultEnumParser(companion.scalaDescriptor, c.value)) match {
-        case Success(e) => Right(companion.fromValue(e.index))
+        case Success(e) => Right(companion.fromValue(e.number))
         case Failure(t) => Left(DecodingFailure(t.getMessage, List.empty))
       }
     }
