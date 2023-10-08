@@ -100,6 +100,14 @@ class CodecSpec extends AnyFreeSpec with Matchers {
       }
       MyEnum.values.foreach(check(_: MyEnum))
       MyEnum3.values.foreach(check(_: MyEnum3))
+
+      MyEnum.V1.asJson.as[MyEnum] mustBe Right(MyEnum.V1)
+      MyEnum.V2.asJson.as[MyEnum] mustBe Right(MyEnum.V2)
+      MyEnum.V3.asJson.as[MyEnum] mustBe Right(MyEnum.V3)
+
+      MyEnum3.V1.asJson.as[MyEnum3] mustBe Right(MyEnum3.V1)
+      MyEnum3.V2.asJson.as[MyEnum3] mustBe Right(MyEnum3.V2)
+      MyEnum3.V3.asJson.as[MyEnum3] mustBe Right(MyEnum3.V3)
     }
 
     "decode to same value via codec and JsonFormat" in {
