@@ -108,7 +108,7 @@ class CodecSpec extends AnyFreeSpec with Matchers {
         val decodedWithJsonFormat = cmp.fromValue(
           JsonFormat.parser
             .defaultEnumParser(cmp.scalaDescriptor, JsonFormat.printer.serializeEnum(e.scalaValueDescriptor))
-            .index
+            .number
         )
         val decodedImplicitly = e.asJson.as[E]
         decodedImplicitly mustBe Right(decodedWithJsonFormat)
