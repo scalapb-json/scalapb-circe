@@ -3,6 +3,7 @@ package scalapb_circe
 import com.google.protobuf.any.{Any => PBAny}
 import jsontest.anytests.{AnyTest, ManyAnyTest}
 import io.circe.parser.parse
+import scalapb.GeneratedMessageCompanion
 import scalapb_json._
 import EitherOps._
 import org.scalatest.flatspec.AnyFlatSpec
@@ -38,7 +39,7 @@ class AnyFormatSpec extends AnyFlatSpec with Matchers with JavaAssertions {
       |}
     """.stripMargin).getOrError
 
-  override def registeredCompanions = Seq(AnyTest, ManyAnyTest)
+  override def registeredCompanions: Seq[GeneratedMessageCompanion[_]] = Seq(AnyTest, ManyAnyTest)
 
   // For clarity
   def UnregisteredPrinter = JsonFormat.printer
