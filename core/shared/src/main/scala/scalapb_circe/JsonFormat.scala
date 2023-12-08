@@ -271,7 +271,7 @@ class Parser(
       } else parseSingleValue(cmp, fd, value)
     }
 
-    formatRegistry.getMessageParser(cmp.defaultInstance.getClass) match {
+    formatRegistry.getMessageParser(ScalapbCirceCompat.getClassFromMessageCompanion(cmp)) match {
       case Some(p) => p(this, value).asInstanceOf[GeneratedMessage].toPMessage
       case None =>
         value.asObject match {
