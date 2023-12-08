@@ -2,6 +2,7 @@ package scalapb_circe
 
 import org.scalatest.OptionValues
 import jsontest.test._
+import jsontest.test3.DefaultInstanceErrorTest
 import com.google.protobuf.util.{JsonFormat => JavaJsonFormat}
 import com.google.protobuf.any.{Any => PBAny}
 import com.google.protobuf.util.JsonFormat.{TypeRegistry => JavaTypeRegistry}
@@ -50,4 +51,13 @@ class JsonFormatSpecJVM extends AnyFlatSpec with Matchers with OptionValues {
     anyEnabledParser.fromJsonString[PBAny](javaJson).unpack[MyTest] must be(TestProto)
   }
 
+  "DefaultInstanceErrorTest" should "be success" in {
+    val e = intercept[AssertionError] {
+      DefaultInstanceErrorTest.defaultInstance
+    }
+    assert(e.getMessage == "assertion failed: should not zero")
+    new Parser().fromJsonString[DefaultInstanceErrorTest]("""{"x": 2}""") mustBe DefaultInstanceErrorTest(
+      ErrorIfZero(2)
+    )
+  }
 }

@@ -6,6 +6,7 @@ import "test.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/field_mask.proto";
+import "scalapb/scalapb.proto";
 
 message MyTest3 {
   enum MyEnum3 {
@@ -52,4 +53,8 @@ message StructTest {
 
 message TestFieldMask {
   google.protobuf.FieldMask field_mask_value = 1;
+}
+
+message DefaultInstanceErrorTest {
+  int32 x = 1 [(scalapb.field).type = "scalapb_circe.ErrorIfZero"];
 }
