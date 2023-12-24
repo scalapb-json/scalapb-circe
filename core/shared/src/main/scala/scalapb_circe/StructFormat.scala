@@ -42,7 +42,7 @@ object StructFormat {
   def structWriter(v: struct.Struct): Json =
     Json.obj(v.fields.iterator.map { case (x, y) =>
       x -> structValueWriter(y)
-    }.toList: _*)
+    }.toList *)
 
   def listValueParser(json: Seq[Json]): struct.ListValue =
     com.google.protobuf.struct.ListValue(json.map(structValueParser))

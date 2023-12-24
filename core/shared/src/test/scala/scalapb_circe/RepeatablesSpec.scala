@@ -17,7 +17,7 @@ object RepeatablesSpec extends Scalaprops {
     Gen.from1(Nested.of)
 
   private[this] implicit val enumGen: Gen[RepeatablesTest.Enum] =
-    Gen.elements(RepeatablesTest.Enum.values.head, RepeatablesTest.Enum.values.tail: _*)
+    Gen.elements(RepeatablesTest.Enum.values.head, RepeatablesTest.Enum.values.tail *)
 
   private[this] implicit def seqGen[A: Gen]: Gen[Seq[A]] =
     Gen.gen(Gen[Vector[A]].f)
