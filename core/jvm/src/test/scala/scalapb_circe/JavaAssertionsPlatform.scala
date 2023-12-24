@@ -7,7 +7,7 @@ import org.scalatest.matchers.must.Matchers
 trait JavaAssertionsPlatform {
   self: Matchers with JavaAssertions =>
 
-  def registeredCompanions: Seq[GeneratedMessageCompanion[_]]
+  def registeredCompanions: Seq[GeneratedMessageCompanion[?]]
 
   val JavaJsonTypeRegistry =
     this.registeredCompanions.foldLeft(JavaTypeRegistry.newBuilder())(_ add _.javaDescriptor).build()

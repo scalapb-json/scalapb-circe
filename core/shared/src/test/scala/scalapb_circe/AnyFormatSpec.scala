@@ -39,7 +39,7 @@ class AnyFormatSpec extends AnyFlatSpec with Matchers with JavaAssertions {
       |}
     """.stripMargin).getOrError
 
-  override def registeredCompanions: Seq[GeneratedMessageCompanion[_]] = Seq(AnyTest, ManyAnyTest)
+  override def registeredCompanions: Seq[GeneratedMessageCompanion[?]] = Seq(AnyTest, ManyAnyTest)
 
   // For clarity
   def UnregisteredPrinter = JsonFormat.printer
