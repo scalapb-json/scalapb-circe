@@ -107,7 +107,7 @@ class Printer(
                 serializeSingleValue(valueDescriptor, x.getField(valueDescriptor), formattingLongAsNumber)
               }
               key -> value
-            }.toList: _*)
+            }.toList *)
           )
         } else {
           b += JField(name, Json.fromValues(xs.map(toJson)))
@@ -130,7 +130,7 @@ class Printer(
           b += JField(
             name,
             Json.arr(
-              xs.map(serializeSingleValue(fd, _, formattingLongAsNumber)): _*
+              xs.map(serializeSingleValue(fd, _, formattingLongAsNumber)) *
             )
           )
         }
@@ -162,7 +162,7 @@ class Printer(
             serializeNonMessageField(f, name, m.getField(f), b)
           }
         }
-        Json.obj(b.result(): _*)
+        Json.obj(b.result() *)
     }
   }
 
