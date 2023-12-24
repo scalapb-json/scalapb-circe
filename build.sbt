@@ -46,6 +46,15 @@ val unusedWarnings = Def.setting(
   Seq("-Ywarn-unused:imports")
 )
 
+val scalapbScala3Sources = Def.setting(
+  scalaBinaryVersion.value match {
+    case "2.12" =>
+      false
+    case _ =>
+      true
+  }
+)
+
 lazy val macros = project
   .in(file("macros"))
   .settings(
@@ -107,7 +116,7 @@ val scalapbCirce = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   .jvmSettings(
     (Test / PB.targets) := Seq(
       PB.gens.java -> (Test / sourceManaged).value,
-      scalapb.gen(javaConversions = true) -> (Test / sourceManaged).value
+      scalapb.gen(javaConversions = true, scala3Sources = scalapbScala3Sources.value) -> (Test / sourceManaged).value
     ),
     libraryDependencies ++= Seq(
       "com.google.protobuf" % "protobuf-java-util" % "3.25.1" % "test",
@@ -133,7 +142,7 @@ val scalapbCirce = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   )
   .platformsSettings(JSPlatform, NativePlatform)(
     (Test / PB.targets) := Seq(
-      scalapb.gen(javaConversions = false) -> (Test / sourceManaged).value
+      scalapb.gen(javaConversions = false, scala3Sources = scalapbScala3Sources.value) -> (Test / sourceManaged).value
     )
   )
 
