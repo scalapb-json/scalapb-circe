@@ -114,7 +114,7 @@ val scalapbCirce = crossProject(JVMPlatform, JSPlatform, NativePlatform)
     )
   )
   .jvmSettings(
-    (Test / PB.targets) := Seq(
+    (Test / PB.targets) ++= Seq[protocbridge.Target](
       PB.gens.java -> (Test / sourceManaged).value,
       scalapb.gen(javaConversions = true, scala3Sources = scalapbScala3Sources.value) -> (Test / sourceManaged).value
     ),
@@ -141,7 +141,7 @@ val scalapbCirce = crossProject(JVMPlatform, JSPlatform, NativePlatform)
     scalapropsCoreSettings,
   )
   .platformsSettings(JSPlatform, NativePlatform)(
-    (Test / PB.targets) := Seq(
+    (Test / PB.targets) ++= Seq[protocbridge.Target](
       scalapb.gen(javaConversions = false, scala3Sources = scalapbScala3Sources.value) -> (Test / sourceManaged).value
     )
   )
