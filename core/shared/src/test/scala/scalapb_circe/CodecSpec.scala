@@ -137,17 +137,8 @@ class CodecSpec extends AnyFreeSpec with Matchers {
   }
   "Case class with GeneratedMessage and GeneratedEnum" - {
     "derive and use a semi-auto codec" in {
-
-      import io.circe.generic.semiauto._
+      import CodecSpec._
       import io.circe.syntax._
-
-      case class Band(version: MyEnum, guitars: Seq[Guitar])
-
-      object Band {
-        implicit val dec: Decoder[Band] = deriveDecoder[Band]
-        implicit val enc: Encoder[Band] = deriveEncoder[Band]
-      }
-
       val band = Band(MyEnum.V1, Seq(Guitar(4), Guitar(5)))
       val json = Json.obj(
         "version" -> Json.fromString("V1"),
@@ -161,4 +152,16 @@ class CodecSpec extends AnyFreeSpec with Matchers {
     }
   }
 
+}
+
+object CodecSpec {
+  // https://github.com/circe/circe/issues/2263
+  private case class Band(version: MyEnum, guitars: Seq[Guitar])
+
+  private object Band {
+    import io.circe.generic.semiauto._
+
+    implicit val dec: Decoder[Band] = deriveDecoder[Band]
+    implicit val enc: Encoder[Band] = deriveEncoder[Band]
+  }
 }
