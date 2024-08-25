@@ -62,7 +62,7 @@ object ProtoMacrosCirce {
 
   extension [A <: GeneratedMessage](companion: GeneratedMessageCompanion[A]) {
     def fromJson(json: String): A =
-      JsonFormat.fromJsonString[A](json)(companion)
+      JsonFormat.fromJsonString[A](json)(using companion)
 
     def fromJsonOpt(json: String): Option[A] =
       try {
@@ -89,7 +89,7 @@ object ProtoMacrosCirce {
       }
   }
 
-  private[this] def structInterpolation(s: Expr[StringContext])(using quote: Quotes): Expr[Struct] = {
+  private def structInterpolation(s: Expr[StringContext])(using quote: Quotes): Expr[Struct] = {
     import quote.reflect.report
     val Seq(str) = s.valueOrAbort.parts
     val json = io.circe.parser
@@ -103,7 +103,7 @@ object ProtoMacrosCirce {
     )
   }
 
-  private[this] def valueInterpolation(s: Expr[StringContext])(using quote: Quotes): Expr[Value] = {
+  private def valueInterpolation(s: Expr[StringContext])(using quote: Quotes): Expr[Value] = {
     import quote.reflect.report
     val Seq(str) = s.valueOrAbort.parts
     val json = io.circe.parser.parse(str).left.map(e => report.errorAndAbort(e.toString)).merge
@@ -112,7 +112,7 @@ object ProtoMacrosCirce {
     )
   }
 
-  private[this] def fromJsonConstantImpl[A <: GeneratedMessage: Type](
+  private def fromJsonConstantImpl[A <: GeneratedMessage: Type](
     json: Expr[String],
     companion: Expr[GeneratedMessageCompanion[A]]
   )(using quote: Quotes): Expr[A] = {
@@ -124,11 +124,11 @@ object ProtoMacrosCirce {
 
     val jsonObj = io.circe.parser.parse(str).left.map(e => report.errorAndAbort(e.toString)).merge
     // check compile time
-    JsonFormat.fromJson[A](jsonObj)(c)
+    JsonFormat.fromJson[A](jsonObj)(using c)
     val expr = summon[ToExpr[Json]].apply(jsonObj)
 
     '{
-      JsonFormat.fromJson[A]($expr)($companion)
+      JsonFormat.fromJson[A]($expr)(using $companion)
     }
   }
 }
