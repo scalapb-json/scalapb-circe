@@ -34,8 +34,7 @@ object ProtoMacrosCirce {
       def apply(j: Json)(using Quotes) = j.foldWith[Expr[Json]](new Json.Folder[Expr[Json]] {
         override def onNull = '{ Json.Null }
         override def onBoolean(value: Boolean) = {
-          if (value) '{ Json.True }
-          else '{ Json.False }
+          if (value) '{ Json.True } else '{ Json.False }
         }
         override def onNumber(value: JsonNumber) =
           '{ Json.fromJsonNumber(${ summon[ToExpr[JsonNumber]].apply(value) }) }
