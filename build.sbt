@@ -161,7 +161,7 @@ noPublish
 lazy val commonSettings = Def.settings(
   (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
   scalaVersion := Scala212,
-  crossScalaVersions := Seq(Scala212, "2.13.16", "3.3.4"),
+  crossScalaVersions := Seq(Scala212, "2.13.16", "3.3.5"),
   scalacOptions ++= {
     if (scalaBinaryVersion.value == "3") {
       Nil
