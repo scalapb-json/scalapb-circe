@@ -29,7 +29,7 @@ jobs:
            "+ scalafmtCheckAll"
            scalafmtSbtCheck
            "+ test"
-    - uses: mikepenz/action-junit-report@b14027d33d3a745ccc4d6a12f649e83110b5a373 # v5.4.0
+    - uses: mikepenz/action-junit-report@cf701569b05ccdd861a76b8607a66d76f6fd4857 # v5.5.1
       if: always()
       with:
         report_paths: '**/target/test-reports/*.xml'
