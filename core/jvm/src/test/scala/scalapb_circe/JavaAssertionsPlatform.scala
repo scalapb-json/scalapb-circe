@@ -5,7 +5,7 @@ import scalapb.{GeneratedMessage, GeneratedMessageCompanion, JavaProtoSupport}
 import org.scalatest.matchers.must.Matchers
 
 trait JavaAssertionsPlatform {
-  self: Matchers with JavaAssertions =>
+  self: Matchers & JavaAssertions =>
 
   def registeredCompanions: Seq[GeneratedMessageCompanion[?]]
 
