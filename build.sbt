@@ -142,6 +142,9 @@ val scalapbCirce = crossProject(JVMPlatform, JSPlatform, NativePlatform)
       }
     },
   )
+  .nativeSettings(
+    evictionErrorLevel := Level.Warn,
+  )
   .platformsSettings(JVMPlatform, JSPlatform)(
     scalapropsCoreSettings,
   )
