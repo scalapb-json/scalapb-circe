@@ -87,6 +87,9 @@ lazy val tests = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   .dependsOn(
     scalapbCirce % "test->test"
   )
+  .nativeSettings(
+    evictionErrorLevel := Level.Warn,
+  )
 
 val scalapbCirce = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   .in(file("core"))
