@@ -209,7 +209,7 @@ lazy val commonSettings = Def.settings(
   Compile / PB.targets := Nil,
   (Test / PB.protoSources) := Seq(baseDirectory.value.getParentFile / "shared/src/test/protobuf"),
   scalapbJsonCommonVersion := "0.11.0",
-  circeVersion := "0.14.15",
+  circeVersion := "0.14.16",
   libraryDependencies ++= Seq(
     "com.github.scalaprops" %%% "scalaprops" % "0.11.0" % "test",
     "io.circe" %%% "circe-generic" % circeVersion.value % "test",
