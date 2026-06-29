@@ -223,19 +223,19 @@ lazy val commonSettings = Def.settings(
   ),
   (Global / pomExtra) := {
     <url>https://github.com/scalapb-json/scalapb-circe</url>
-      <scm>
-        <connection>scm:git:github.com/scalapb-json/scalapb-circe.git</connection>
-        <developerConnection>scm:git:git@github.com:scalapb-json/scalapb-circe.git</developerConnection>
-        <url>github.com/scalapb-json/scalapb-circe.git</url>
-        <tag>{tagOrHash.value}</tag>
-      </scm>
-      <developers>
-        <developer>
-          <id>xuwei-k</id>
-          <name>Kenji Yoshida</name>
-          <url>https://github.com/xuwei-k</url>
-        </developer>
-      </developers>
+    <scm>
+      <connection>scm:git:github.com/scalapb-json/scalapb-circe.git</connection>
+      <developerConnection>scm:git:git@github.com:scalapb-json/scalapb-circe.git</developerConnection>
+      <url>github.com/scalapb-json/scalapb-circe.git</url>
+      <tag>{tagOrHash.value}</tag>
+    </scm>
+    <developers>
+      <developer>
+        <id>xuwei-k</id>
+        <name>Kenji Yoshida</name>
+        <url>https://github.com/xuwei-k</url>
+      </developer>
+    </developers>
   },
   publishTo := (if (isSnapshot.value) None else localStaging.value),
   (Compile / doc / scalacOptions) ++= {
