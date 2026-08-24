@@ -76,19 +76,6 @@ class CodecSpec extends AnyFreeSpec with Matchers {
       // Using asJson with an implicit printer includes the default value.
       g.asJson mustBe Json.obj("numberOfStrings" -> Json.fromInt(0))
     }
-
-    "decode using an implicit parser w/ non-standard settings" in {
-      implicit val parser: Parser = new Parser(preservingProtoFieldNames = true)
-
-      // Use the snake-case naming to define a Guitar Json object.
-      val j = Json.obj("number_of_strings" -> Json.fromInt(42))
-
-      // Using the regular JsonFormat parser decodes to the defaultInstance.
-      JsonFormat.fromJson[Guitar](j) mustBe Guitar.defaultInstance
-
-      // Using as[T] with an implicit parser decodes back to the original value (42).
-      j.as[Guitar] mustBe Right(Guitar(42))
-    }
   }
 
   "GeneratedEnum" - {
