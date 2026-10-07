@@ -1,4 +1,4 @@
-import scalapb.compiler.Version._
+import scalapb.compiler.Version.{scalaBinaryVersion => _, _}
 import sbtrelease.ReleaseStateTransformations._
 import sbtcrossproject.CrossPlugin.autoImport.crossProject
 
