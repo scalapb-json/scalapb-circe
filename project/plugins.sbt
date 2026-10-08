@@ -1,3 +1,5 @@
+addSbtPlugin("com.eed3si9n" % "sbt-salad-days" % "0.2.0")
+
 addSbtPlugin("com.github.scalaprops" % "sbt-scalaprops" % "0.5.3")
 
 addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.13.2")
