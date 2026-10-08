@@ -11,7 +11,7 @@ jobs:
       fail-fast: false
       matrix:
         java:
-          - 11
+          - 17
           - 25
         os:
           - ubuntu-latest
@@ -26,12 +26,13 @@ jobs:
     - uses: coursier/cache-action@v8
     - shell: bash
       run: sbt -v
+           --server
            "+ scalafmtCheckAll"
            scalafmtSbtCheck
-           "+ test"
+           "+ testFull"
     - uses: mikepenz/action-junit-report@a9170d5795813c01ab4901ffb045b52bab4ab09d # v6.5.0
       if: always()
       with:
-        report_paths: '**/target/test-reports/*.xml'
+        report_paths: 'target/**/test-reports/*.xml'
         require_tests: true
         check_name: "${{ matrix.java }}"
