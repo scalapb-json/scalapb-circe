@@ -12,7 +12,7 @@ Include in your `build.sbt` file
 libraryDependencies += "io.github.scalapb-json" %% "scalapb-circe" % "0.17.0"
 ```
 
-for scala-js or scala-native
+for scala-js or scala-native with sbt 1.x
 
 ```scala
 libraryDependencies += "io.github.scalapb-json" %%% "scalapb-circe" % "0.17.0"
