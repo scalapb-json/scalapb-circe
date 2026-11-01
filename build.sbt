@@ -208,7 +208,7 @@ lazy val commonSettings = Def.settings(
   scalapbJsonCommonVersion := "0.12.0",
   circeVersion := "0.14.17",
   libraryDependencies ++= Seq(
-    "com.github.scalaprops" %% "scalaprops" % "0.11.1" % "test",
+    "com.github.scalaprops" %% "scalaprops" % "0.12.0" % "test",
     "io.circe" %% "circe-generic" % circeVersion.value % "test",
     "io.github.scalapb-json" %% "scalapb-json-common" % scalapbJsonCommonVersion.value,
     "com.thesamet.scalapb" %% "scalapb-runtime" % scalapbVersion % "protobuf,test",
